@@ -10,38 +10,26 @@ import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.gcc.GccCompatibleCCompiler;
 import com.github.maven_nar.cpptasks.gcc.GppLinker;
 
-public class ArduinoCompiler extends GccCompatibleCCompiler
+public class ArduinoCppCompiler extends GccCompatibleCCompiler
 {
     private final static String[] sourceExtensions = new String[]
-    { ".c", ".cpp", ".s", ".ino" };
+    { ".cpp", };
 
     private final static String[] headerExtensions = new String[]
     { ".h" };
 
-    private static final ArduinoCompiler cppInstance = new ArduinoCompiler( "c++", sourceExtensions,
-        headerExtensions, false, new ArduinoCompiler( "c++", sourceExtensions, headerExtensions, true,
-            null, false, null ), false, null );
+    public ArduinoCppCompiler()
+    {
+        this( "g++", sourceExtensions, headerExtensions, false, new ArduinoCppCompiler( "g++",
+            sourceExtensions, headerExtensions, true, null, false, null ), false, null );
+    }
 
-    private static final ArduinoCompiler gppInstance = new ArduinoCompiler( "g++", sourceExtensions,
-        headerExtensions, false, new ArduinoCompiler( "g++", sourceExtensions, headerExtensions, true,
-            null, false, null ), false, null );
-
-    private ArduinoCompiler( final String command, final String[] sourceExtensions,
-        final String[] headerExtensions, final boolean isLibtool, final ArduinoCompiler libtoolCompiler,
+    private ArduinoCppCompiler( final String command, final String[] sourceExtensions,
+        final String[] headerExtensions, final boolean isLibtool, final ArduinoCppCompiler libtoolCompiler,
         final boolean newEnvironment, final Environment env )
     {
         super( command, null, sourceExtensions, headerExtensions, isLibtool, libtoolCompiler, newEnvironment,
             env );
-    }
-
-    public static ArduinoCompiler getCppInstance()
-    {
-        return cppInstance;
-    }
-
-    public static ArduinoCompiler getGppInstance()
-    {
-        return gppInstance;
     }
 
     @Override

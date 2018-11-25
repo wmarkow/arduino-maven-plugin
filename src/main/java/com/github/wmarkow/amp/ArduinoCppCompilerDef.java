@@ -11,11 +11,11 @@ import com.github.maven_nar.cpptasks.compiler.Processor;
 import com.github.maven_nar.cpptasks.types.CompilerArgument;
 import com.github.maven_nar.cpptasks.types.ConditionalFileSet;
 
-public class ArduinoGppCompilerDef extends CompilerDef
+public class ArduinoCppCompilerDef extends CompilerDef
 {
     private final Vector< String > includePaths = new Vector<>();
 
-    public ArduinoGppCompilerDef( Project project )
+    public ArduinoCppCompilerDef( Project project )
     {
         super();
 
@@ -48,7 +48,7 @@ public class ArduinoGppCompilerDef extends CompilerDef
     @Override
     public Processor getProcessor()
     {
-        return ArduinoCompiler.getGppInstance();
+        return new ArduinoCppCompiler();
     }
 
     public void addIncludePath( String absolutePath )

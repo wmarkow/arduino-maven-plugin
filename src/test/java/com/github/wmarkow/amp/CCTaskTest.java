@@ -17,7 +17,7 @@ public class CCTaskTest
         Project project = new Project();
         project.addBuildListener( new BuildConsoleListener() );
 
-        ArduinoGppCompilerDef cppDef = new ArduinoGppCompilerDef( project );
+        ArduinoCppCompilerDef cppDef = new ArduinoCppCompilerDef( project );
 
         cppDef.addSourceFileDir( new File( new File( "" ).getAbsolutePath(),
             "src/test/resources/arduino-blink-project" ).getAbsolutePath() );
