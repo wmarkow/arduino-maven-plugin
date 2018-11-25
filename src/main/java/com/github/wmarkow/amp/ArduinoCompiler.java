@@ -8,7 +8,7 @@ import com.github.maven_nar.cpptasks.OptimizationEnum;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.gcc.GccCompatibleCCompiler;
-import com.github.maven_nar.cpptasks.gcc.GccLinker;
+import com.github.maven_nar.cpptasks.gcc.GppLinker;
 
 public class ArduinoCompiler extends GccCompatibleCCompiler
 {
@@ -23,7 +23,7 @@ public class ArduinoCompiler extends GccCompatibleCCompiler
             null, false, null ), false, null );
 
     private static final ArduinoCompiler gppInstance = new ArduinoCompiler( "g++", sourceExtensions,
-        headerExtensions, false, new ArduinoCompiler( "c++", sourceExtensions, headerExtensions, true,
+        headerExtensions, false, new ArduinoCompiler( "g++", sourceExtensions, headerExtensions, true,
             null, false, null ), false, null );
 
     private ArduinoCompiler( final String command, final String[] sourceExtensions,
@@ -47,7 +47,7 @@ public class ArduinoCompiler extends GccCompatibleCCompiler
     @Override
     public Linker getLinker( final LinkType linkType )
     {
-        return GccLinker.getInstance().getLinker( linkType );
+        return GppLinker.getInstance().getLinker( linkType );
     }
 
     @Override

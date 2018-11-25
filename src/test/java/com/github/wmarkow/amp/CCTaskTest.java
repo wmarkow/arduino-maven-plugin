@@ -41,6 +41,11 @@ public class CCTaskTest
         objDir.mkdirs();
         task.setObjdir( objDir );
 
+        task.setOutfile( new File( new File( "" ).getAbsolutePath(), "target/output.elf" ) );
+
+        ArduinoLinkerDef linkerDef = new ArduinoLinkerDef();
+        task.addConfiguredLinker( linkerDef );
+
         task.execute();
     }
 }
