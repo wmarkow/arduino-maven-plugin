@@ -17,6 +17,28 @@ public class CCTaskTest
         Project project = new Project();
         project.addBuildListener( new BuildConsoleListener() );
 
+        ArduinoCppCompilerDef cppDef = createCppCompilerDef( project );
+        ArduinoCCompilerDef cDef = createCCompilerDef( project );
+
+        CCTask task = new CCTask();
+        task.setProject( project );
+        task.addConfiguredCompiler( cppDef );
+        task.addConfiguredCompiler( cDef );
+        // object directory
+        File objDir = new File( new File( "" ).getAbsolutePath(), "target/obj" );
+        objDir.mkdirs();
+        task.setObjdir( objDir );
+
+        task.setOutfile( new File( new File( "" ).getAbsolutePath(), "target/output.elf" ) );
+
+        ArduinoLinkerDef linkerDef = new ArduinoLinkerDef();
+        task.addConfiguredLinker( linkerDef );
+
+        task.execute();
+    }
+    
+    private ArduinoCppCompilerDef createCppCompilerDef( Project project )
+    {
         ArduinoCppCompilerDef cppDef = new ArduinoCppCompilerDef( project );
 
         cppDef.addSourceFileDir( new File( new File( "" ).getAbsolutePath(),
@@ -32,20 +54,28 @@ public class CCTaskTest
             "src/test/resources/arduino-core-1.6.17-avr/src" ).getAbsolutePath() );
         cppDef.addIncludePath( new File( new File( "" ).getAbsolutePath(),
             "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ).getAbsolutePath() );
+        
+        return cppDef;
+    }
 
-        CCTask task = new CCTask();
-        task.setProject( project );
-        task.addConfiguredCompiler( cppDef );
-        // object directory
-        File objDir = new File( new File( "" ).getAbsolutePath(), "target/obj" );
-        objDir.mkdirs();
-        task.setObjdir( objDir );
+    private ArduinoCCompilerDef createCCompilerDef( Project project )
+    {
+        ArduinoCCompilerDef cDef = new ArduinoCCompilerDef( project );
 
-        task.setOutfile( new File( new File( "" ).getAbsolutePath(), "target/output.elf" ) );
+        cDef.addSourceFileDir( new File( new File( "" ).getAbsolutePath(),
+            "src/test/resources/arduino-blink-project" ).getAbsolutePath() );
+        cDef.addSourceFileDir( new File( new File( "" ).getAbsolutePath(),
+            "src/test/resources/arduino-core-1.6.17-avr/src" ).getAbsolutePath() );
+        cDef.addSourceFileDir( new File( new File( "" ).getAbsolutePath(),
+            "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ).getAbsolutePath() );
 
-        ArduinoLinkerDef linkerDef = new ArduinoLinkerDef();
-        task.addConfiguredLinker( linkerDef );
+        cDef.addIncludePath( new File( new File( "" ).getAbsolutePath(),
+            "src/test/resources/arduino-blink-project" ).getAbsolutePath() );
+        cDef.addIncludePath( new File( new File( "" ).getAbsolutePath(),
+            "src/test/resources/arduino-core-1.6.17-avr/src" ).getAbsolutePath() );
+        cDef.addIncludePath( new File( new File( "" ).getAbsolutePath(),
+            "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ).getAbsolutePath() );
 
-        task.execute();
+        return cDef;
     }
 }
