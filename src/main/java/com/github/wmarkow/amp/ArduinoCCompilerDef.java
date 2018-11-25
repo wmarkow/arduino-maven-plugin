@@ -1,30 +1,15 @@
 package com.github.wmarkow.amp;
 
-import java.io.File;
-import java.util.Vector;
-
 import org.apache.tools.ant.Project;
 
-import com.github.maven_nar.cpptasks.CompilerDef;
-import com.github.maven_nar.cpptasks.WarningLevelEnum;
 import com.github.maven_nar.cpptasks.compiler.Processor;
-import com.github.maven_nar.cpptasks.types.CompilerArgument;
 import com.github.maven_nar.cpptasks.types.ConditionalFileSet;
 
-public class ArduinoCCompilerDef extends CompilerDef
+public class ArduinoCCompilerDef extends ArduinoCompilerDef
 {
-    private final Vector< String > includePaths = new Vector<>();
-
     public ArduinoCCompilerDef( Project project )
     {
-        super();
-
-        setProject( project );
-        setCompilerPrefix( "avr-" );
-
-        WarningLevelEnum wle = new WarningLevelEnum();
-        wle.setValue( "diagnostic" );
-        setWarnings( wle );
+        super( project );
 
         addCompilerArg( "-c" );
         addCompilerArg( "-g" );
@@ -49,38 +34,12 @@ public class ArduinoCCompilerDef extends CompilerDef
         return new ArduinoCCompiler();
     }
 
-    public void addIncludePath( String absolutePath )
+    @Override
+    public void addSourceFileDir( String absolutePath )
     {
-        includePaths.addElement( absolutePath );
-    }
-
-    public void addSourceFileDir( String aboslutePath )
-    {
-        if( getProject() == null )
-        {
-            throw new IllegalStateException( "Project must not be null" );
-        }
-
-        final ConditionalFileSet fileSet = new ConditionalFileSet();
-        fileSet.setProject( getProject() );
+        final ConditionalFileSet fileSet = createConditionalFileSet( absolutePath );
         fileSet.setIncludes( "*.c" );
-        fileSet.setDir( new File( aboslutePath ) );
 
         addFileset( fileSet );
-    }
-
-    @Override
-    public String[] getActiveIncludePaths()
-    {
-        return includePaths.toArray( new String[]
-        {} );
-    }
-
-    private void addCompilerArg( String param )
-    {
-        CompilerArgument cp = new CompilerArgument();
-        cp.setValue( param );
-
-        this.addConfiguredCompilerArg( cp );
     }
 }
