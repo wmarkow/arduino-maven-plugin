@@ -65,7 +65,7 @@ public class ArduinoCppCompilerDef extends CompilerDef
 
         final ConditionalFileSet fileSet = new ConditionalFileSet();
         fileSet.setProject( getProject() );
-        fileSet.setIncludes( "*.cpp, *.ino" );
+        fileSet.setIncludes( "*.cpp" );
         fileSet.setDir( new File( aboslutePath ) );
 
         addFileset( fileSet );
