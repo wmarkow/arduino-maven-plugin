@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp;
+package com.github.wmarkow.amp.compiler;
 
 import java.util.Vector;
 
@@ -6,6 +6,7 @@ import com.github.maven_nar.cpptasks.OptimizationEnum;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.gcc.GccCompatibleCCompiler;
+import com.github.wmarkow.amp.linker.ArduinoLinker;
 
 public abstract class ArduinoCompiler extends GccCompatibleCCompiler
 {

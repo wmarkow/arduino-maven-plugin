@@ -1,14 +1,13 @@
-package com.github.wmarkow.amp;
+package com.github.wmarkow.amp.compiler;
 
 import org.apache.tools.ant.Project;
 
 import com.github.maven_nar.cpptasks.compiler.Processor;
 import com.github.maven_nar.cpptasks.types.ConditionalFileSet;
 
-public class ArduinoCppCompilerDef extends ArduinoCompilerDef
+public class ArduinoCCompilerDef extends ArduinoCompilerDef
 {
-
-    public ArduinoCppCompilerDef( Project project )
+    public ArduinoCCompilerDef( Project project )
     {
         super( project );
 
@@ -17,13 +16,11 @@ public class ArduinoCppCompilerDef extends ArduinoCompilerDef
         addCompilerArg( "-Os" );
         addCompilerArg( "-Wall" );
         addCompilerArg( "-Wextra" );
-        addCompilerArg( "-std=gnu++11" );
-        addCompilerArg( "-fpermissive" );
-        addCompilerArg( "-fno-exceptions" );
+        addCompilerArg( "-std=gnu11" );
         addCompilerArg( "-ffunction-sections" );
         addCompilerArg( "-fdata-sections" );
-        addCompilerArg( "-fno-threadsafe-statics" );
         addCompilerArg( "-flto" );
+        addCompilerArg( "-fno-fat-lto-objects" );
         addCompilerArg( "-mmcu=atmega328p" );
         addCompilerArg( "-DF_CPU=16000000L" );
         addCompilerArg( "-DARDUINO=10609" );
@@ -34,14 +31,14 @@ public class ArduinoCppCompilerDef extends ArduinoCompilerDef
     @Override
     public Processor getProcessor()
     {
-        return new ArduinoCppCompiler();
+        return new ArduinoCCompiler();
     }
 
     @Override
     public void addSourceFileDir( String absolutePath )
     {
         final ConditionalFileSet fileSet = createConditionalFileSet( absolutePath );
-        fileSet.setIncludes( "*.cpp" );
+        fileSet.setIncludes( "*.c" );
 
         addFileset( fileSet );
     }

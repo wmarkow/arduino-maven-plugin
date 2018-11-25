@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp;
+package com.github.wmarkow.amp.compiler;
 
 import java.io.File;
 import java.util.Vector;

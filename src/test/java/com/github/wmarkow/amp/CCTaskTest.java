@@ -8,6 +8,9 @@ import org.apache.tools.ant.Project;
 import org.junit.Test;
 
 import com.github.maven_nar.cpptasks.CCTask;
+import com.github.wmarkow.amp.compiler.ArduinoCCompilerDef;
+import com.github.wmarkow.amp.compiler.ArduinoCppCompilerDef;
+import com.github.wmarkow.amp.linker.ArduinoLinkerDef;
 
 public class CCTaskTest
 {

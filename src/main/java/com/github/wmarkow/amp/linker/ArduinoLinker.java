@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp;
+package com.github.wmarkow.amp.linker;
 
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;

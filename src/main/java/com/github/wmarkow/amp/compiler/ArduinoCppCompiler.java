@@ -1,4 +1,5 @@
-package com.github.wmarkow.amp;
+package com.github.wmarkow.amp.compiler;
+
 
 public class ArduinoCppCompiler extends ArduinoCompiler
 {
