@@ -2,6 +2,7 @@ package com.github.wmarkow.amp.builder;
 
 import java.io.File;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.BuildListener;
 import org.apache.tools.ant.Project;
 
@@ -12,6 +13,7 @@ import com.github.wmarkow.amp.linker.ArduinoLinkerDef;
 
 public class ArduinoBuilder
 {
+    private final static String OBJ_DIR_NAME = "obj";
     private String artifactId;
     private String version;
     private String classifier;
@@ -50,10 +52,21 @@ public class ArduinoBuilder
         }
 
         targetBuildDirectory = absolutePath;
-        task.setObjdir( new File( absolutePath, "obj" ) );
+        task.setObjdir( new File( absolutePath, OBJ_DIR_NAME ) );
 
         final String outputElfFileNameWithoutExt = artifactId + "-" + version + "-" + classifier;
         task.setOutfile( new File( absolutePath, outputElfFileNameWithoutExt ) );
+    }
+
+    public void cleanTargetBuildDirectory()
+    {
+        if( targetBuildDirectory == null )
+        {
+            throw new IllegalStateException( "setTargetBuildDirectory not called" );
+        }
+
+        FileUtils.deleteQuietly( new File( targetBuildDirectory, OBJ_DIR_NAME ) );
+        FileUtils.deleteQuietly( new File( targetBuildDirectory, getTargetElfFileName() ) );
     }
 
     public void addSourceFileDir( File absolutePath )
@@ -80,7 +93,7 @@ public class ArduinoBuilder
             throw new IllegalStateException( "setTargetBuildDirectory not called" );
         }
 
-        File objTargetDirectory = new File( targetBuildDirectory, "obj" );
+        File objTargetDirectory = new File( targetBuildDirectory, OBJ_DIR_NAME );
 
         if( !objTargetDirectory.exists() && !objTargetDirectory.mkdirs() )
         {
@@ -88,5 +101,10 @@ public class ArduinoBuilder
         }
 
         task.execute();
+    }
+
+    private String getTargetElfFileName()
+    {
+        return artifactId + "-" + version + "-" + classifier + ".elf";
     }
 }
