@@ -5,9 +5,12 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import com.github.wmarkow.amp.BuildConsoleListener;
+import com.github.wmarkow.amp.IntegrationTest;
 
+@Category( IntegrationTest.class )
 public class ArduinoBuilderTest
 {
     @Test

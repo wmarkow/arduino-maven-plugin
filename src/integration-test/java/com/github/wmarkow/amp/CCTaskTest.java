@@ -6,12 +6,14 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.tools.ant.Project;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.wmarkow.amp.compiler.ArduinoCCompilerDef;
 import com.github.wmarkow.amp.compiler.ArduinoCppCompilerDef;
 import com.github.wmarkow.amp.linker.ArduinoLinkerDef;
 
+@Category( IntegrationTest.class )
 public class CCTaskTest
 {
     @Test
