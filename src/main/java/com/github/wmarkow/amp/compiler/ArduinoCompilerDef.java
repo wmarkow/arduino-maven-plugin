@@ -1,6 +1,8 @@
 package com.github.wmarkow.amp.compiler;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.tools.ant.Project;
@@ -12,7 +14,7 @@ import com.github.maven_nar.cpptasks.types.ConditionalFileSet;
 
 public abstract class ArduinoCompilerDef extends CompilerDef
 {
-    private final Vector< String > includePaths = new Vector<>();
+    private final Vector< File > includePaths = new Vector<>();
 
     public ArduinoCompilerDef( Project project )
     {
@@ -25,7 +27,7 @@ public abstract class ArduinoCompilerDef extends CompilerDef
         setWarnings( wle );
     }
 
-    public void addIncludePath( String absolutePath )
+    public void addIncludePath( File absolutePath )
     {
         includePaths.addElement( absolutePath );
     }
@@ -33,11 +35,18 @@ public abstract class ArduinoCompilerDef extends CompilerDef
     @Override
     public String[] getActiveIncludePaths()
     {
-        return includePaths.toArray( new String[]
+        List< String > result = new ArrayList< String >();
+
+        for( File includePath : includePaths )
+        {
+            result.add( includePath.getAbsolutePath() );
+        }
+
+        return result.toArray( new String[]
         {} );
     }
 
-    public abstract void addSourceFileDir( String absolutePath );
+    public abstract void addSourceFileDir( File absolutePath );
 
     protected void addCompilerArg( String param )
     {
@@ -47,7 +56,7 @@ public abstract class ArduinoCompilerDef extends CompilerDef
         this.addConfiguredCompilerArg( cp );
     }
 
-    protected ConditionalFileSet createConditionalFileSet( String aboslutePath )
+    protected ConditionalFileSet createConditionalFileSet( File aboslutePath )
     {
         if( getProject() == null )
         {
@@ -56,7 +65,7 @@ public abstract class ArduinoCompilerDef extends CompilerDef
 
         final ConditionalFileSet fileSet = new ConditionalFileSet();
         fileSet.setProject( getProject() );
-        fileSet.setDir( new File( aboslutePath ) );
+        fileSet.setDir( aboslutePath );
 
         return fileSet;
     }

@@ -45,18 +45,18 @@ public class CCTaskTest
         ArduinoCppCompilerDef cppDef = new ArduinoCppCompilerDef( project );
 
         cppDef.addSourceFileDir( new File( new File( "" ).getAbsolutePath(),
-            "src/test/resources/arduino-blink-project" ).getAbsolutePath() );
+            "src/test/resources/arduino-blink-project" ) );
         cppDef.addSourceFileDir( new File( new File( "" ).getAbsolutePath(),
-            "src/test/resources/arduino-core-1.6.17-avr/src" ).getAbsolutePath() );
+            "src/test/resources/arduino-core-1.6.17-avr/src" ) );
         cppDef.addSourceFileDir( new File( new File( "" ).getAbsolutePath(),
-            "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ).getAbsolutePath() );
+            "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
 
         cppDef.addIncludePath( new File( new File( "" ).getAbsolutePath(),
-            "src/test/resources/arduino-blink-project" ).getAbsolutePath() );
+            "src/test/resources/arduino-blink-project" ) );
         cppDef.addIncludePath( new File( new File( "" ).getAbsolutePath(),
-            "src/test/resources/arduino-core-1.6.17-avr/src" ).getAbsolutePath() );
+            "src/test/resources/arduino-core-1.6.17-avr/src" ) );
         cppDef.addIncludePath( new File( new File( "" ).getAbsolutePath(),
-            "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ).getAbsolutePath() );
+            "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
         
         return cppDef;
     }
@@ -66,18 +66,18 @@ public class CCTaskTest
         ArduinoCCompilerDef cDef = new ArduinoCCompilerDef( project );
 
         cDef.addSourceFileDir( new File( new File( "" ).getAbsolutePath(),
-            "src/test/resources/arduino-blink-project" ).getAbsolutePath() );
+            "src/test/resources/arduino-blink-project" ) );
         cDef.addSourceFileDir( new File( new File( "" ).getAbsolutePath(),
-            "src/test/resources/arduino-core-1.6.17-avr/src" ).getAbsolutePath() );
+            "src/test/resources/arduino-core-1.6.17-avr/src" ) );
         cDef.addSourceFileDir( new File( new File( "" ).getAbsolutePath(),
-            "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ).getAbsolutePath() );
+            "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
 
         cDef.addIncludePath( new File( new File( "" ).getAbsolutePath(),
-            "src/test/resources/arduino-blink-project" ).getAbsolutePath() );
+            "src/test/resources/arduino-blink-project" ) );
         cDef.addIncludePath( new File( new File( "" ).getAbsolutePath(),
-            "src/test/resources/arduino-core-1.6.17-avr/src" ).getAbsolutePath() );
+            "src/test/resources/arduino-core-1.6.17-avr/src" ) );
         cDef.addIncludePath( new File( new File( "" ).getAbsolutePath(),
-            "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ).getAbsolutePath() );
+            "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
 
         return cDef;
     }

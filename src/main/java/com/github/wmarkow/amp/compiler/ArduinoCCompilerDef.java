@@ -1,5 +1,7 @@
 package com.github.wmarkow.amp.compiler;
 
+import java.io.File;
+
 import org.apache.tools.ant.Project;
 
 import com.github.maven_nar.cpptasks.compiler.Processor;
@@ -35,7 +37,7 @@ public class ArduinoCCompilerDef extends ArduinoCompilerDef
     }
 
     @Override
-    public void addSourceFileDir( String absolutePath )
+    public void addSourceFileDir( File absolutePath )
     {
         final ConditionalFileSet fileSet = createConditionalFileSet( absolutePath );
         fileSet.setIncludes( "*.c" );
