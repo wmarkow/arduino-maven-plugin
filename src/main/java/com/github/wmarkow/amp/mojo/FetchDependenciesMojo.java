@@ -3,12 +3,11 @@ package com.github.wmarkow.amp.mojo;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.ResolutionScope;
 
-@Mojo( name = "download-dependencies", defaultPhase = LifecyclePhase.GENERATE_SOURCES,
-    requiresProject = true, requiresDependencyResolution = ResolutionScope.TEST )
+//@Mojo( name = "download-dependencies", defaultPhase = LifecyclePhase.GENERATE_SOURCES,
+//    requiresProject = true, requiresDependencyResolution = ResolutionScope.TEST )
+@Mojo( name = "download-dependencies" )
 public class FetchDependenciesMojo extends AbstractMojo
 {
     @Override

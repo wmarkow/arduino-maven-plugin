@@ -11,8 +11,13 @@ public class FetchDependenciesMojoTest extends AbstractMojoTestCase
     @Override
     protected void setUp() throws Exception
     {
-        // required for mojo lookups to work
         super.setUp();
+    }
+
+    @Override
+    protected void tearDown() throws Exception
+    {
+        super.tearDown();
     }
 
     @Test
@@ -24,12 +29,6 @@ public class FetchDependenciesMojoTest extends AbstractMojoTestCase
 
         FetchDependenciesMojo mojo = (FetchDependenciesMojo)lookupMojo( "download-dependencies", pom );
 
-        // FetchDependenciesMojo mojo = new FetchDependenciesMojo();
-        // mojo = (FetchDependenciesMojo) configureMojo(
-        // mojo,
-        // extractPluginConfiguration( "arduino-maven-plugin", testPom ) );
-        // mojo.execute();
-        
         assertNotNull( mojo );
     }
 }
