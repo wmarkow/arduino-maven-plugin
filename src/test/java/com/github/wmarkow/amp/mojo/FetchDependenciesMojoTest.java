@@ -18,15 +18,17 @@ public class FetchDependenciesMojoTest extends AbstractMojoTestCase
     @Test
     public void testMojoGoal() throws Exception
     {
-        File testPom = new File( getBasedir(), "src/test/resources/project-blink/pom.xml" );
+        File pom = new File( getBasedir(), "src/test/resources/project-blink/pom.xml" );
+        assertNotNull( pom );
+        assertTrue( pom.exists() );
 
-//        FetchDependenciesMojo mojo = (FetchDependenciesMojo)lookupMojo( "download-dependencies", testPom );
+        FetchDependenciesMojo mojo = (FetchDependenciesMojo)lookupMojo( "download-dependencies", pom );
 
-        FetchDependenciesMojo mojo = new FetchDependenciesMojo();
-        mojo = (FetchDependenciesMojo) configureMojo(
- mojo,
-                extractPluginConfiguration( "arduino-maven-plugin", testPom ) );
-        mojo.execute();
+        // FetchDependenciesMojo mojo = new FetchDependenciesMojo();
+        // mojo = (FetchDependenciesMojo) configureMojo(
+        // mojo,
+        // extractPluginConfiguration( "arduino-maven-plugin", testPom ) );
+        // mojo.execute();
         
         assertNotNull( mojo );
     }
