@@ -20,9 +20,7 @@
 				<artifactId>arduino-maven-plugin</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
 				<configuration>
-<!-- 					<goals> -->
-<!-- 						<goal>download-dependencies</goal> -->
-<!-- 					</goals> -->
+
 				</configuration>
 
 				<executions>
@@ -33,12 +31,29 @@
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
-
 	</build>
 
 	<dependencies>
+        <dependency>
+            <groupId>com.github.arduino</groupId>
+            <artifactId>arduino-core</artifactId>
+            <version>1.6.17</version>
+            <classifier>avr</classifier>
+            <type>arduinolib</type>
+        </dependency>
+        <dependency>
+            <groupId>com.github.arduino</groupId>
+            <artifactId>arduino-variant</artifactId>
+            <version>1.6.17</version>
+            <classifier>avr-standard</classifier>
+            <type>arduinolib</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>3.3.9</version>
+        </dependency>
 
 	</dependencies>
 

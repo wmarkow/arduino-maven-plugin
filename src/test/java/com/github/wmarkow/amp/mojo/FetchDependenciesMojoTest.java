@@ -30,6 +30,8 @@ public class FetchDependenciesMojoTest extends AbstractMojoTestCase
         FetchDependenciesMojo mojo = (FetchDependenciesMojo)lookupMojo( "download-dependencies", pom );
 
         assertNotNull( mojo );
+
+        mojo.execute();
     }
 }
 
