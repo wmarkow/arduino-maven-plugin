@@ -27,11 +27,9 @@ public class FetchDependenciesMojoTest extends AbstractMojoTestCase
         assertNotNull( pom );
         assertTrue( pom.exists() );
 
-        FetchDependenciesMojo mojo = (FetchDependenciesMojo)lookupMojo( "download-dependencies", pom );
+        FetchDependenciesMojo mojo = (FetchDependenciesMojo)lookupMojo( "fetch-dependencies", pom );
 
         assertNotNull( mojo );
-
-        mojo.execute();
     }
 }
 

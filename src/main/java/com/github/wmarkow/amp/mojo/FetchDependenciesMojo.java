@@ -8,6 +8,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -18,22 +19,16 @@ import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.collection.DependencyCollectionException;
 import org.eclipse.aether.graph.DependencyNode;
-import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.resolution.ArtifactRequest;
+import org.eclipse.aether.resolution.ArtifactResolutionException;
+import org.eclipse.aether.resolution.ArtifactResult;
 import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
-//@Mojo( name = "download-dependencies", defaultPhase = LifecyclePhase.GENERATE_SOURCES,
-//    requiresProject = true, requiresDependencyResolution = ResolutionScope.TEST )
-@Mojo( name = "download-dependencies" )
+@Mojo( name = "fetch-dependencies", defaultPhase = LifecyclePhase.INITIALIZE, requiresProject = true )
 public class FetchDependenciesMojo extends AbstractMojo
 {
-    // @Parameter( defaultValue = "${project}", readonly = true )
-    // private MavenProject mavenProject;
-    //
     @Component
     private MavenProject mavenProject;
-
-    @Parameter( defaultValue = "${project.remoteProjectRepositories}" )
-    private List< RemoteRepository > projectRepos;
 
     @Component
     private RepositorySystem repoSystem;
@@ -44,14 +39,40 @@ public class FetchDependenciesMojo extends AbstractMojo
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        System.out.println( "Hello world2!" );
-
-        List< Artifact > arduinoLibs = getArduinoLibDependencies();
+        List< Artifact > arduinoLibs = getMissingArduinoLibs();
 
         for( Artifact arduinoLib : arduinoLibs )
         {
-            System.out.println( artifactToString( arduinoLib ) );
+            System.out.println( String.format( "Arduinolib is missing: %s", artifactToString( arduinoLib ) ) );
         }
+    }
+
+    private List< Artifact > getMissingArduinoLibs()
+    {
+        List< Artifact > missingLibs = new ArrayList<>();
+
+        final List< Artifact > arduinoLibs = getArduinoLibDependencies();
+
+        for( Artifact arduinoLib : arduinoLibs )
+        {
+            ArtifactRequest req = new ArtifactRequest().setArtifact( arduinoLib );
+            ArtifactResult resolutionResult;
+            try
+            {
+                resolutionResult = repoSystem.resolveArtifact( repoSession, req );
+
+                if( resolutionResult.isMissing() )
+                {
+                    missingLibs.add( arduinoLib );
+                }
+            }
+            catch( ArtifactResolutionException e )
+            {
+                missingLibs.add( arduinoLib );
+            }
+        }
+
+        return missingLibs;
     }
 
     private List< Artifact > getArduinoLibDependencies()
@@ -59,10 +80,10 @@ public class FetchDependenciesMojo extends AbstractMojo
         DependencyNode node = getVerboseDependencyTree();
 
         List< Artifact > result = new ArrayList< Artifact >();
-        
+
         for( DependencyNode dn : node.getChildren() )
         {
-            if("arduinolib".equals(dn.getArtifact().getExtension()))
+            if( "arduinolib".equals( dn.getArtifact().getExtension() ) )
             {
                 result.add( dn.getArtifact() );
             }
@@ -80,6 +101,9 @@ public class FetchDependenciesMojo extends AbstractMojo
         org.apache.maven.artifact.Artifact art = mavenProject.getArtifact();
 
         DefaultRepositorySystemSession session = new DefaultRepositorySystemSession( repoSession );
+
+        System.out.println( String.format( "Local repo path = %s", repoSession.getLocalRepository()
+            .getBasedir().getAbsolutePath() ) );
 
         // Set the No-Op Graph transformer so tree stays intact
         session.setDependencyGraphTransformer( new NoopDependencyGraphTransformer() );
