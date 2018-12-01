@@ -19,13 +19,53 @@ public class LibraryRepacker
 
         // unzip input file to a temporary file
         final File unzipDir = new File( inputZipFile.getAbsolutePath() + "_unzip" );
-        ZipUtil.unwrap( inputZipFile, unzipDir );
+        ZipUtil.unpack( inputZipFile, unzipDir );
 
         // copy specific folder from source directory into a destination directory
-        final File dstDir = new File( workDir, "extracted_arduino_library" );
-        FileUtils.copyDirectory( new File( unzipDir, folderToUnpack ), dstDir );
+        final File dstDir = new File( workDir, outputZipFile.getName() + "_repacked" );
+
+        if( dstDir.exists() )
+        {
+            FileUtils.cleanDirectory( dstDir );
+        }
+
+        File folderToCopy = new File( unzipDir, folderToUnpack );
+        if( folderToCopy.exists() )
+        {
+
+        }
+        else
+        {
+            String[] subfiles = unzipDir.list();
+            if( subfiles.length != 1 )
+            {
+                throw new IllegalArgumentException( String.format(
+                    "Input ZIP file %s contains invalid file lauout", folderToCopy.getAbsolutePath() ) );
+            }
+
+            folderToCopy = new File( unzipDir, subfiles[ 0 ] + "/" + folderToUnpack );
+        }
+
+        if( hasSubfolder( folderToCopy, "src" ) )
+        {
+            // 'src' folder already exist, copy it as well
+            FileUtils.copyDirectory( folderToCopy, dstDir );
+        }
+        else
+        {
+            File dstDirWithSrc = new File( dstDir, "src" );
+            FileUtils.forceMkdir( dstDirWithSrc );
+            FileUtils.copyDirectory( folderToCopy, dstDirWithSrc );
+        }
 
         // pack destination directory into ZIP
         ZipUtil.pack( dstDir, outputZipFile );
+    }
+
+    private boolean hasSubfolder( File rootFolder, String subfolder )
+    {
+        File subdirFile = new File( rootFolder, subfolder );
+
+        return subdirFile.exists();
     }
 }
