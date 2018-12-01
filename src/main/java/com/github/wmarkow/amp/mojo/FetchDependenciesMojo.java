@@ -1,8 +1,11 @@
 package com.github.wmarkow.amp.mojo;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 //import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -24,6 +27,11 @@ import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
 import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
+import com.github.wmarkow.amp.ArtifactUtils;
+import com.github.wmarkow.amp.fetch.GithubFetchDescriptor;
+import com.github.wmarkow.amp.fetch.GithubFetcher;
+import com.github.wmarkow.amp.fetch.LibraryRepacker;
+
 @Mojo( name = "fetch-dependencies", defaultPhase = LifecyclePhase.INITIALIZE, requiresProject = true )
 public class FetchDependenciesMojo extends AbstractMojo
 {
@@ -43,7 +51,14 @@ public class FetchDependenciesMojo extends AbstractMojo
 
         for( Artifact arduinoLib : arduinoLibs )
         {
-            System.out.println( String.format( "Arduinolib is missing: %s", artifactToString( arduinoLib ) ) );
+            try
+            {
+                prepareLibrary( arduinoLib );
+            }
+            catch( IOException e )
+            {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -141,5 +156,57 @@ public class FetchDependenciesMojo extends AbstractMojo
         sb.append( artifact.getVersion() );
 
         return sb.toString();
+    }
+
+    private void prepareLibrary( Artifact arduinoLib ) throws IOException
+    {
+        System.out.println( "Preparing library for " + artifactToString( arduinoLib ) );
+
+        if( "com.github.arduino".equals( arduinoLib.getGroupId() )
+            && "arduino-core".equals( arduinoLib.getArtifactId() )
+            && "1.6.23".equals( arduinoLib.getBaseVersion() ) && "avr".equals( arduinoLib.getClassifier() ) )
+        {
+            // fetch com.github.arduino:arduino-core-1.6.23-avr
+            GithubFetcher githubFetcher = new GithubFetcher();
+            GithubFetchDescriptor descriptor = new GithubFetchDescriptor();
+            descriptor.username = "arduino";
+            descriptor.repoName = "ArduinoCore-avr";
+            descriptor.refName = "1.6.23";
+
+            File targetDir = new File( "target/arduino-maven-plugin" );
+            FileUtils.forceMkdir( targetDir );
+
+            File fetchedSources = githubFetcher.fetchLibrary( descriptor, targetDir );
+
+            LibraryRepacker repacker = new LibraryRepacker();
+            File arduinoZipLibrary = new File( targetDir, ArtifactUtils.getZipFileName( arduinoLib ) );
+            repacker.repack( fetchedSources, "cores/arduino", arduinoZipLibrary );
+
+            return;
+        }
+
+        if( "com.github.arduino".equals( arduinoLib.getGroupId() )
+            && "arduino-variant".equals( arduinoLib.getArtifactId() )
+            && "1.6.23".equals( arduinoLib.getBaseVersion() )
+            && "avr-standard".equals( arduinoLib.getClassifier() ) )
+        {
+            // fetch com.github.arduino:arduino-core-1.6.23-avr
+            GithubFetcher githubFetcher = new GithubFetcher();
+            GithubFetchDescriptor descriptor = new GithubFetchDescriptor();
+            descriptor.username = "arduino";
+            descriptor.repoName = "ArduinoCore-avr";
+            descriptor.refName = "1.6.23";
+
+            File targetDir = new File( "target/arduino-maven-plugin" );
+            FileUtils.forceMkdir( targetDir );
+
+            File fetchedSources = githubFetcher.fetchLibrary( descriptor, targetDir );
+
+            LibraryRepacker repacker = new LibraryRepacker();
+            File arduinoZipLibrary = new File( targetDir, ArtifactUtils.getZipFileName( arduinoLib ) );
+            repacker.repack( fetchedSources, "variants/standard", arduinoZipLibrary );
+
+            return;
+        }
     }
 }

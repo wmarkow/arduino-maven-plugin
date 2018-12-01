@@ -37,14 +37,14 @@
         <dependency>
             <groupId>com.github.arduino</groupId>
             <artifactId>arduino-core</artifactId>
-            <version>1.6.17</version>
+            <version>1.6.23</version>
             <classifier>avr</classifier>
             <type>arduinolib</type>
         </dependency>
         <dependency>
             <groupId>com.github.arduino</groupId>
             <artifactId>arduino-variant</artifactId>
-            <version>1.6.17</version>
+            <version>1.6.23</version>
             <classifier>avr-standard</classifier>
             <type>arduinolib</type>
         </dependency>
