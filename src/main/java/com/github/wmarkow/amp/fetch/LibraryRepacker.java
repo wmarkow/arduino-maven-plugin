@@ -4,16 +4,22 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zeroturnaround.zip.ZipUtil;
 
 public class LibraryRepacker
 {
+    private Logger logger = LoggerFactory.getLogger( LibraryRepacker.class );
+
     public void repack( File inputZipFile, String folderToUnpack, File outputZipFile ) throws IOException
     {
         if( inputZipFile == null )
         {
             throw new IllegalArgumentException( "Input ZIP file must not be null" );
         }
+
+        logger.info( String.format( "Repack the library into %s ", outputZipFile.getAbsolutePath() ) );
 
         final File workDir = inputZipFile.getParentFile();
 

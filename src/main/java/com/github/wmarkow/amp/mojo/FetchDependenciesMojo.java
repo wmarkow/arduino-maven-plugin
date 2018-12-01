@@ -57,7 +57,7 @@ public class FetchDependenciesMojo extends AbstractMojo
             }
             catch( IOException e )
             {
-                e.printStackTrace();
+                getLog().error( e.getMessage(), e );
             }
         }
     }
@@ -117,8 +117,9 @@ public class FetchDependenciesMojo extends AbstractMojo
 
         DefaultRepositorySystemSession session = new DefaultRepositorySystemSession( repoSession );
 
-        System.out.println( String.format( "Local repo path = %s", repoSession.getLocalRepository()
-            .getBasedir().getAbsolutePath() ) );
+        getLog().info(
+            String.format( "Local repo path = %s", repoSession.getLocalRepository().getBasedir()
+                .getAbsolutePath() ) );
 
         // Set the No-Op Graph transformer so tree stays intact
         session.setDependencyGraphTransformer( new NoopDependencyGraphTransformer() );
@@ -137,7 +138,7 @@ public class FetchDependenciesMojo extends AbstractMojo
         }
         catch( DependencyCollectionException exception )
         {
-            this.getLog().warn( "Could not collect dependencies from repo system", exception );
+            getLog().warn( "Could not collect dependencies from repo system", exception );
             return null;
         }
     }
@@ -160,7 +161,7 @@ public class FetchDependenciesMojo extends AbstractMojo
 
     private void prepareLibrary( Artifact arduinoLib ) throws IOException
     {
-        System.out.println( "Preparing library for " + artifactToString( arduinoLib ) );
+        getLog().info( "Preparing library for " + artifactToString( arduinoLib ) );
 
         if( "com.github.arduino".equals( arduinoLib.getGroupId() )
             && "arduino-core".equals( arduinoLib.getArtifactId() )

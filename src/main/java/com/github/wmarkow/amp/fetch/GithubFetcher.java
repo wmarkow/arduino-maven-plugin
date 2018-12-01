@@ -6,9 +6,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GithubFetcher
 {
+    private Logger logger = LoggerFactory.getLogger( GithubFetcher.class );
+
     private final static String GITHUB_ARCHIVE_URL_FORMAT = "https://github.com/%s/%s/archive/%s.zip";
 
     public File fetchLibrary( GithubFetchDescriptor descriptor, File targetDir ) throws IOException
@@ -29,6 +33,8 @@ public class GithubFetcher
         }
 
         final URL url = getArchiveUrl( descriptor.username, descriptor.repoName, descriptor.refName );
+
+        logger.info( String.format( "Fetching sources from %s", url.toString() ) );
 
         File targetFile =
             new File( targetDir.getAbsolutePath(), getFileName( descriptor.username, descriptor.repoName,
