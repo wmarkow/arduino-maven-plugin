@@ -22,6 +22,8 @@ import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.collection.DependencyCollectionException;
 import org.eclipse.aether.graph.DependencyNode;
+import org.eclipse.aether.installation.InstallRequest;
+import org.eclipse.aether.installation.InstallationException;
 import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
@@ -53,11 +55,17 @@ public class FetchDependenciesMojo extends AbstractMojo
         {
             try
             {
-                prepareLibrary( arduinoLib );
+                File file = prepareLibrary( arduinoLib );
+
+                installLibrary( arduinoLib, file );
             }
             catch( IOException e )
             {
-                getLog().error( e.getMessage(), e );
+                throw new MojoFailureException( e.getMessage() );
+            }
+            catch( InstallationException e )
+            {
+                throw new MojoFailureException( e.getMessage() );
             }
         }
     }
@@ -159,7 +167,7 @@ public class FetchDependenciesMojo extends AbstractMojo
         return sb.toString();
     }
 
-    private void prepareLibrary( Artifact arduinoLib ) throws IOException
+    private File prepareLibrary( Artifact arduinoLib ) throws IOException
     {
         getLog().info( "Preparing library for " + artifactToString( arduinoLib ) );
 
@@ -183,7 +191,7 @@ public class FetchDependenciesMojo extends AbstractMojo
             File arduinoZipLibrary = new File( targetDir, ArtifactUtils.getZipFileName( arduinoLib ) );
             repacker.repack( fetchedSources, "cores/arduino", arduinoZipLibrary );
 
-            return;
+            return arduinoZipLibrary;
         }
 
         if( "com.github.arduino".equals( arduinoLib.getGroupId() )
@@ -207,7 +215,19 @@ public class FetchDependenciesMojo extends AbstractMojo
             File arduinoZipLibrary = new File( targetDir, ArtifactUtils.getZipFileName( arduinoLib ) );
             repacker.repack( fetchedSources, "variants/standard", arduinoZipLibrary );
 
-            return;
+            return arduinoZipLibrary;
         }
+
+        return null;
+    }
+
+    private void installLibrary( Artifact arduinoLib, File libraryFile ) throws IOException,
+        InstallationException
+    {
+        InstallRequest installRequest = new InstallRequest();
+
+        Artifact newArtifact = arduinoLib.setFile( libraryFile );
+        installRequest.addArtifact( newArtifact );
+        repoSystem.install( repoSession, installRequest );
     }
 }
