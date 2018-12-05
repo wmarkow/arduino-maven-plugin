@@ -45,6 +45,13 @@
                             <goal>build</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

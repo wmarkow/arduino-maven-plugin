@@ -1,6 +1,7 @@
 package com.github.wmarkow.amp;
 
 import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
 
 public class ArtifactUtils
 {
@@ -23,5 +24,11 @@ public class ArtifactUtils
     public static String getZipFileName( Artifact artifact )
     {
         return getBaseFileName( artifact ) + ".zip";
+    }
+
+    public static Artifact mavenToAether( org.apache.maven.artifact.Artifact mavenArtifact )
+    {
+        return new DefaultArtifact( mavenArtifact.getGroupId(), mavenArtifact.getArtifactId(),
+            mavenArtifact.getClassifier(), mavenArtifact.getType(), mavenArtifact.getVersion() );
     }
 }

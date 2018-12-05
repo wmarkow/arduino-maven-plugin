@@ -54,7 +54,7 @@ public class ArduinoBuilder
         targetBuildDirectory = absolutePath;
         task.setObjdir( new File( absolutePath, OBJ_DIR_NAME ) );
 
-        final String outputElfFileNameWithoutExt = artifactId + "-" + version + "-" + classifier;
+        final String outputElfFileNameWithoutExt = getTargetElfFileNameWithoutExtension();
         task.setOutfile( new File( absolutePath, outputElfFileNameWithoutExt ) );
     }
 
@@ -103,8 +103,24 @@ public class ArduinoBuilder
         task.execute();
     }
 
+    // TODO: refactor this method and getTargetElfFileName() as well
+    private String getTargetElfFileNameWithoutExtension()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append( artifactId );
+        sb.append( "-" );
+        sb.append( version );
+        if( classifier != null && !classifier.isEmpty() )
+        {
+            sb.append( "-" );
+            sb.append( classifier );
+        }
+
+        return sb.toString();
+    }
+
     private String getTargetElfFileName()
     {
-        return artifactId + "-" + version + "-" + classifier + ".elf";
+        return getTargetElfFileNameWithoutExtension() + ".elf";
     }
 }

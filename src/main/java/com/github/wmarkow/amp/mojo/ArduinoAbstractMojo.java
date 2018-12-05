@@ -16,6 +16,8 @@ import org.eclipse.aether.collection.DependencyCollectionException;
 import org.eclipse.aether.graph.DependencyNode;
 import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
+import com.github.wmarkow.amp.ArtifactUtils;
+
 public abstract class ArduinoAbstractMojo extends AbstractMojo
 {
     @Component
@@ -60,13 +62,18 @@ public abstract class ArduinoAbstractMojo extends AbstractMojo
         return sb.toString();
     }
 
+    protected org.eclipse.aether.artifact.Artifact getProjectArtifact()
+    {
+        return ArtifactUtils.mavenToAether( mavenProject.getArtifact() );
+    }
+
     private DependencyNode getVerboseDependencyTree()
     {
         // Create CollectRequest object that will be submitted to collect the dependencies
         CollectRequest collectReq = new CollectRequest();
 
         // Get artifact this Maven project is attempting to build
-        org.apache.maven.artifact.Artifact art = mavenProject.getArtifact();
+        Artifact artifact = getProjectArtifact();
 
         DefaultRepositorySystemSession session = new DefaultRepositorySystemSession( repoSession );
 
@@ -74,9 +81,7 @@ public abstract class ArduinoAbstractMojo extends AbstractMojo
         session.setDependencyGraphTransformer( new NoopDependencyGraphTransformer() );
 
         // Create Aether graph dependency object from params extracted above
-        org.eclipse.aether.graph.Dependency dep =
-            new org.eclipse.aether.graph.Dependency( new org.eclipse.aether.artifact.DefaultArtifact(
-                art.getGroupId(), art.getArtifactId(), null, art.getVersion() ), null );
+        org.eclipse.aether.graph.Dependency dep = new org.eclipse.aether.graph.Dependency( artifact, null );
 
         // Set the root of the request, in this case the current project will be the root
         collectReq.setRoot( dep );
@@ -92,5 +97,3 @@ public abstract class ArduinoAbstractMojo extends AbstractMojo
         }
     }
 }
-
-

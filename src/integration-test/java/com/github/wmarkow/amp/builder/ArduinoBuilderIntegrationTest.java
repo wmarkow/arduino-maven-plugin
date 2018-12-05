@@ -4,6 +4,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -15,7 +17,7 @@ import com.github.wmarkow.amp.IntegrationTest;
 public class ArduinoBuilderIntegrationTest
 {
     @Test
-    public void testCompileBlink()
+    public void testCompileBlink() throws ExecutionException, IOException, InterruptedException
     {
         ArduinoBuilder builder = new ArduinoBuilder( "blink", "1.0.0-SNAPSHOT", "avr-standard" );
         builder.addBuildListener( new BuildConsoleListener() );
@@ -23,8 +25,10 @@ public class ArduinoBuilderIntegrationTest
 
         builder.cleanTargetBuildDirectory();
 
-        assertFalse( new File( new File( "" ).getAbsolutePath(),
-            "target/blink-1.0.0-SNAPSHOT-avr-standard.elf" ).exists() );
+        final File elfFile =
+            new File( new File( "" ).getAbsolutePath(), "target/blink-1.0.0-SNAPSHOT-avr-standard.elf" );
+
+        assertFalse( elfFile.exists() );
 
         builder.addSourceFileDir( new File( new File( "" ).getAbsolutePath(),
             "src/test/resources/arduino-blink-project" ) );
@@ -42,8 +46,14 @@ public class ArduinoBuilderIntegrationTest
 
         builder.build();
         
-        assertTrue( new File( new File( "" ).getAbsolutePath(),
-            "target/blink-1.0.0-SNAPSHOT-avr-standard.elf" ).exists() );
+        assertTrue( elfFile.exists() );
+
+        ArduinoPackager packager = new ArduinoPackager();
+        File hexFile =
+            new File( new File( "" ).getAbsolutePath(), "target/blink-1.0.0-SNAPSHOT-avr-standard.hex" );
+        packager.createHex( elfFile, hexFile );
+
+        assertTrue( hexFile.exists() );
     }
 }
 
