@@ -25,9 +25,24 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>fetch-dependencies</id>
                         <phase>initialize</phase>
                         <goals>
                             <goal>fetch-dependencies</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>build</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>build</goal>
                         </goals>
                     </execution>
                 </executions>
