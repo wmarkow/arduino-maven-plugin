@@ -15,15 +15,15 @@ import org.junit.experimental.categories.Category;
 import com.github.wmarkow.amp.IntegrationTest;
 
 @Category( IntegrationTest.class )
-public class CCompilerIntegrationTest
+public class SCompilerIntegrationTest
 {
-    private CCompiler compiler;
-    private File objDir = new File( "target/obj" );
+    SCompiler compiler;
+    File objDir = new File( "target/obj" );
 
     @Before
     public void init() throws IOException
     {
-        compiler = new CCompiler();
+        compiler = new SCompiler();
 
         compiler.setCommand( "avr-gcc" );
         compiler.addSrcDirectory( new File( "src/test/resources/arduino-blink-project" ) );
@@ -32,7 +32,7 @@ public class CCompilerIntegrationTest
         compiler.addIncludeDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
         compiler
             .addIncludeDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
-        compiler.setObjDirectory( objDir );
+        compiler.setObjDirectory( new File( "target/obj" ) );
         compiler.setCommandExecutionDirectory( new File( "." ) );
 
         compiler.addCommandArgs( getDefaultCommandArgs() );
@@ -47,7 +47,7 @@ public class CCompilerIntegrationTest
     {
         compiler.compile();
 
-        assertEquals( 7, FileUtils.listFiles( objDir, new String[]
+        assertEquals( 1, FileUtils.listFiles( objDir, new String[]
         { "o" }, true ).size() );
     }
 
@@ -57,14 +57,11 @@ public class CCompilerIntegrationTest
 
         args.add( "-c" );
         args.add( "-g" );
-        args.add( "-Os" );
-        args.add( "-Wall" );
-        args.add( "-Wextra" );
-        args.add( "-std=gnu11" );
-        args.add( "-ffunction-sections" );
-        args.add( "-fdata-sections" );
+        args.add( "-x" );
+        args.add( "assembler-with-cpp" );
         args.add( "-flto" );
-        args.add( "-fno-fat-lto-objects" );
+        args.add( "-MMD" );
+        args.add( "-MP" );
         args.add( "-mmcu=atmega328p" );
         args.add( "-DF_CPU=16000000L" );
         args.add( "-DARDUINO=10609" );

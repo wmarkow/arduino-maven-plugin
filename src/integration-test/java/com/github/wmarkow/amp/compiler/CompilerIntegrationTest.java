@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -15,27 +13,33 @@ import org.junit.experimental.categories.Category;
 import com.github.wmarkow.amp.IntegrationTest;
 
 @Category( IntegrationTest.class )
-public class CCompilerIntegrationTest
+public class CompilerIntegrationTest
 {
-    private CCompiler compiler;
-    private File objDir = new File( "target/obj" );
+
+    Compiler compiler;
+    File objDir = new File( "target/obj" );
 
     @Before
     public void init() throws IOException
     {
-        compiler = new CCompiler();
+        compiler = new Compiler();
 
-        compiler.setCommand( "avr-gcc" );
+        compiler.setCppCompilerCommand( "avr-g++" );
+        compiler.setCCompilerCommand( "avr-gcc" );
+        compiler.setSCompilerCommand( "avr-gcc" );
+
+        compiler.addCppCompilerArgs( CppCompilerIntegrationTest.getDefaultCommandArgs() );
+        compiler.addCCompilerArgs( CCompilerIntegrationTest.getDefaultCommandArgs() );
+        compiler.addSCompilerArgs( SCompilerIntegrationTest.getDefaultCommandArgs() );
+
         compiler.addSrcDirectory( new File( "src/test/resources/arduino-blink-project" ) );
         compiler.addSrcDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
         compiler.addSrcDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
         compiler.addIncludeDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
         compiler
             .addIncludeDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
-        compiler.setObjDirectory( objDir );
+        compiler.setObjDirectory( new File( "target/obj" ) );
         compiler.setCommandExecutionDirectory( new File( "." ) );
-
-        compiler.addCommandArgs( getDefaultCommandArgs() );
 
         FileUtils.cleanDirectory( objDir );
         assertEquals( 0, FileUtils.listFiles( objDir, new String[]
@@ -47,30 +51,7 @@ public class CCompilerIntegrationTest
     {
         compiler.compile();
 
-        assertEquals( 7, FileUtils.listFiles( objDir, new String[]
+        assertEquals( 26, FileUtils.listFiles( objDir, new String[]
         { "o" }, true ).size() );
-    }
-
-    public final static List< String > getDefaultCommandArgs()
-    {
-        List< String > args = new ArrayList< String >();
-
-        args.add( "-c" );
-        args.add( "-g" );
-        args.add( "-Os" );
-        args.add( "-Wall" );
-        args.add( "-Wextra" );
-        args.add( "-std=gnu11" );
-        args.add( "-ffunction-sections" );
-        args.add( "-fdata-sections" );
-        args.add( "-flto" );
-        args.add( "-fno-fat-lto-objects" );
-        args.add( "-mmcu=atmega328p" );
-        args.add( "-DF_CPU=16000000L" );
-        args.add( "-DARDUINO=10609" );
-        args.add( "-DARDUINO_AVR_UNO" );
-        args.add( "-DARDUINO_ARCH_AVR" );
-
-        return args;
     }
 }

@@ -10,33 +10,15 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.wmarkow.amp.cmd.CommandExecutor;
+import com.github.wmarkow.amp.processor.AbstractProcessor;
 
-public abstract class AbstractCompiler
+public abstract class AbstractCompiler extends AbstractProcessor
 {
     private Logger logger = LoggerFactory.getLogger( AbstractCompiler.class );
 
-    private String cmd;
-    private List< String > cmdArgs = new ArrayList< String >();
     private List< File > srcDirs = new ArrayList< File >();
     private List< File > incDirs = new ArrayList< File >();
     private File objDir;
-    private File cmdExeDir;
-
-    public void setCommand( String cmd )
-    {
-        this.cmd = cmd;
-    }
-
-    public void setCommandExecutionDirectory( File dir )
-    {
-        this.cmdExeDir = dir;
-    }
-
-    public void addCompilerArg( String arg )
-    {
-        cmdArgs.add( arg );
-    }
 
     public void addSrcDirectory( File srcDir )
     {
@@ -63,16 +45,12 @@ public abstract class AbstractCompiler
 
             for( File file : files )
             {
+                logger.info( "" );
                 logger.info( String.format( "Compiling %s", file ) );
 
                 List< String > cmd = prepareCommand( baseCmd, file );
 
-                CommandExecutor ce = new CommandExecutor();
-                int exitCode = ce.execute( cmd, cmdExeDir );
-                if( exitCode != 0 )
-                {
-                    throw new RuntimeException( String.format( "Compiler exited with exit code %s", exitCode ) );
-                }
+                executeCommand( cmd );
             }
         }
     }
@@ -83,8 +61,8 @@ public abstract class AbstractCompiler
     {
         List< String > result = new ArrayList< String >();
 
-        result.add( cmd );
-        result.addAll( cmdArgs );
+        result.add( getCommand() );
+        result.addAll( getCommandArgs() );
 
         for( File incDir : incDirs )
         {

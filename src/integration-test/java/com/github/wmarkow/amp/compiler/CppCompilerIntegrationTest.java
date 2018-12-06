@@ -1,8 +1,14 @@
 package com.github.wmarkow.amp.compiler;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -11,10 +17,13 @@ import com.github.wmarkow.amp.IntegrationTest;
 @Category( IntegrationTest.class )
 public class CppCompilerIntegrationTest
 {
-    @Test
-    public void testCompile() throws IOException, InterruptedException
+    CppCompiler compiler;
+    File objDir = new File( "target/obj" );
+
+    @Before
+    public void init() throws IOException
     {
-        CppCompiler compiler = new CppCompiler();
+        compiler = new CppCompiler();
 
         compiler.setCommand( "avr-g++" );
         compiler.addSrcDirectory( new File( "src/test/resources/arduino-blink-project" ) );
@@ -23,29 +32,47 @@ public class CppCompilerIntegrationTest
         compiler.addIncludeDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
         compiler
             .addIncludeDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
-        compiler.setObjDirectory( new File( "target/obj" ) );
+        compiler.setObjDirectory( objDir );
         compiler.setCommandExecutionDirectory( new File( "." ) );
 
-        compiler.addCompilerArg( "-c" );
-        compiler.addCompilerArg( "-g" );
-        compiler.addCompilerArg( "-Os" );
-        compiler.addCompilerArg( "-Wall" );
-        compiler.addCompilerArg( "-Wextra" );
-        compiler.addCompilerArg( "-std=gnu++11" );
-        compiler.addCompilerArg( "-fpermissive" );
-        compiler.addCompilerArg( "-fno-exceptions" );
-        compiler.addCompilerArg( "-ffunction-sections" );
-        compiler.addCompilerArg( "-fdata-sections" );
-        compiler.addCompilerArg( "-fno-threadsafe-statics" );
-        compiler.addCompilerArg( "-flto" );
-        compiler.addCompilerArg( "-mmcu=atmega328p" );
-        compiler.addCompilerArg( "-DF_CPU=16000000L" );
-        compiler.addCompilerArg( "-DARDUINO=10609" );
-        compiler.addCompilerArg( "-DARDUINO_AVR_UNO" );
-        compiler.addCompilerArg( "-DARDUINO_ARCH_AVR" );
+        compiler.addCommandArgs( getDefaultCommandArgs() );
 
+        FileUtils.cleanDirectory( objDir );
+        assertEquals( 0, FileUtils.listFiles( objDir, new String[]
+        { "o" }, true ).size() );
+    }
+
+    @Test
+    public void testCompile() throws IOException, InterruptedException
+    {
         compiler.compile();
+
+        assertEquals( 18, FileUtils.listFiles( objDir, new String[]
+        { "o" }, true ).size() );
+    }
+
+    public final static List< String > getDefaultCommandArgs()
+    {
+        List< String > args = new ArrayList< String >();
+
+        args.add( "-c" );
+        args.add( "-g" );
+        args.add( "-Os" );
+        args.add( "-Wall" );
+        args.add( "-Wextra" );
+        args.add( "-std=gnu++11" );
+        args.add( "-fpermissive" );
+        args.add( "-fno-exceptions" );
+        args.add( "-ffunction-sections" );
+        args.add( "-fdata-sections" );
+        args.add( "-fno-threadsafe-statics" );
+        args.add( "-flto" );
+        args.add( "-mmcu=atmega328p" );
+        args.add( "-DF_CPU=16000000L" );
+        args.add( "-DARDUINO=10609" );
+        args.add( "-DARDUINO_AVR_UNO" );
+        args.add( "-DARDUINO_ARCH_AVR" );
+
+        return args;
     }
 }
-
-
