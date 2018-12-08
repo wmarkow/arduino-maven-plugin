@@ -10,7 +10,6 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.eclipse.aether.artifact.Artifact;
 
 import com.github.wmarkow.amp.ArtifactUtils;
-import com.github.wmarkow.amp.builder.ArduinoPackager;
 
 @Mojo( name = "package", defaultPhase = LifecyclePhase.PACKAGE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
@@ -29,15 +28,5 @@ public class PackageMojo extends ArduinoAbstractMojo
         File hexFile =
             new File( new File( "" ).getAbsoluteFile(), "target/" + ArtifactUtils.getBaseFileName( artifact )
                 + ".hex" );
-
-        ArduinoPackager packager = new ArduinoPackager();
-        try
-        {
-            packager.createHex( elfFile, hexFile );
-        }
-        catch( Exception e )
-        {
-            throw new MojoFailureException( e.getMessage(), e );
-        }
     }
 }
