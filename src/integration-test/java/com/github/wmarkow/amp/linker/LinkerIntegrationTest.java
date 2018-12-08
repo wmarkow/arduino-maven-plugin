@@ -11,10 +11,13 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+import com.github.wmarkow.amp.IntegrationTest;
 import com.github.wmarkow.amp.compiler.CompilerIntegrationTest;
 
-public class LinkerTest
+@Category( IntegrationTest.class )
+public class LinkerIntegrationTest
 {
     Linker linker;
     File outputElfFile = new File( "target/output.elf" );
