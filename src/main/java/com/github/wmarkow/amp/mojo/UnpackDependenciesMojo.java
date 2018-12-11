@@ -26,7 +26,7 @@ public class UnpackDependenciesMojo extends ArduinoAbstractMojo
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        List< Artifact > arduinoLibs = getArduinoLibDependencies();
+        List< Artifact > arduinoLibs = getArduinoDependencies();
 
         File dstBaseDir = new File( "target/generated-sources/" );
 

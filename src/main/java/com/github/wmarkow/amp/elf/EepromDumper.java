@@ -10,11 +10,12 @@ import org.slf4j.LoggerFactory;
 
 import com.github.wmarkow.amp.processor.AbstractProcessor;
 
-public class EepromxDumper extends AbstractProcessor
+public class EepromDumper extends AbstractProcessor
 {
-    private Logger logger = LoggerFactory.getLogger( EepromxDumper.class );
+    private Logger logger = LoggerFactory.getLogger( EepromDumper.class );
 
-    public void makeHex( File inputElfFile, File outputEepromFile ) throws IOException, InterruptedException
+    public void makeEeprom( File inputElfFile, File outputEepromFile ) throws IOException,
+        InterruptedException
     {
         List< String > cmd = new ArrayList< String >();
 

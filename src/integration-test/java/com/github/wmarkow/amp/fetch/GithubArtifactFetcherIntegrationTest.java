@@ -10,7 +10,7 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
-public class GithubFetcherIntegrationTest
+public class GithubArtifactFetcherIntegrationTest
 {
     @Test
     public void testFetchLibraryForArduinoCoreFromExistingTag() throws IOException
@@ -21,7 +21,7 @@ public class GithubFetcherIntegrationTest
         descriptor.repoName = "ArduinoCore-avr";
         descriptor.refName = "1.6.23";
 
-        GithubFetcher fetcher = new GithubFetcher();
+        GithubArtifactFetcher fetcher = new GithubArtifactFetcher();
 
         File targetDir = new File( "target/arduino-maven-plugin/" );
         FileUtils.forceMkdir( targetDir );
@@ -41,7 +41,7 @@ public class GithubFetcherIntegrationTest
         descriptor.repoName = "ArduinoCore-avr";
         descriptor.refName = "1.6.23blablabla";
 
-        GithubFetcher fetcher = new GithubFetcher();
+        GithubArtifactFetcher fetcher = new GithubArtifactFetcher();
 
         File targetDir = new File( "target/arduino-maven-plugin/" );
         FileUtils.forceMkdir( targetDir );

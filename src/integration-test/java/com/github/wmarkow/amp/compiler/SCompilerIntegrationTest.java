@@ -23,6 +23,8 @@ public class SCompilerIntegrationTest
     @Before
     public void init() throws IOException
     {
+        FileUtils.forceMkdir( objDir );
+
         compiler = new SCompiler();
 
         compiler.setCommand( "avr-gcc" );

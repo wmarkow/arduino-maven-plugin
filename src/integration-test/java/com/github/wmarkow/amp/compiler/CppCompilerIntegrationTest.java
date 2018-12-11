@@ -23,6 +23,8 @@ public class CppCompilerIntegrationTest
     @Before
     public void init() throws IOException
     {
+        FileUtils.forceMkdir( objDir );
+
         compiler = new CppCompiler();
 
         compiler.setCommand( "avr-g++" );

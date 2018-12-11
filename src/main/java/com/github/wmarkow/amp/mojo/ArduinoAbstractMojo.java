@@ -20,6 +20,9 @@ import com.github.wmarkow.amp.ArtifactUtils;
 
 public abstract class ArduinoAbstractMojo extends AbstractMojo
 {
+    protected final static String ARDUINO_CORE_EXTENSION = "arduinocore";
+    protected final static String ARDUINO_LIB_EXTENSION = "arduinolib";
+
     @Component
     protected MavenProject mavenProject;
 
@@ -29,7 +32,7 @@ public abstract class ArduinoAbstractMojo extends AbstractMojo
     @Parameter( defaultValue = "${repositorySystemSession}" )
     protected RepositorySystemSession repoSession;
 
-    protected List< Artifact > getArduinoLibDependencies()
+    protected List< Artifact > getArduinoDependencies()
     {
         DependencyNode node = getVerboseDependencyTree();
 
@@ -37,7 +40,8 @@ public abstract class ArduinoAbstractMojo extends AbstractMojo
 
         for( DependencyNode dn : node.getChildren() )
         {
-            if( "arduinolib".equals( dn.getArtifact().getExtension() ) )
+            if( ARDUINO_CORE_EXTENSION.equals( dn.getArtifact().getExtension() )
+                || ARDUINO_LIB_EXTENSION.equals( dn.getArtifact().getExtension() ) )
             {
                 result.add( dn.getArtifact() );
             }

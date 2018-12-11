@@ -37,6 +37,8 @@ public abstract class AbstractCompiler extends AbstractProcessor
 
     public void compile() throws IOException, InterruptedException
     {
+        FileUtils.forceMkdir( objDir );
+
         List< String > baseCmd = prepareBaseCommand();
 
         for( File srcDir : srcDirs )

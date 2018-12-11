@@ -69,7 +69,7 @@ public class BuildMojo extends ArduinoAbstractMojo
         compiler.setObjDirectory( objDir );
 
         compiler.addSrcDirectory( new File( sourceDirectory ) );
-        for( Artifact arduinoLib : getArduinoLibDependencies() )
+        for( Artifact arduinoLib : getArduinoDependencies() )
         {
             File libSourcesDir = getPathToUnpackedLibrarySourcesDir( arduinoLib );
 

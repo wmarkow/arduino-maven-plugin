@@ -9,9 +9,9 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GithubFetcher
+public class GithubArtifactFetcher
 {
-    private Logger logger = LoggerFactory.getLogger( GithubFetcher.class );
+    private Logger logger = LoggerFactory.getLogger( GithubArtifactFetcher.class );
 
     private final static String GITHUB_ARCHIVE_URL_FORMAT = "https://github.com/%s/%s/archive/%s.zip";
 
