@@ -60,4 +60,11 @@ public class Platform
         return boards;
     }
 
+    @Override
+    public String toString()
+    {
+        return "Platform [name=" + name + ", architecture=" + architecture + ", version=" + version
+            + ", url=" + url + "]";
+    }
+
 }

@@ -23,6 +23,13 @@ public class Package
     {
         return platforms;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Package [name=" + name + ", maintainer=" + maintainer + "]";
+    }
+
 }
 
 
