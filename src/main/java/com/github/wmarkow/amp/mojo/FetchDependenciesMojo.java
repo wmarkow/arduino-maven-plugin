@@ -2,6 +2,7 @@ package com.github.wmarkow.amp.mojo;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +19,11 @@ import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
 
 import com.github.wmarkow.amp.ArtifactUtils;
+import com.github.wmarkow.amp.fetch.ArduinoCoreArtifactFetcher;
 import com.github.wmarkow.amp.fetch.GithubArtifactFetcher;
 import com.github.wmarkow.amp.fetch.GithubFetchDescriptor;
 import com.github.wmarkow.amp.fetch.LibraryRepacker;
+import com.github.wmarkow.amp.platform.PlatformPackageManager;
 
 @Mojo( name = "fetch-dependencies", defaultPhase = LifecyclePhase.INITIALIZE, requiresProject = true )
 public class FetchDependenciesMojo extends ArduinoAbstractMojo
@@ -36,10 +39,23 @@ public class FetchDependenciesMojo extends ArduinoAbstractMojo
 
             if( ARDUINO_CORE_EXTENSION.equals( arduinoLib.getExtension() ) )
             {
-                getLog().warn(
-                    String.format(
-                        "Arduino Core Artifact resolving not supported yet. %s will not be downloaded!",
-                        this.artifactToString( arduinoLib ) ) );
+                File workDir = new File( "target/arduino-maven-plugin" );
+                PlatformPackageManager ppm = new PlatformPackageManager( workDir );
+
+                try
+                {
+                    ppm.addPackageUrl( new URL( "https://downloads.arduino.cc/packages/package_index.json" ) );
+                    ppm.update();
+
+                    ArduinoCoreArtifactFetcher fetcher = new ArduinoCoreArtifactFetcher( ppm );
+                    File fetchedCore =
+                        fetcher.fetch( arduinoLib.getArtifactId(), arduinoLib.getVersion(), workDir );
+                    installLibrary( arduinoLib, fetchedCore );
+                }
+                catch( Exception e )
+                {
+                    throw new MojoFailureException( e.getMessage() );
+                }
             }
 
             if( ARDUINO_LIB_EXTENSION.equals( arduinoLib.getExtension() ) )
@@ -50,11 +66,7 @@ public class FetchDependenciesMojo extends ArduinoAbstractMojo
 
                     installLibrary( arduinoLib, file );
                 }
-                catch( IOException e )
-                {
-                    throw new MojoFailureException( e.getMessage() );
-                }
-                catch( InstallationException e )
+                catch( Exception e )
                 {
                     throw new MojoFailureException( e.getMessage() );
                 }
