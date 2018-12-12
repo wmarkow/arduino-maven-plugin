@@ -15,11 +15,11 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.eclipse.aether.artifact.Artifact;
 
 import com.github.wmarkow.amp.ArtifactUtils;
-import com.github.wmarkow.amp.compiler.CCompilerIntegrationTest;
-import com.github.wmarkow.amp.compiler.Compiler;
-import com.github.wmarkow.amp.compiler.CppCompilerIntegrationTest;
-import com.github.wmarkow.amp.compiler.SCompilerIntegrationTest;
-import com.github.wmarkow.amp.linker.Linker;
+import com.github.wmarkow.amp.build.compiler.CCompilerIntegrationTest;
+import com.github.wmarkow.amp.build.compiler.Compiler;
+import com.github.wmarkow.amp.build.compiler.CppCompilerIntegrationTest;
+import com.github.wmarkow.amp.build.compiler.SCompilerIntegrationTest;
+import com.github.wmarkow.amp.build.linker.Linker;
 
 @Mojo( name = "build", defaultPhase = LifecyclePhase.COMPILE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )

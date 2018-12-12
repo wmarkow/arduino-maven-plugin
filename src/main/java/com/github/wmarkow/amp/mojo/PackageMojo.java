@@ -13,8 +13,8 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.eclipse.aether.artifact.Artifact;
 
 import com.github.wmarkow.amp.ArtifactUtils;
-import com.github.wmarkow.amp.elf.EepromDumper;
-import com.github.wmarkow.amp.elf.HexDumper;
+import com.github.wmarkow.amp.build.elf.EepromDumper;
+import com.github.wmarkow.amp.build.elf.HexDumper;
 
 @Mojo( name = "package", defaultPhase = LifecyclePhase.PACKAGE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )

@@ -13,6 +13,7 @@ import org.eclipse.aether.artifact.DefaultArtifact;
 import org.junit.Test;
 
 import com.github.wmarkow.amp.ArtifactUtils;
+import com.github.wmarkow.amp.dependency.LibraryRepacker;
 
 public class LibraryRepackerTest
 {
