@@ -14,9 +14,9 @@ import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
-import org.zeroturnaround.zip.ZipUtil;
 
 import com.github.wmarkow.amp.ArtifactUtils;
+import com.github.wmarkow.amp.CompressUtil;
 
 @Mojo( name = "unpack-dependencies", defaultPhase = LifecyclePhase.GENERATE_SOURCES,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
@@ -50,7 +50,15 @@ public class UnpackDependenciesMojo extends ArduinoAbstractMojo
             getLog().info(
                 String.format( "Unpacking library from %s to %s", sourceZip.getAbsolutePath(),
                     dstDir.getAbsolutePath() ) );
-            ZipUtil.unpack( sourceZip, dstDir );
+
+            try
+            {
+                CompressUtil.unpack( sourceZip, dstDir );
+            }
+            catch( IOException e )
+            {
+                throw new MojoExecutionException( e.getMessage(), e );
+            }
         }
     }
 
