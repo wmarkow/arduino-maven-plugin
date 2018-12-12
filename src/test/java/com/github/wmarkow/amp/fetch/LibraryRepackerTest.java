@@ -1,15 +1,16 @@
 package com.github.wmarkow.amp.fetch;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.artifact.DefaultArtifact;
 import org.junit.Test;
-import org.zeroturnaround.zip.ZipUtil;
 
 import com.github.wmarkow.amp.ArtifactUtils;
 
@@ -29,14 +30,19 @@ public class LibraryRepackerTest
         repacker.repack( inputZipFile, "/cores/arduino", outputZipFile );
 
         assertTrue( outputZipFile.exists() );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/abi.cpp" ) );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/Arduino.h" ) );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/main.cpp" ) );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/wiring.c" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "abi.cpp" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "Arduino.h" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "main.cpp" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "wiring.c" ) );
+
+        ZipFile zipFile = new ZipFile( outputZipFile );
+
+        assertNotNull( zipFile.getEntry( "src/abi.cpp" ) );
+        assertNotNull( zipFile.getEntry( "src/Arduino.h" ) );
+        assertNotNull( zipFile.getEntry( "src/main.cpp" ) );
+        assertNotNull( zipFile.getEntry( "src/wiring.c" ) );
+        assertNull( zipFile.getEntry( "abi.cpp" ) );
+        assertNull( zipFile.getEntry( "Arduino.h" ) );
+        assertNull( zipFile.getEntry( "main.cpp" ) );
+        assertNull( zipFile.getEntry( "wiring.c" ) );
+
+        zipFile.close();
     }
 
     @Test
@@ -52,14 +58,19 @@ public class LibraryRepackerTest
         repacker.repack( inputZipFile, "/cores/arduino", outputZipFile );
 
         assertTrue( outputZipFile.exists() );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/abi.cpp" ) );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/Arduino.h" ) );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/main.cpp" ) );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/wiring.c" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "abi.cpp" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "Arduino.h" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "main.cpp" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "wiring.c" ) );
+
+        ZipFile zipFile = new ZipFile( outputZipFile );
+
+        assertNotNull( zipFile.getEntry( "src/abi.cpp" ) );
+        assertNotNull( zipFile.getEntry( "src/Arduino.h" ) );
+        assertNotNull( zipFile.getEntry( "src/main.cpp" ) );
+        assertNotNull( zipFile.getEntry( "src/wiring.c" ) );
+        assertNull( zipFile.getEntry( "abi.cpp" ) );
+        assertNull( zipFile.getEntry( "Arduino.h" ) );
+        assertNull( zipFile.getEntry( "main.cpp" ) );
+        assertNull( zipFile.getEntry( "wiring.c" ) );
+
+        zipFile.close();
     }
 
     @Test
@@ -75,14 +86,19 @@ public class LibraryRepackerTest
         repacker.repack( inputZipFile, "/cores/arduino", outputZipFile );
 
         assertTrue( outputZipFile.exists() );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/abi.cpp" ) );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/Arduino.h" ) );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/main.cpp" ) );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/wiring.c" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "abi.cpp" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "Arduino.h" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "main.cpp" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "wiring.c" ) );
+
+        ZipFile zipFile = new ZipFile( outputZipFile );
+
+        assertNotNull( zipFile.getEntry( "src/abi.cpp" ) );
+        assertNotNull( zipFile.getEntry( "src/Arduino.h" ) );
+        assertNotNull( zipFile.getEntry( "src/main.cpp" ) );
+        assertNotNull( zipFile.getEntry( "src/wiring.c" ) );
+        assertNull( zipFile.getEntry( "abi.cpp" ) );
+        assertNull( zipFile.getEntry( "Arduino.h" ) );
+        assertNull( zipFile.getEntry( "main.cpp" ) );
+        assertNull( zipFile.getEntry( "wiring.c" ) );
+
+        zipFile.close();
     }
 
     @Test
@@ -98,13 +114,18 @@ public class LibraryRepackerTest
         repacker.repack( inputZipFile, "/cores/arduino", outputZipFile );
 
         assertTrue( outputZipFile.exists() );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/abi.cpp" ) );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/Arduino.h" ) );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/main.cpp" ) );
-        assertTrue( ZipUtil.containsEntry( outputZipFile, "src/wiring.c" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "abi.cpp" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "Arduino.h" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "main.cpp" ) );
-        assertFalse( ZipUtil.containsEntry( outputZipFile, "wiring.c" ) );
+
+        ZipFile zipFile = new ZipFile( outputZipFile );
+
+        assertNotNull( zipFile.getEntry( "src/abi.cpp" ) );
+        assertNotNull( zipFile.getEntry( "src/Arduino.h" ) );
+        assertNotNull( zipFile.getEntry( "src/main.cpp" ) );
+        assertNotNull( zipFile.getEntry( "src/wiring.c" ) );
+        assertNull( zipFile.getEntry( "abi.cpp" ) );
+        assertNull( zipFile.getEntry( "Arduino.h" ) );
+        assertNull( zipFile.getEntry( "main.cpp" ) );
+        assertNull( zipFile.getEntry( "wiring.c" ) );
+
+        zipFile.close();
     }
 }

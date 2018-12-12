@@ -2,17 +2,23 @@ package com.github.wmarkow.amp;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.Collection;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 public class CompressUtil
@@ -27,6 +33,45 @@ public class CompressUtil
         }
 
         return unpackTarBzip2( inputFile, targetDir );
+    }
+
+    public static boolean packZip( File dir, File outputFile ) throws IOException
+    {
+        OutputStream archiveStream = new FileOutputStream( outputFile );
+        ArchiveOutputStream archive;
+        try
+        {
+            archive =
+                new ArchiveStreamFactory()
+                    .createArchiveOutputStream( ArchiveStreamFactory.ZIP, archiveStream );
+        }
+        catch( ArchiveException e )
+        {
+            throw new IOException( e.getMessage(), e );
+        }
+
+        Collection< File > fileList = FileUtils.listFiles( dir, null, true );
+
+        for( File file : fileList )
+        {
+            int index = dir.getAbsolutePath().length() + 1;
+            String path = file.getCanonicalPath();
+            String entryName = path.substring( index );
+
+            ZipArchiveEntry entry = new ZipArchiveEntry( entryName );
+            archive.putArchiveEntry( entry );
+
+            BufferedInputStream input = new BufferedInputStream( new FileInputStream( file ) );
+
+            IOUtils.copy( input, archive );
+            input.close();
+            archive.closeArchiveEntry();
+        }
+
+        archive.finish();
+        archiveStream.close();
+
+        return true;
     }
 
     private static boolean unpackGeneric( File inputFile, File targetDir ) throws IOException

@@ -6,7 +6,8 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zeroturnaround.zip.ZipUtil;
+
+import com.github.wmarkow.amp.CompressUtil;
 
 public class LibraryRepacker
 {
@@ -25,7 +26,7 @@ public class LibraryRepacker
 
         // unzip input file to a temporary file
         final File unzipDir = new File( inputZipFile.getAbsolutePath() + "_unzip" );
-        ZipUtil.unpack( inputZipFile, unzipDir );
+        CompressUtil.unpack( inputZipFile, unzipDir );
 
         // copy specific folder from source directory into a destination directory
         final File dstDir = new File( workDir, outputZipFile.getName() + "_repacked" );
@@ -65,7 +66,7 @@ public class LibraryRepacker
         }
 
         // pack destination directory into ZIP
-        ZipUtil.pack( dstDir, outputZipFile );
+        CompressUtil.packZip( dstDir, outputZipFile );
     }
 
     private boolean hasSubfolder( File rootFolder, String subfolder )

@@ -47,12 +47,6 @@ public class CompressUtilTest
         boolean result =
             CompressUtil.unpack( new File( "src/test/resources/test.tar.bz2" ), uncompressTarBz2Dir );
 
-        File testFile = new File( "target/test.txt" );
-        FileUtils.touch( testFile );
-        assertTrue( testFile.exists() );
-        FileUtils.deleteQuietly( testFile );
-        assertFalse( testFile.exists() );
-
         assertTrue( result );
         assertFalse( new File( uncompressTarBz2Dir, "test.tar.tar" ).exists() );
         assertEquals( 1, uncompressTarBz2Dir.list().length );
