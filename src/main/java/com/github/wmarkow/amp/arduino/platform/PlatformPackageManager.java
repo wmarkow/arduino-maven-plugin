@@ -50,9 +50,9 @@ public class PlatformPackageManager
                     FileUtils.copyURLToFile( url, file, 5000, 2500 );
                 }
 
-                PlatformPackageIndexReader ppir = new PlatformPackageIndexReader();
+                PlatformFilesReader pir = new PlatformFilesReader();
 
-                loadedIndexes.add( ppir.readFromJson( file ) );
+                loadedIndexes.add( pir.readFromJson( file ) );
             }
             catch( IOException e )
             {

@@ -2,6 +2,7 @@ package com.github.wmarkow.amp.variable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class VariableStorage
 {
@@ -12,8 +13,13 @@ public class VariableStorage
         variables.put( variable.getName(), variable );
     }
     
-    public Variable get( String name )
+    public Variable getVariable( String name )
     {
         return variables.get( name );
+    }
+
+    public Set< String > getNames()
+    {
+        return variables.keySet();
     }
 }

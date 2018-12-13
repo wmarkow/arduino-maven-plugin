@@ -66,7 +66,7 @@ public class ExpressionEvaluatorTest
         storage.addVariable( new Variable( "compiler.cpp.cmd", "avr-gcc" ) );
 
         ExpressionEvaluator evaluator = new ExpressionEvaluator();
-        String result = evaluator.evaluate( "{compiler.path} {compiler.cpp.cmd}", storage );
+        String result = evaluator.evaluate( "{compiler.path}{compiler.cpp.cmd}", storage );
 
         assertEquals( "avr-gcc", result );
     }

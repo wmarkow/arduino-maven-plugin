@@ -45,7 +45,7 @@ public class ExpressionEvaluator extends ExpressionVisitor
 
         final String variablename = variableName.toString();
 
-        final Variable variable = storage.get( variablename );
+        final Variable variable = storage.getVariable( variablename );
 
         if( variable == null )
         {
