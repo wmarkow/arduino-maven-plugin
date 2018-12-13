@@ -1,7 +1,5 @@
 package com.github.wmarkow.amp.arduino.platform;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Platform
 {
@@ -13,7 +11,8 @@ public class Platform
     private String archiveFileName;
     private String checksum;
     private int size;
-    private List< Board > boards = new ArrayList< Board >();
+
+    // private List< Board > boards = new ArrayList< Board >();
 
     public String getName()
     {
@@ -53,11 +52,6 @@ public class Platform
     public int getSize()
     {
         return size;
-    }
-
-    public List< Board > getBoards()
-    {
-        return boards;
     }
 
     @Override

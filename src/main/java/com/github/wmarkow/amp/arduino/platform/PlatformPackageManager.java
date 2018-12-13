@@ -11,8 +11,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-
 public class PlatformPackageManager
 {
     private Logger logger = LoggerFactory.getLogger( PlatformPackageManager.class );
@@ -52,7 +50,9 @@ public class PlatformPackageManager
                     FileUtils.copyURLToFile( url, file, 5000, 2500 );
                 }
 
-                loadedIndexes.add( readFromJson( file ) );
+                PlatformPackageIndexReader ppir = new PlatformPackageIndexReader();
+
+                loadedIndexes.add( ppir.readFromJson( file ) );
             }
             catch( IOException e )
             {
@@ -94,13 +94,5 @@ public class PlatformPackageManager
         }
 
         return result;
-    }
-
-    private PlatformPackageIndex readFromJson( File jsonFile ) throws IOException
-    {
-        String jsonString = FileUtils.readFileToString( jsonFile, "UTF-8" );
-        Gson gson = new Gson();
-
-        return gson.fromJson( jsonString, PlatformPackageIndex.class );
     }
 }
