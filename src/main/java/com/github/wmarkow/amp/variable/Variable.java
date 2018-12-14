@@ -5,6 +5,12 @@ public class Variable
     private String name;
     private String value;
 
+    public Variable( Variable other )
+    {
+        this.name = other.getName();
+        this.value = other.getValue();
+    }
+
     public Variable( String name, String value )
     {
         this.name = name;
@@ -29,5 +35,11 @@ public class Variable
     public String getName()
     {
         return name;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Variable [name=" + name + ", value=" + value + "]";
     }
 }

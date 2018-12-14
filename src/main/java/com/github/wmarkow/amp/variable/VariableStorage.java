@@ -1,25 +1,12 @@
 package com.github.wmarkow.amp.variable;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
-public class VariableStorage
+public interface VariableStorage
 {
-    private Map< String, Variable > variables = new HashMap< String, Variable >();
-
-    public void addVariable( Variable variable )
-    {
-        variables.put( variable.getName(), variable );
-    }
+    public void addVariable( Variable variable );
     
-    public Variable getVariable( String name )
-    {
-        return variables.get( name );
-    }
+    public Variable getVariable( String name );
 
-    public Set< String > getNames()
-    {
-        return variables.keySet();
-    }
+    public Set< String > getNames();
 }

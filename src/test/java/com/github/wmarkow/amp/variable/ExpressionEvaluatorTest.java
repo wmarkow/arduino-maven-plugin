@@ -10,7 +10,7 @@ public class ExpressionEvaluatorTest
     @Test
     public void testEvaluateForNoVariableExpression()
     {
-        VariableStorage storage = new VariableStorage();
+        VariableStorage storage = new DefaultVariableStorage();
 
         ExpressionEvaluator evaluator = new ExpressionEvaluator();
 
@@ -22,7 +22,7 @@ public class ExpressionEvaluatorTest
     @Test
     public void testEvaluateForOneVariableExpressionButMissingVariable()
     {
-        VariableStorage storage = new VariableStorage();
+        VariableStorage storage = new DefaultVariableStorage();
 
         ExpressionEvaluator evaluator = new ExpressionEvaluator();
 
@@ -34,7 +34,7 @@ public class ExpressionEvaluatorTest
     @Test
     public void testEvaluateForOneVariableExpression()
     {
-        VariableStorage storage = new VariableStorage();
+        VariableStorage storage = new DefaultVariableStorage();
         storage.addVariable( new Variable( "variable", "15002900" ) );
 
         ExpressionEvaluator evaluator = new ExpressionEvaluator();
@@ -47,7 +47,7 @@ public class ExpressionEvaluatorTest
     @Test
     public void testEvaluateForOneNestedVariableExpression()
     {
-        VariableStorage storage = new VariableStorage();
+        VariableStorage storage = new DefaultVariableStorage();
         storage.addVariable( new Variable( "variable", "15002900" ) );
         storage.addVariable( new Variable( "variable2", "123 {variable}" ) );
 
@@ -61,7 +61,7 @@ public class ExpressionEvaluatorTest
     @Test
     public void testEvaluateSimple()
     {
-        VariableStorage storage = new VariableStorage();
+        VariableStorage storage = new DefaultVariableStorage();
         storage.addVariable( new Variable( "compiler.path", "" ) );
         storage.addVariable( new Variable( "compiler.cpp.cmd", "avr-gcc" ) );
 

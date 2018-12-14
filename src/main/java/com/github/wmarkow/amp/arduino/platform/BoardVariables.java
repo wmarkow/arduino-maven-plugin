@@ -1,8 +1,8 @@
 package com.github.wmarkow.amp.arduino.platform;
 
-import com.github.wmarkow.amp.variable.VariableStorage;
+import com.github.wmarkow.amp.variable.DefaultVariableStorage;
 
-public class BoardVariables extends VariableStorage
+public class BoardVariables extends DefaultVariableStorage
 {
 
 }
