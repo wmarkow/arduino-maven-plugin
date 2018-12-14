@@ -50,7 +50,7 @@ public class PlatformFilesReader
 
             int indexOfFirstDot = variable.getName().indexOf( '.' );
             String boardName = variable.getName().substring( 0, indexOfFirstDot );
-            String newVariableName = variable.getName().substring( indexOfFirstDot );
+            String newVariableName = variable.getName().substring( indexOfFirstDot + 1 );
 
             BoardVariables boardVariables = result.getBoardVariables( boardName );
             if( boardVariables == null )

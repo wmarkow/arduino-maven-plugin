@@ -1,6 +1,7 @@
 package com.github.wmarkow.amp.arduino.platform;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,5 +42,19 @@ public class PlatformFilesReaderTest
             pir.readBoardsVariables( new File( "src/test/resources/arduino/boards.txt" ) );
 
         assertEquals( 26, variables.getBoardNames().size() );
+    }
+
+    @Test
+    public void testReadBoardsVariablesFromFileForUno() throws IOException
+    {
+        PlatformFilesReader pir = new PlatformFilesReader();
+
+        BoardsVariables variables =
+            pir.readBoardsVariables( new File( "src/test/resources/arduino/boards.txt" ) );
+
+        BoardVariables unoBoard = variables.getBoardVariables( "uno" );
+
+        assertNotNull( unoBoard );
+        assertEquals( "atmega328p", unoBoard.getVariable( "build.mcu" ).getValue() );
     }
 }
