@@ -24,6 +24,19 @@ public class Package
         return platforms;
     }
 
+    public Platform getPlatformByVersion( String version )
+    {
+        for( Platform platform : getPlatforms() )
+        {
+            if( version.equals( platform.getVersion() ) )
+            {
+                return platform;
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public String toString()
     {
@@ -31,5 +44,3 @@ public class Package
     }
 
 }
-
-

@@ -11,6 +11,17 @@ public class PlatformPackageIndex
     {
         return packages;
     }
+
+    public Package getPackage( String name )
+    {
+        for( Package _package : packages )
+        {
+            if( name.equals( _package.getName() ) )
+            {
+                return _package;
+            }
+        }
+
+        return null;
+    }
 }
-
-
