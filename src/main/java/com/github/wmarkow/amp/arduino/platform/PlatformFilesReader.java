@@ -30,7 +30,7 @@ public class PlatformFilesReader
 
         for( Variable variable : variables )
         {
-            result.addVariable( variable );
+            result.putVariable( variable );
         }
 
         return result;
@@ -58,7 +58,7 @@ public class PlatformFilesReader
                 boardVariables = new BoardVariables();
                 result.addBoardVariables( boardName, boardVariables );
             }
-            boardVariables.addVariable( new Variable( newVariableName, variable.getValue() ) );
+            boardVariables.putVariable( new Variable( newVariableName, variable.getValue() ) );
         }
 
         return result;

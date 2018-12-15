@@ -15,7 +15,7 @@ public class MultiVariableStorage extends DefaultVariableStorage
         {
             for( String name : storage.getNames() )
             {
-                result.addVariable( new Variable( storage.getVariable( name ) ) );
+                result.putVariable( new Variable( storage.getVariable( name ) ) );
             }
         }
         return result;

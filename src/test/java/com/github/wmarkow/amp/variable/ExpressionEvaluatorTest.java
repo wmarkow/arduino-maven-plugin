@@ -35,7 +35,7 @@ public class ExpressionEvaluatorTest
     public void testEvaluateForOneVariableExpression()
     {
         VariableStorage storage = new DefaultVariableStorage();
-        storage.addVariable( new Variable( "variable", "15002900" ) );
+        storage.putVariable( new Variable( "variable", "15002900" ) );
 
         ExpressionEvaluator evaluator = new ExpressionEvaluator();
 
@@ -48,8 +48,8 @@ public class ExpressionEvaluatorTest
     public void testEvaluateForOneNestedVariableExpression()
     {
         VariableStorage storage = new DefaultVariableStorage();
-        storage.addVariable( new Variable( "variable", "15002900" ) );
-        storage.addVariable( new Variable( "variable2", "123 {variable}" ) );
+        storage.putVariable( new Variable( "variable", "15002900" ) );
+        storage.putVariable( new Variable( "variable2", "123 {variable}" ) );
 
         ExpressionEvaluator evaluator = new ExpressionEvaluator();
 
@@ -62,18 +62,12 @@ public class ExpressionEvaluatorTest
     public void testEvaluateSimple()
     {
         VariableStorage storage = new DefaultVariableStorage();
-        storage.addVariable( new Variable( "compiler.path", "" ) );
-        storage.addVariable( new Variable( "compiler.cpp.cmd", "avr-gcc" ) );
+        storage.putVariable( new Variable( "compiler.path", "" ) );
+        storage.putVariable( new Variable( "compiler.cpp.cmd", "avr-gcc" ) );
 
         ExpressionEvaluator evaluator = new ExpressionEvaluator();
         String result = evaluator.evaluate( "{compiler.path}{compiler.cpp.cmd}", storage );
 
         assertEquals( "avr-gcc", result );
     }
-
-    // recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -mmcu={build.mcu}
-    // -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board}
-    // -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}"
-    // -o "{object_file}"
-
 }

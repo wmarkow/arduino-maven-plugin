@@ -9,7 +9,7 @@ public class DefaultVariableStorage implements VariableStorage
     private Map< String, Variable > variables = new HashMap< String, Variable >();
 
     @Override
-    public void addVariable( Variable variable )
+    public void putVariable( Variable variable )
     {
         variables.put( variable.getName(), variable );
     }
