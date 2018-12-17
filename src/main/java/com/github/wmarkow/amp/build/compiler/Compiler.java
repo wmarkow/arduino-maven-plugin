@@ -2,7 +2,6 @@ package com.github.wmarkow.amp.build.compiler;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
@@ -14,29 +13,14 @@ public class Compiler
     private CCompiler cCompiler;
     private SCompiler sCompiler;
 
-    public Compiler( Platform aPlatform, PlatformVariables aPlatformVariables, BoardVariables aBoardVariables )
+    public Compiler( Platform platform, PlatformVariables platformVariables, BoardVariables boardVariables )
     {
         cppCompiler =
-            new CppCompiler( new CCompilerCommandBuilder( aPlatform, aPlatformVariables, aBoardVariables ) );
+            new CppCompiler( new CCompilerCommandBuilder( platform, platformVariables, boardVariables ) );
         cCompiler =
-            new CCompiler( new CCompilerCommandBuilder( aPlatform, aPlatformVariables, aBoardVariables ) );
+            new CCompiler( new CCompilerCommandBuilder( platform, platformVariables, boardVariables ) );
         sCompiler =
-            new SCompiler( new CCompilerCommandBuilder( aPlatform, aPlatformVariables, aBoardVariables ) );
-    }
-
-    public void setCppCompilerCommand( String command )
-    {
-        cppCompiler.setCommand( command );
-    }
-
-    public void setCCompilerCommand( String command )
-    {
-        cCompiler.setCommand( command );
-    }
-
-    public void setSCompilerCommand( String command )
-    {
-        sCompiler.setCommand( command );
+            new SCompiler( new CCompilerCommandBuilder( platform, platformVariables, boardVariables ) );
     }
 
     public void setCommandExecutionDirectory( File dir )
@@ -65,21 +49,6 @@ public class Compiler
         cppCompiler.addIncludeDirectory( dir );
         cCompiler.addIncludeDirectory( dir );
         sCompiler.addIncludeDirectory( dir );
-    }
-
-    public void addCppCompilerArgs( List< String > args )
-    {
-        cppCompiler.addCommandArgs( args );
-    }
-
-    public void addCCompilerArgs( List< String > args )
-    {
-        cCompiler.addCommandArgs( args );
-    }
-
-    public void addSCompilerArgs( List< String > args )
-    {
-        sCompiler.addCommandArgs( args );
     }
 
     public void compile() throws IOException, InterruptedException

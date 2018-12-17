@@ -52,7 +52,7 @@ public class BuildMojo extends ArduinoAbstractMojo
 
     private void compile() throws IOException, InterruptedException
     {
-        PlatformPackageManager ppm = new PlatformPackageManager( new File( "target/amp" ) );
+        PlatformPackageManager ppm = new PlatformPackageManager( new File( "target/arduino-maven-plugin" ) );
         ppm.addPackageUrl( new URL( "https://downloads.arduino.cc/packages/package_index.json" ) );
         ppm.update();
 
@@ -68,18 +68,7 @@ public class BuildMojo extends ArduinoAbstractMojo
 
         FileUtils.forceMkdir( objDir );
 
-        compiler.setCppCompilerCommand( "avr-g++" );
-        compiler.setCCompilerCommand( "avr-gcc" );
-        compiler.setSCompilerCommand( "avr-gcc" );
         compiler.setCommandExecutionDirectory( new File( "." ) );
-        // compiler.addCCompilerArgs( getDefaultCCompilerCommandArgs() );
-        // compiler.addCppCompilerArgs( getDefaultCppCompilerCommandArgs() );
-        // compiler.addSCompilerArgs( getDefaultSCompilerCommandArgs() );
-        //
-        // compiler.addCppCompilerArgs( CppCompilerIntegrationTest.getDefaultCommandArgs() );
-        // compiler.addCCompilerArgs( CCompilerIntegrationTest.getDefaultCommandArgs() );
-        // compiler.addSCompilerArgs( SCompilerIntegrationTest.getDefaultCommandArgs() );
-
         compiler.setObjDirectory( objDir );
 
         compiler.addSrcDirectory( new File( sourceDirectory ) );
@@ -121,74 +110,6 @@ public class BuildMojo extends ArduinoAbstractMojo
         }
 
         return baseDir;
-    }
-
-    private final static List< String > getDefaultCCompilerCommandArgs()
-    {
-        List< String > args = new ArrayList< String >();
-
-        args.add( "-c" );
-        args.add( "-g" );
-        args.add( "-Os" );
-        args.add( "-Wall" );
-        args.add( "-Wextra" );
-        args.add( "-std=gnu11" );
-        args.add( "-ffunction-sections" );
-        args.add( "-fdata-sections" );
-        args.add( "-flto" );
-        args.add( "-fno-fat-lto-objects" );
-        args.add( "-mmcu=atmega328p" );
-        args.add( "-DF_CPU=16000000L" );
-        args.add( "-DARDUINO=10609" );
-        args.add( "-DARDUINO_AVR_UNO" );
-        args.add( "-DARDUINO_ARCH_AVR" );
-
-        return args;
-    }
-
-    private final static List< String > getDefaultCppCompilerCommandArgs()
-    {
-        List< String > args = new ArrayList< String >();
-
-        args.add( "-c" );
-        args.add( "-g" );
-        args.add( "-Os" );
-        args.add( "-Wall" );
-        args.add( "-Wextra" );
-        args.add( "-std=gnu++11" );
-        args.add( "-fpermissive" );
-        args.add( "-fno-exceptions" );
-        args.add( "-ffunction-sections" );
-        args.add( "-fdata-sections" );
-        args.add( "-fno-threadsafe-statics" );
-        args.add( "-flto" );
-        args.add( "-mmcu=atmega328p" );
-        args.add( "-DF_CPU=16000000L" );
-        args.add( "-DARDUINO=10609" );
-        args.add( "-DARDUINO_AVR_UNO" );
-        args.add( "-DARDUINO_ARCH_AVR" );
-
-        return args;
-    }
-
-    private final static List< String > getDefaultSCompilerCommandArgs()
-    {
-        List< String > args = new ArrayList< String >();
-
-        args.add( "-c" );
-        args.add( "-g" );
-        args.add( "-x" );
-        args.add( "assembler-with-cpp" );
-        args.add( "-flto" );
-        args.add( "-MMD" );
-        args.add( "-MP" );
-        args.add( "-mmcu=atmega328p" );
-        args.add( "-DF_CPU=16000000L" );
-        args.add( "-DARDUINO=10609" );
-        args.add( "-DARDUINO_AVR_UNO" );
-        args.add( "-DARDUINO_ARCH_AVR" );
-
-        return args;
     }
 
     private final static List< String > getDefaultLinkerCommandArgs()
