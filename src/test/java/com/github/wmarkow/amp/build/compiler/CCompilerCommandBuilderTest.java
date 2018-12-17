@@ -45,7 +45,7 @@ public class CCompilerCommandBuilderTest
                 boardsVariables.getBoardVariables( "uno" ) );
 
         assertEquals(
-            "\"{runtime.tools.avr-gcc.path}/bin/avr-gcc\" -c -g -Os -w -std=gnu11 -ffunction-sections -fdata-sections -MMD -flto -fno-fat-lto-objects -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO=10609 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR   {includes} \"{source_file}\" -o \"{object_file}\"",
+            "\"avr-gcc\" -c -g -Os -w -std=gnu11 -ffunction-sections -fdata-sections -MMD -flto -fno-fat-lto-objects -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO=10609 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR   {includes} \"{source_file}\" -o \"{object_file}\"",
             builder.buildCommand() );
     }
 
@@ -74,7 +74,7 @@ public class CCompilerCommandBuilderTest
         builder.setIncludes( includes );
 
         assertEquals(
-            "\"{runtime.tools.avr-gcc.path}/bin/avr-gcc\" -c -g -Os -w -std=gnu11 -ffunction-sections -fdata-sections -MMD -flto -fno-fat-lto-objects -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO=10609 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR   -Isrc\\main\\cpp  \"src\\main\\cpp\\main.c\" -o \"target\\obj\\main.c.o\"",
+            "\"avr-gcc\" -c -g -Os -w -std=gnu11 -ffunction-sections -fdata-sections -MMD -flto -fno-fat-lto-objects -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO=10609 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR   -Isrc\\main\\cpp  \"src\\main\\cpp\\main.c\" -o \"target\\obj\\main.c.o\"",
             builder.buildCommand() );
     }
 }

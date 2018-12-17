@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import com.github.wmarkow.amp.IntegrationTest;
-import com.github.wmarkow.amp.build.compiler.Compiler;
 
 @Category( IntegrationTest.class )
 public class CompilerIntegrationTest
@@ -23,30 +22,31 @@ public class CompilerIntegrationTest
     @Before
     public void init() throws IOException
     {
-        FileUtils.forceMkdir( objDir );
-
-        compiler = new Compiler();
-
-        compiler.setCppCompilerCommand( "avr-g++" );
-        compiler.setCCompilerCommand( "avr-gcc" );
-        compiler.setSCompilerCommand( "avr-gcc" );
-
-        compiler.addCppCompilerArgs( CppCompilerIntegrationTest.getDefaultCommandArgs() );
-        compiler.addCCompilerArgs( CCompilerIntegrationTest.getDefaultCommandArgs() );
-        compiler.addSCompilerArgs( SCompilerIntegrationTest.getDefaultCommandArgs() );
-
-        compiler.addSrcDirectory( new File( "src/test/resources/arduino-blink-project" ) );
-        compiler.addSrcDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
-        compiler.addSrcDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
-        compiler.addIncludeDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
-        compiler
-            .addIncludeDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
-        compiler.setObjDirectory( new File( "target/obj" ) );
-        compiler.setCommandExecutionDirectory( new File( "." ) );
-
-        FileUtils.cleanDirectory( objDir );
-        assertEquals( 0, FileUtils.listFiles( objDir, new String[]
-        { "o" }, true ).size() );
+        // FileUtils.forceMkdir( objDir );
+        //
+        // compiler = new Compiler();
+        //
+        // compiler.setCppCompilerCommand( "avr-g++" );
+        // compiler.setCCompilerCommand( "avr-gcc" );
+        // compiler.setSCompilerCommand( "avr-gcc" );
+        //
+        // compiler.addCppCompilerArgs( CppCompilerIntegrationTest.getDefaultCommandArgs() );
+        // compiler.addCCompilerArgs( CCompilerIntegrationTest.getDefaultCommandArgs() );
+        // compiler.addSCompilerArgs( SCompilerIntegrationTest.getDefaultCommandArgs() );
+        //
+        // compiler.addSrcDirectory( new File( "src/test/resources/arduino-blink-project" ) );
+        // compiler.addSrcDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
+        // compiler.addSrcDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" )
+        // );
+        // compiler.addIncludeDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
+        // compiler
+        // .addIncludeDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
+        // compiler.setObjDirectory( new File( "target/obj" ) );
+        // compiler.setCommandExecutionDirectory( new File( "." ) );
+        //
+        // FileUtils.cleanDirectory( objDir );
+        // assertEquals( 0, FileUtils.listFiles( objDir, new String[]
+        // { "o" }, true ).size() );
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.github.wmarkow.amp.mojo;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +16,12 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.eclipse.aether.artifact.Artifact;
 
 import com.github.wmarkow.amp.ArtifactUtils;
-import com.github.wmarkow.amp.build.compiler.CCompilerIntegrationTest;
+import com.github.wmarkow.amp.arduino.platform.BoardVariables;
+import com.github.wmarkow.amp.arduino.platform.Platform;
+import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
+import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
+import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
 import com.github.wmarkow.amp.build.compiler.Compiler;
-import com.github.wmarkow.amp.build.compiler.CppCompilerIntegrationTest;
-import com.github.wmarkow.amp.build.compiler.SCompilerIntegrationTest;
 import com.github.wmarkow.amp.build.linker.Linker;
 
 @Mojo( name = "build", defaultPhase = LifecyclePhase.COMPILE,
@@ -49,7 +52,18 @@ public class BuildMojo extends ArduinoAbstractMojo
 
     private void compile() throws IOException, InterruptedException
     {
-        Compiler compiler = new Compiler();
+        PlatformPackageManager ppm = new PlatformPackageManager( new File( "target/amp" ) );
+        ppm.addPackageUrl( new URL( "https://downloads.arduino.cc/packages/package_index.json" ) );
+        ppm.update();
+
+        Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
+
+        final Platform platform =
+            ppm.getPlatform( arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
+        final PlatformVariables platformVariables = getPlatformVariables( arduinoCoreArtifact );
+        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, "uno" );
+
+        Compiler compiler = new Compiler( platform, platformVariables, boardVariables );
         File objDir = new File( "target/obj" );
 
         FileUtils.forceMkdir( objDir );
@@ -58,13 +72,13 @@ public class BuildMojo extends ArduinoAbstractMojo
         compiler.setCCompilerCommand( "avr-gcc" );
         compiler.setSCompilerCommand( "avr-gcc" );
         compiler.setCommandExecutionDirectory( new File( "." ) );
-        compiler.addCCompilerArgs( getDefaultCCompilerCommandArgs() );
-        compiler.addCppCompilerArgs( getDefaultCppCompilerCommandArgs() );
-        compiler.addSCompilerArgs( getDefaultSCompilerCommandArgs() );
-
-        compiler.addCppCompilerArgs( CppCompilerIntegrationTest.getDefaultCommandArgs() );
-        compiler.addCCompilerArgs( CCompilerIntegrationTest.getDefaultCommandArgs() );
-        compiler.addSCompilerArgs( SCompilerIntegrationTest.getDefaultCommandArgs() );
+        // compiler.addCCompilerArgs( getDefaultCCompilerCommandArgs() );
+        // compiler.addCppCompilerArgs( getDefaultCppCompilerCommandArgs() );
+        // compiler.addSCompilerArgs( getDefaultSCompilerCommandArgs() );
+        //
+        // compiler.addCppCompilerArgs( CppCompilerIntegrationTest.getDefaultCommandArgs() );
+        // compiler.addCCompilerArgs( CCompilerIntegrationTest.getDefaultCommandArgs() );
+        // compiler.addSCompilerArgs( SCompilerIntegrationTest.getDefaultCommandArgs() );
 
         compiler.setObjDirectory( objDir );
 
@@ -191,5 +205,23 @@ public class BuildMojo extends ArduinoAbstractMojo
         args.add( "-mmcu=atmega328p" );
 
         return args;
+    }
+
+    private PlatformVariables getPlatformVariables( Artifact arduinoCoreArtifact ) throws IOException
+    {
+        File platformTxtFile =
+            new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), "avr/platform.txt" );
+
+        PlatformFilesReader pfr = new PlatformFilesReader();
+        return pfr.readPlatformVariablesFromFile( platformTxtFile );
+    }
+
+    private BoardVariables getBoardVariables( Artifact arduinoCoreArtifact, String board ) throws IOException
+    {
+        File boardsTxtFile =
+            new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), "avr/boards.txt" );
+
+        PlatformFilesReader pfr = new PlatformFilesReader();
+        return pfr.readBoardsVariables( boardsTxtFile ).getBoardVariables( board );
     }
 }

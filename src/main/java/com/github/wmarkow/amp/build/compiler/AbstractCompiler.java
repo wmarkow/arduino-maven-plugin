@@ -19,6 +19,17 @@ public abstract class AbstractCompiler extends AbstractProcessor
     private List< File > srcDirs = new ArrayList< File >();
     private List< File > incDirs = new ArrayList< File >();
     private File objDir;
+    private CompilerCommandBuilder compilerCommandBuilder;
+
+    public AbstractCompiler( CompilerCommandBuilder compilerCommandBuilder )
+    {
+        if( compilerCommandBuilder == null )
+        {
+            throw new IllegalArgumentException( "CompilerCommandBuilder must not be null" );
+        }
+
+        this.compilerCommandBuilder = compilerCommandBuilder;
+    }
 
     public void addSrcDirectory( File srcDir )
     {
@@ -39,7 +50,7 @@ public abstract class AbstractCompiler extends AbstractProcessor
     {
         FileUtils.forceMkdir( objDir );
 
-        List< String > baseCmd = prepareBaseCommand();
+        compilerCommandBuilder.setIncludes( incDirs );
 
         for( File srcDir : srcDirs )
         {
@@ -50,7 +61,14 @@ public abstract class AbstractCompiler extends AbstractProcessor
                 logger.info( "" );
                 logger.info( String.format( "Compiling %s", file ) );
 
-                List< String > cmd = prepareCommand( baseCmd, file );
+                compilerCommandBuilder.setSourceFile( file );
+
+                String srcFileName = file.getName();
+                File objFile = new File( objDir, srcFileName + ".o" );
+
+                compilerCommandBuilder.setObjectFile( objFile );
+
+                final String cmd = compilerCommandBuilder.buildCommand();
 
                 executeCommand( cmd );
             }
@@ -58,35 +76,4 @@ public abstract class AbstractCompiler extends AbstractProcessor
     }
 
     protected abstract String[] getFilesExtensions();
-
-    private List< String > prepareBaseCommand()
-    {
-        List< String > result = new ArrayList< String >();
-
-        result.add( getCommand() );
-        result.addAll( getCommandArgs() );
-
-        for( File incDir : incDirs )
-        {
-            result.add( "-I" + incDir.getPath() );
-        }
-
-        return result;
-    }
-
-    private List< String > prepareCommand( List< String > baseCommand, File srcFile )
-    {
-        List< String > cmd = new ArrayList< String >();
-        cmd.addAll( baseCommand );
-
-        cmd.add( "-o" );
-
-        String srcFileName = srcFile.getName();
-        File objFile = new File( objDir, srcFileName + ".o" );
-
-        cmd.add( objFile.getPath() );
-        cmd.add( srcFile.getPath() );
-
-        return cmd;
-    }
 }

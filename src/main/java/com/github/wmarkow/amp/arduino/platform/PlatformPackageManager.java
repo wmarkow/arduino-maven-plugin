@@ -95,4 +95,21 @@ public class PlatformPackageManager
 
         return result;
     }
+
+    public Platform getPlatform( String artifactId, String version )
+    {
+        for( Package _package : getPackages() )
+        {
+            for( Platform platform : _package.getPlatforms() )
+            {
+                final String _artifactId = _package.getName() + "-" + platform.getArchitecture();
+                if( artifactId.equals( _artifactId ) && version.equals( platform.getVersion() ) )
+                {
+                    return platform;
+                }
+            }
+        }
+
+        return null;
+    }
 }

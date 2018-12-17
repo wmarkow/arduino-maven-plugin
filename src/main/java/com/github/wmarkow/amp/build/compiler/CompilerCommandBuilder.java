@@ -18,6 +18,7 @@ public abstract class CompilerCommandBuilder
     private final static String VAR_SOURCE_FILE = "source_file";
     private final static String VAR_OBJECT_FILE = "object_file";
     private final static String VAR_RUNTIME_IDE_VERSION = "runtime.ide.version";
+    private final static String VAR_COMPILER_PATH = "compiler.path";
 
     private MultiVariableStorage variableStorage;
     private Platform platform;
@@ -71,6 +72,7 @@ public abstract class CompilerCommandBuilder
         ExpressionEvaluator evaluator = new ExpressionEvaluator();
         setBuildArch( platform, variableStorage );
         setRuntimeIdeVersion( variableStorage );
+        setCompilerPath( variableStorage );
 
         final String compileReceipePatternVariableName = getCompileReceipePatternVariableName();
         final String compilePatternExpression =
@@ -97,5 +99,10 @@ public abstract class CompilerCommandBuilder
     private void setRuntimeIdeVersion( VariableStorage storage )
     {
         variableStorage.putVariable( new Variable( VAR_RUNTIME_IDE_VERSION, "10609" ) );
+    }
+
+    private void setCompilerPath( VariableStorage storage )
+    {
+        variableStorage.putVariable( new Variable( VAR_COMPILER_PATH, "" ) );
     }
 }

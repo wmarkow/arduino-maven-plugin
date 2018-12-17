@@ -4,11 +4,25 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import com.github.wmarkow.amp.arduino.platform.BoardVariables;
+import com.github.wmarkow.amp.arduino.platform.Platform;
+import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
+
 public class Compiler
 {
-    private CppCompiler cppCompiler = new CppCompiler();
-    private CCompiler cCompiler = new CCompiler();
-    private SCompiler sCompiler = new SCompiler();
+    private CppCompiler cppCompiler;
+    private CCompiler cCompiler;
+    private SCompiler sCompiler;
+
+    public Compiler( Platform aPlatform, PlatformVariables aPlatformVariables, BoardVariables aBoardVariables )
+    {
+        cppCompiler =
+            new CppCompiler( new CCompilerCommandBuilder( aPlatform, aPlatformVariables, aBoardVariables ) );
+        cCompiler =
+            new CCompiler( new CCompilerCommandBuilder( aPlatform, aPlatformVariables, aBoardVariables ) );
+        sCompiler =
+            new SCompiler( new CCompilerCommandBuilder( aPlatform, aPlatformVariables, aBoardVariables ) );
+    }
 
     public void setCppCompilerCommand( String command )
     {

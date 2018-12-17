@@ -3,6 +3,7 @@ package com.github.wmarkow.amp.build;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.github.wmarkow.amp.cmd.CommandExecutor;
@@ -52,5 +53,14 @@ public abstract class AbstractProcessor
         {
             throw new RuntimeException( String.format( "Command exited with exit code %s", exitCode ) );
         }
+    }
+
+    protected void executeCommand( String cmd ) throws IOException, InterruptedException
+    {
+        final String split[] = cmd.split( " " );
+
+        List< String > cmdAsList = Arrays.asList( split );
+
+        executeCommand( cmdAsList );
     }
 }

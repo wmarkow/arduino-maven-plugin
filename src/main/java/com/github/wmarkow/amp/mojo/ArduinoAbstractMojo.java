@@ -71,6 +71,19 @@ public abstract class ArduinoAbstractMojo extends AbstractMojo
         return ArtifactUtils.mavenToAether( mavenProject.getArtifact() );
     }
 
+    protected Artifact getArduinoCoreArtifact()
+    {
+        for( Artifact artifact : getArduinoDependencies() )
+        {
+            if( ARDUINO_CORE_EXTENSION.equals( artifact.getExtension() ) )
+            {
+                return artifact;
+            }
+        }
+
+        return null;
+    }
+
     private DependencyNode getVerboseDependencyTree()
     {
         // Create CollectRequest object that will be submitted to collect the dependencies

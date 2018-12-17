@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import com.github.wmarkow.amp.IntegrationTest;
-import com.github.wmarkow.amp.build.compiler.CCompiler;
 
 @Category( IntegrationTest.class )
 public class CCompilerIntegrationTest
@@ -24,25 +23,26 @@ public class CCompilerIntegrationTest
     @Before
     public void init() throws IOException
     {
-        FileUtils.forceMkdir( objDir );
-
-        compiler = new CCompiler();
-
-        compiler.setCommand( "avr-gcc" );
-        compiler.addSrcDirectory( new File( "src/test/resources/arduino-blink-project" ) );
-        compiler.addSrcDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
-        compiler.addSrcDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
-        compiler.addIncludeDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
-        compiler
-            .addIncludeDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
-        compiler.setObjDirectory( objDir );
-        compiler.setCommandExecutionDirectory( new File( "." ) );
-
-        compiler.addCommandArgs( getDefaultCommandArgs() );
-
-        FileUtils.cleanDirectory( objDir );
-        assertEquals( 0, FileUtils.listFiles( objDir, new String[]
-        { "o" }, true ).size() );
+        // FileUtils.forceMkdir( objDir );
+        //
+        // compiler = new CCompiler();
+        //
+        // compiler.setCommand( "avr-gcc" );
+        // compiler.addSrcDirectory( new File( "src/test/resources/arduino-blink-project" ) );
+        // compiler.addSrcDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
+        // compiler.addSrcDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" )
+        // );
+        // compiler.addIncludeDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
+        // compiler
+        // .addIncludeDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
+        // compiler.setObjDirectory( objDir );
+        // compiler.setCommandExecutionDirectory( new File( "." ) );
+        //
+        // compiler.addCommandArgs( getDefaultCommandArgs() );
+        //
+        // FileUtils.cleanDirectory( objDir );
+        // assertEquals( 0, FileUtils.listFiles( objDir, new String[]
+        // { "o" }, true ).size() );
     }
 
     @Test
