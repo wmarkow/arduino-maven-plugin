@@ -72,12 +72,31 @@ public class BuildMojo extends ArduinoAbstractMojo
         compiler.setObjDirectory( objDir );
 
         compiler.addSrcDirectory( new File( sourceDirectory ) );
-        for( Artifact arduinoLib : getArduinoDependencies() )
-        {
-            File libSourcesDir = getPathToUnpackedLibrarySourcesDir( arduinoLib );
 
-            compiler.addSrcDirectory( libSourcesDir );
-            compiler.addIncludeDirectory( libSourcesDir );
+        final String arch = platform.getArchitecture();
+        final String core = boardVariables.getVariable( BoardVariables.VAR_BUILD_CORE ).getValue();
+        final String variant = boardVariables.getVariable( BoardVariables.VAR_BUILD_VARIANT ).getValue();
+
+        for( Artifact arduinoDependency : getArduinoDependencies() )
+        {
+            if( ARDUINO_LIB_EXTENSION.equals( arduinoDependency.getExtension() ) )
+            {
+                File path = getPathToUnpackedLibrarySourcesDir( arduinoDependency );
+                compiler.addSrcDirectory( path );
+                compiler.addIncludeDirectory( path );
+            }
+
+            if( ARDUINO_CORE_EXTENSION.equals( arduinoDependency.getExtension() ) )
+            {
+                File[] paths =
+                    getPathToUnpackedCoreLibrarySourcesDir( arduinoDependency, arch, core, variant );
+
+                for( File path : paths )
+                {
+                    compiler.addSrcDirectory( path );
+                    compiler.addIncludeDirectory( path );
+                }
+            }
         }
 
         compiler.compile();
@@ -110,6 +129,21 @@ public class BuildMojo extends ArduinoAbstractMojo
         }
 
         return baseDir;
+    }
+
+    private File[] getPathToUnpackedCoreLibrarySourcesDir( Artifact artifact, String arch, String core,
+        String variant )
+    {
+        File baseDir =
+            new File( new File( "target/generated-sources/" ).getAbsolutePath(),
+                ArtifactUtils.getBaseFileName( artifact ) );
+
+        List< File > result = new ArrayList< File >();
+        result.add( new File( baseDir, arch + "/cores/" + core ) );
+        result.add( new File( baseDir, arch + "/variants/" + variant ) );
+
+        return result.toArray( new File[]
+        {} );
     }
 
     private final static List< String > getDefaultLinkerCommandArgs()

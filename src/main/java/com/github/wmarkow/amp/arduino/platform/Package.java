@@ -3,6 +3,9 @@ package com.github.wmarkow.amp.arduino.platform;
 import java.util.ArrayList;
 import java.util.List;
 
+/***
+ * https://github.com/arduino/arduino/wiki/arduino-ide-1.5-3rd-party-hardware-specification
+ */
 public class Package
 {
     private String name;
