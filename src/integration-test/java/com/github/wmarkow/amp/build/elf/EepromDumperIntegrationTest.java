@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import com.github.wmarkow.amp.IntegrationTest;
-import com.github.wmarkow.amp.build.elf.HexDumper;
 import com.github.wmarkow.amp.build.linker.LinkerIntegrationTest;
 
 @Category( IntegrationTest.class )
@@ -40,16 +39,16 @@ public class EepromDumperIntegrationTest
     {
         HexDumper hexDumper = new HexDumper();
 
-        hexDumper.setCommand( "avr-objcopy" );
-        hexDumper.addCommandArg( "-O" );
-        hexDumper.addCommandArg( "ihex" );
-        hexDumper.addCommandArg( "-j" );
-        hexDumper.addCommandArg( ".eeprom" );
-        hexDumper.addCommandArg( "--set-section-flags=.eeprom=alloc,load" );
-        hexDumper.addCommandArg( "--no-change-warnings" );
-        hexDumper.addCommandArg( "--change-section-lma" );
-        hexDumper.addCommandArg( ".eeprom=0" );
-        hexDumper.setCommandExecutionDirectory( new File( "." ) );
+        // hexDumper.setCommand( "avr-objcopy" );
+        // hexDumper.addCommandArg( "-O" );
+        // hexDumper.addCommandArg( "ihex" );
+        // hexDumper.addCommandArg( "-j" );
+        // hexDumper.addCommandArg( ".eeprom" );
+        // hexDumper.addCommandArg( "--set-section-flags=.eeprom=alloc,load" );
+        // hexDumper.addCommandArg( "--no-change-warnings" );
+        // hexDumper.addCommandArg( "--change-section-lma" );
+        // hexDumper.addCommandArg( ".eeprom=0" );
+        // hexDumper.setCommandExecutionDirectory( new File( "." ) );
 
         assertFalse( outputEepromFile.exists() );
 

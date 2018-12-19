@@ -17,12 +17,13 @@ import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageIndex;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
+import com.github.wmarkow.amp.build.compiler.CompilerIntegrationTest;
 
 @Category( IntegrationTest.class )
-public class LinkerIntegrationTest
+public class ArchiverIntegrationTest
 {
-    Linker linker;
-    File outputElfFile = new File( "target/output.elf" );
+    Archiver archiver;
+    File outputArchiveFile = new File( "target/output.ar" );
 
     @Before
     public void init() throws IOException, InterruptedException
@@ -38,28 +39,28 @@ public class LinkerIntegrationTest
             pfr.readBoardsVariables( new File( "src/test/resources/arduino/boards.txt" ) ).getBoardVariables(
                 "uno" );
 
-        LinkerCommandBuilder lcb = new LinkerCommandBuilder( platform, platformVariables, boardVariables );
-        linker = new Linker( lcb );
+        ArchiverCommandBuilder lcb = new ArchiverCommandBuilder( platform, platformVariables, boardVariables );
+        archiver = new Archiver( lcb );
 
-        linker.setCommandExecutionDirectory( new File( "." ) );
+        archiver.setCommandExecutionDirectory( new File( "." ) );
 
-        if( outputElfFile.exists() )
+        if( outputArchiveFile.exists() )
         {
-            FileUtils.forceDelete( outputElfFile );
+            FileUtils.forceDelete( outputArchiveFile );
         }
 
-        ArchiverIntegrationTest compiler = new ArchiverIntegrationTest();
+        CompilerIntegrationTest compiler = new CompilerIntegrationTest();
         compiler.init();
-        compiler.testArchive();
+        compiler.testCompile();
     }
 
     @Test
-    public void testLink() throws IOException, InterruptedException
+    public void testArchive() throws IOException, InterruptedException
     {
-        assertFalse( outputElfFile.exists() );
+        assertFalse( outputArchiveFile.exists() );
 
-        linker.link( new File( "target/obj" ), outputElfFile );
+        archiver.archive( new File( "target/obj" ), outputArchiveFile );
 
-        assertTrue( outputElfFile.exists() );
+        assertTrue( outputArchiveFile.exists() );
     }
 }

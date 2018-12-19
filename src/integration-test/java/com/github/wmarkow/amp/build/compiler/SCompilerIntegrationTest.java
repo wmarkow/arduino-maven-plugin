@@ -44,7 +44,6 @@ public class SCompilerIntegrationTest
         compiler =
             new SCompiler( new CppCompilerCommandBuilder( platform, platformVariables, boardVariables ) );
 
-        compiler.setCommand( "avr-gcc" );
         compiler.addSrcDirectory( new File( "src/test/resources/arduino-blink-project" ) );
         compiler.addSrcDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
         compiler.addSrcDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
@@ -53,8 +52,6 @@ public class SCompilerIntegrationTest
             .addIncludeDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
         compiler.setObjDirectory( new File( "target/obj" ) );
         compiler.setCommandExecutionDirectory( new File( "." ) );
-
-        compiler.addCommandArgs( getDefaultCommandArgs() );
 
         FileUtils.cleanDirectory( objDir );
         assertEquals( 0, FileUtils.listFiles( objDir, new String[]

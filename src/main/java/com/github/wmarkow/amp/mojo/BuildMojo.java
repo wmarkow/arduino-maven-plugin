@@ -22,7 +22,10 @@ import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
 import com.github.wmarkow.amp.build.compiler.Compiler;
+import com.github.wmarkow.amp.build.linker.Archiver;
+import com.github.wmarkow.amp.build.linker.ArchiverCommandBuilder;
 import com.github.wmarkow.amp.build.linker.Linker;
+import com.github.wmarkow.amp.build.linker.LinkerCommandBuilder;
 
 @Mojo( name = "build", defaultPhase = LifecyclePhase.COMPILE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
@@ -38,6 +41,7 @@ public class BuildMojo extends ArduinoAbstractMojo
         try
         {
             compile();
+            archive();
             link();
         }
         catch( IOException e )
@@ -102,12 +106,46 @@ public class BuildMojo extends ArduinoAbstractMojo
         compiler.compile();
     }
 
+    private void archive() throws IOException, InterruptedException
+    {
+        PlatformPackageManager ppm = new PlatformPackageManager( new File( "target/arduino-maven-plugin" ) );
+        ppm.addPackageUrl( new URL( "https://downloads.arduino.cc/packages/package_index.json" ) );
+        ppm.update();
+
+        Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
+
+        final Platform platform =
+            ppm.getPlatform( arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
+        final PlatformVariables platformVariables = getPlatformVariables( arduinoCoreArtifact );
+        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, "uno" );
+
+        ArchiverCommandBuilder acb = new ArchiverCommandBuilder( platform, platformVariables, boardVariables );
+        Archiver archiver = new Archiver( acb );
+        archiver.setCommandExecutionDirectory( new File( "." ) );
+
+        final Artifact projectArtifact = getProjectArtifact();
+        final String archiveFileName = ArtifactUtils.getBaseFileName( projectArtifact ) + ".ar";
+        File outputArchiveFile = new File( "target/" + archiveFileName );
+
+        archiver.archive( new File( "target/obj" ), outputArchiveFile );
+    }
+
     private void link() throws IOException, InterruptedException
     {
-        Linker linker = new Linker();
-        linker.setCommand( "avr-gcc" );
+        PlatformPackageManager ppm = new PlatformPackageManager( new File( "target/arduino-maven-plugin" ) );
+        ppm.addPackageUrl( new URL( "https://downloads.arduino.cc/packages/package_index.json" ) );
+        ppm.update();
+
+        Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
+
+        final Platform platform =
+            ppm.getPlatform( arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
+        final PlatformVariables platformVariables = getPlatformVariables( arduinoCoreArtifact );
+        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, "uno" );
+
+        LinkerCommandBuilder lcb = new LinkerCommandBuilder( platform, platformVariables, boardVariables );
+        Linker linker = new Linker( lcb );
         linker.setCommandExecutionDirectory( new File( "." ) );
-        linker.addCommandArgs( getDefaultLinkerCommandArgs() );
 
         final Artifact projectArtifact = getProjectArtifact();
         final String elfFileName = ArtifactUtils.getBaseFileName( projectArtifact ) + ".elf";
@@ -144,22 +182,6 @@ public class BuildMojo extends ArduinoAbstractMojo
 
         return result.toArray( new File[]
         {} );
-    }
-
-    private final static List< String > getDefaultLinkerCommandArgs()
-    {
-        List< String > args = new ArrayList< String >();
-
-        args.add( "-Wall" );
-        args.add( "-Wextra" );
-        args.add( "-Os" );
-        args.add( "-g" );
-        args.add( "-flto" );
-        args.add( "-fuse-linker-plugin" );
-        args.add( "-Wl,--gc-sections" );
-        args.add( "-mmcu=atmega328p" );
-
-        return args;
     }
 
     private PlatformVariables getPlatformVariables( Artifact arduinoCoreArtifact ) throws IOException

@@ -42,7 +42,6 @@ public class CppCompilerIntegrationTest
         compiler =
             new CppCompiler( new CppCompilerCommandBuilder( platform, platformVariables, boardVariables ) );
 
-        compiler.setCommand( "avr-g++" );
         compiler.addSrcDirectory( new File( "src/test/resources/arduino-blink-project" ) );
         compiler.addSrcDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
         compiler.addSrcDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );

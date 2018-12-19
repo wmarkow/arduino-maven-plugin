@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import com.github.wmarkow.amp.IntegrationTest;
-import com.github.wmarkow.amp.build.elf.HexDumper;
 import com.github.wmarkow.amp.build.linker.LinkerIntegrationTest;
 
 @Category( IntegrationTest.class )
@@ -40,12 +39,12 @@ public class HexDumperIntegrationTest
     {
         HexDumper hexDumper = new HexDumper();
 
-        hexDumper.setCommand( "avr-objcopy" );
-        hexDumper.addCommandArg( "-O" );
-        hexDumper.addCommandArg( "ihex" );
-        hexDumper.addCommandArg( "-R" );
-        hexDumper.addCommandArg( ".eeprom" );
-        hexDumper.setCommandExecutionDirectory( new File( "." ) );
+        // hexDumper.setCommand( "avr-objcopy" );
+        // hexDumper.addCommandArg( "-O" );
+        // hexDumper.addCommandArg( "ihex" );
+        // hexDumper.addCommandArg( "-R" );
+        // hexDumper.addCommandArg( ".eeprom" );
+        // hexDumper.setCommandExecutionDirectory( new File( "." ) );
 
         assertFalse( outputHexFile.exists() );
 

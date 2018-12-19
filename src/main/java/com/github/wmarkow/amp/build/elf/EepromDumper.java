@@ -19,8 +19,8 @@ public class EepromDumper extends AbstractProcessor
     {
         List< String > cmd = new ArrayList< String >();
 
-        cmd.add( getCommand() );
-        cmd.addAll( getCommandArgs() );
+        // cmd.add( getCommand() );
+        // cmd.addAll( getCommandArgs() );
         cmd.add( inputElfFile.getPath() );
         cmd.add( outputEepromFile.getPath() );
 

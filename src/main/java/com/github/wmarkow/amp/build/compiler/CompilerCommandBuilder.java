@@ -6,41 +6,22 @@ import java.util.List;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
+import com.github.wmarkow.amp.build.CommandBuilder;
 import com.github.wmarkow.amp.variable.ExpressionEvaluator;
-import com.github.wmarkow.amp.variable.MultiVariableStorage;
 import com.github.wmarkow.amp.variable.Variable;
-import com.github.wmarkow.amp.variable.VariableStorage;
 
-public abstract class CompilerCommandBuilder
+public abstract class CompilerCommandBuilder extends CommandBuilder
 {
-    private final static String VAR_BUILD_ARCH = "build.arch";
+
     private final static String VAR_INCLUDES = "includes";
     private final static String VAR_SOURCE_FILE = "source_file";
     private final static String VAR_OBJECT_FILE = "object_file";
-    private final static String VAR_RUNTIME_IDE_VERSION = "runtime.ide.version";
-    private final static String VAR_COMPILER_PATH = "compiler.path";
 
-    private MultiVariableStorage variableStorage;
-    private Platform platform;
 
-    public CompilerCommandBuilder( Platform platform, PlatformVariables platformVariables,
-        BoardVariables boardVariables )
+    public CompilerCommandBuilder( Platform aPlatform, PlatformVariables aPlatformVariables,
+        BoardVariables aBoardVariables )
     {
-        if( platformVariables == null )
-        {
-            throw new IllegalArgumentException( "Platform variables must not be null" );
-        }
-        if( boardVariables == null )
-        {
-            throw new IllegalArgumentException( "Board variables must not be null" );
-        }
-        if( platform == null )
-        {
-            throw new IllegalArgumentException( "Platform must not be null" );
-        }
-
-        this.platform = platform;
-        variableStorage = MultiVariableStorage.populateFrom( platformVariables, boardVariables );
+        super( aPlatform, aPlatformVariables, aBoardVariables );
     }
 
     public void setSourceFile( File srcFile )
@@ -67,6 +48,7 @@ public abstract class CompilerCommandBuilder
         variableStorage.putVariable( new Variable( VAR_OBJECT_FILE, objFile.getPath() ) );
     }
 
+    @Override
     public String buildCommand()
     {
         ExpressionEvaluator evaluator = new ExpressionEvaluator();
@@ -82,27 +64,4 @@ public abstract class CompilerCommandBuilder
     }
 
     protected abstract String getCompileReceipePatternVariableName();
-
-    /***
-     * A way to set build.arch variable. More details here: https://github.com/arduino/Arduino/issues/4878
-     * 
-     * @param platform
-     * @param storage
-     */
-    private void setBuildArch( Platform platform, VariableStorage storage )
-    {
-        final String buildArch = platform.getArchitecture().toUpperCase();
-
-        variableStorage.putVariable( new Variable( VAR_BUILD_ARCH, buildArch ) );
-    }
-
-    private void setRuntimeIdeVersion( VariableStorage storage )
-    {
-        variableStorage.putVariable( new Variable( VAR_RUNTIME_IDE_VERSION, "10609" ) );
-    }
-
-    private void setCompilerPath( VariableStorage storage )
-    {
-        variableStorage.putVariable( new Variable( VAR_COMPILER_PATH, "" ) );
-    }
 }

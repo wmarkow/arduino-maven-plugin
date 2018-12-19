@@ -39,9 +39,9 @@ public class PackageMojo extends ArduinoAbstractMojo
     {
         HexDumper hexDumper = new HexDumper();
 
-        hexDumper.setCommand( "avr-objcopy" );
+        // hexDumper.setCommand( "avr-objcopy" );
         hexDumper.setCommandExecutionDirectory( new File( "." ) );
-        hexDumper.addCommandArgs( getDefaultHexCommandArgs() );
+        // hexDumper.addCommandArgs( getDefaultHexCommandArgs() );
 
         final Artifact projectArtifact = getProjectArtifact();
         final String elfFileName = ArtifactUtils.getBaseFileName( projectArtifact );
@@ -55,9 +55,9 @@ public class PackageMojo extends ArduinoAbstractMojo
     {
         EepromDumper eepromDumper = new EepromDumper();
 
-        eepromDumper.setCommand( "avr-objcopy" );
+        // eepromDumper.setCommand( "avr-objcopy" );
         eepromDumper.setCommandExecutionDirectory( new File( "." ) );
-        eepromDumper.addCommandArgs( getDefaultEepromCommandArgs() );
+        // eepromDumper.addCommandArgs( getDefaultEepromCommandArgs() );
 
         final Artifact projectArtifact = getProjectArtifact();
         final String elfFileName = ArtifactUtils.getBaseFileName( projectArtifact );
