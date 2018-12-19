@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.build.elf;
+package com.github.wmarkow.amp.build.imager;
 
 import java.io.File;
 import java.io.IOException;

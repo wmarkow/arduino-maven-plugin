@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.build.elf;
+package com.github.wmarkow.amp.build.imager;
 
 import java.io.File;
 
@@ -12,15 +12,15 @@ import com.github.wmarkow.amp.variable.ExpressionEvaluator;
 import com.github.wmarkow.amp.variable.Variable;
 import com.github.wmarkow.amp.variable.VariableStorage;
 
-public class EepromImageCommandBuilder extends CommandBuilder
+public class HexImageCommandBuilder extends CommandBuilder
 {
-    private final static String VAR_RECEIPE_EEPROM_IMAGE_PATTERN = "recipe.objcopy.eep.pattern";
+    private final static String VAR_RECEIPE_HEX_IMAGE_PATTERN = "recipe.objcopy.hex.pattern";
     private final static String VAR_BUILD_PATH = "build.path";
     private final static String VAR_BUILD_PROJECT_NAME = "build.project_name";
 
     private File elfFile;
 
-    public EepromImageCommandBuilder( Platform aPlatform, PlatformVariables aPlatformVariables,
+    public HexImageCommandBuilder( Platform aPlatform, PlatformVariables aPlatformVariables,
         BoardVariables aBoardVariables )
     {
         super( aPlatform, aPlatformVariables, aBoardVariables );
@@ -36,8 +36,7 @@ public class EepromImageCommandBuilder extends CommandBuilder
 
         ExpressionEvaluator evaluator = new ExpressionEvaluator();
 
-        return evaluator.evaluate(
-            variableStorage.getVariable( VAR_RECEIPE_EEPROM_IMAGE_PATTERN ).getValue(),
+        return evaluator.evaluate( variableStorage.getVariable( VAR_RECEIPE_HEX_IMAGE_PATTERN ).getValue(),
             variableStorage );
     }
 

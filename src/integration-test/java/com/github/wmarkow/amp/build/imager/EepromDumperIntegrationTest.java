@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.build.linker;
+package com.github.wmarkow.amp.build.imager;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -17,13 +17,16 @@ import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageIndex;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
-import com.github.wmarkow.amp.build.compiler.CompilerIntegrationTest;
+import com.github.wmarkow.amp.build.imager.EepromDumper;
+import com.github.wmarkow.amp.build.imager.EepromImageCommandBuilder;
+import com.github.wmarkow.amp.build.linker.LinkerIntegrationTest;
 
 @Category( IntegrationTest.class )
-public class ArchiverIntegrationTest
+public class EepromDumperIntegrationTest
 {
-    Archiver archiver;
-    File outputArchiveFile = new File( "target/output.ar" );
+    private EepromDumper eepromDumper;
+    private File inputElfFile = new File( "target/output.elf" );
+    private File outputEepromFile = new File( "target/output.eep" );
 
     @Before
     public void init() throws IOException, InterruptedException
@@ -39,28 +42,30 @@ public class ArchiverIntegrationTest
             pfr.readBoardsVariables( new File( "src/test/resources/arduino/boards.txt" ) ).getBoardVariables(
                 "uno" );
 
-        ArchiverCommandBuilder lcb = new ArchiverCommandBuilder( platform, platformVariables, boardVariables );
-        archiver = new Archiver( lcb );
+        EepromImageCommandBuilder commandBuilder =
+            new EepromImageCommandBuilder( platform, platformVariables, boardVariables );
+        eepromDumper = new EepromDumper( commandBuilder );
+        eepromDumper.setCommandExecutionDirectory( new File( "." ) );
 
-        archiver.setCommandExecutionDirectory( new File( "." ) );
+        LinkerIntegrationTest lit = new LinkerIntegrationTest();
+        lit.init();
+        lit.testLink();
 
-        if( outputArchiveFile.exists() )
+        if( outputEepromFile.exists() )
         {
-            FileUtils.forceDelete( outputArchiveFile );
+            FileUtils.forceDelete( outputEepromFile );
         }
-
-        CompilerIntegrationTest compiler = new CompilerIntegrationTest();
-        compiler.init();
-        compiler.testCompile();
     }
 
     @Test
-    public void testArchive() throws IOException, InterruptedException
+    public void testEepromDumper() throws IOException, InterruptedException
     {
-        assertFalse( outputArchiveFile.exists() );
+        assertFalse( outputEepromFile.exists() );
 
-        archiver.archive( new File( "target/obj" ), outputArchiveFile );
+        eepromDumper.makeEeprom( inputElfFile );
 
-        assertTrue( outputArchiveFile.exists() );
+        assertTrue( outputEepromFile.exists() );
     }
 }
+
+

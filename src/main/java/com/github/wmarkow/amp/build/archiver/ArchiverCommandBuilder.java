@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.build.linker;
+package com.github.wmarkow.amp.build.archiver;
 
 import java.io.File;
 

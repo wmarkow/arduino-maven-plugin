@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.build.elf;
+package com.github.wmarkow.amp.build.imager;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -17,6 +17,8 @@ import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageIndex;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
+import com.github.wmarkow.amp.build.imager.HexDumper;
+import com.github.wmarkow.amp.build.imager.HexImageCommandBuilder;
 import com.github.wmarkow.amp.build.linker.LinkerIntegrationTest;
 
 @Category( IntegrationTest.class )

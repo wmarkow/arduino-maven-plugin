@@ -16,10 +16,10 @@ import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
-import com.github.wmarkow.amp.build.elf.EepromDumper;
-import com.github.wmarkow.amp.build.elf.EepromImageCommandBuilder;
-import com.github.wmarkow.amp.build.elf.HexDumper;
-import com.github.wmarkow.amp.build.elf.HexImageCommandBuilder;
+import com.github.wmarkow.amp.build.imager.EepromDumper;
+import com.github.wmarkow.amp.build.imager.EepromImageCommandBuilder;
+import com.github.wmarkow.amp.build.imager.HexDumper;
+import com.github.wmarkow.amp.build.imager.HexImageCommandBuilder;
 
 @Mojo( name = "package", defaultPhase = LifecyclePhase.PACKAGE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )

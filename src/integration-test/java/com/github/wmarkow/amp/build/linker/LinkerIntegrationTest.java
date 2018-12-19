@@ -17,6 +17,9 @@ import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageIndex;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
+import com.github.wmarkow.amp.build.archiver.ArchiverIntegrationTest;
+import com.github.wmarkow.amp.build.linker.Linker;
+import com.github.wmarkow.amp.build.linker.LinkerCommandBuilder;
 
 @Category( IntegrationTest.class )
 public class LinkerIntegrationTest

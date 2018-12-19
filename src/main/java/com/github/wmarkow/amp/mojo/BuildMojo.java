@@ -18,9 +18,9 @@ import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
+import com.github.wmarkow.amp.build.archiver.Archiver;
+import com.github.wmarkow.amp.build.archiver.ArchiverCommandBuilder;
 import com.github.wmarkow.amp.build.compiler.Compiler;
-import com.github.wmarkow.amp.build.linker.Archiver;
-import com.github.wmarkow.amp.build.linker.ArchiverCommandBuilder;
 import com.github.wmarkow.amp.build.linker.Linker;
 import com.github.wmarkow.amp.build.linker.LinkerCommandBuilder;
 
