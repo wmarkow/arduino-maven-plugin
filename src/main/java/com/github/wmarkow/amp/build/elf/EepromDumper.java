@@ -2,8 +2,6 @@ package com.github.wmarkow.amp.build.elf;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,19 +12,20 @@ public class EepromDumper extends AbstractProcessor
 {
     private Logger logger = LoggerFactory.getLogger( EepromDumper.class );
 
-    public void makeEeprom( File inputElfFile, File outputEepromFile ) throws IOException,
-        InterruptedException
+    private EepromImageCommandBuilder commandBuilder;
+
+    public EepromDumper( EepromImageCommandBuilder commandBuilder )
     {
-        List< String > cmd = new ArrayList< String >();
+        super();
+        this.commandBuilder = commandBuilder;
+    }
 
-        // cmd.add( getCommand() );
-        // cmd.addAll( getCommandArgs() );
-        cmd.add( inputElfFile.getPath() );
-        cmd.add( outputEepromFile.getPath() );
-
+    public void makeEeprom( File inputElfFile ) throws IOException, InterruptedException
+    {
         logger.info( "" );
         logger.info( String.format( "Creating EEPROM image" ) );
 
-        executeCommand( cmd );
+        commandBuilder.setInputElfFile( inputElfFile );
+        executeCommand( commandBuilder.buildCommand() );
     }
 }

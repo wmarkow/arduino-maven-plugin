@@ -1,5 +1,7 @@
 package com.github.wmarkow.amp.mojo;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,9 @@ import org.eclipse.aether.graph.DependencyNode;
 import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
 import com.github.wmarkow.amp.ArtifactUtils;
+import com.github.wmarkow.amp.arduino.platform.BoardVariables;
+import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
+import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
 
 public abstract class ArduinoAbstractMojo extends AbstractMojo
 {
@@ -82,6 +87,57 @@ public abstract class ArduinoAbstractMojo extends AbstractMojo
         }
 
         return null;
+    }
+
+    protected PlatformVariables getPlatformVariables( Artifact arduinoCoreArtifact ) throws IOException
+    {
+        // FIXME: derive path to platfrom.txt correctly
+        File platformTxtFile =
+            new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), "avr/platform.txt" );
+
+        PlatformFilesReader pfr = new PlatformFilesReader();
+        return pfr.readPlatformVariablesFromFile( platformTxtFile );
+    }
+
+    protected BoardVariables getBoardVariables( Artifact arduinoCoreArtifact, String board )
+        throws IOException
+    {
+        // FIXME: derive path to boards.txt correctly
+        File boardsTxtFile =
+            new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), "avr/boards.txt" );
+
+        PlatformFilesReader pfr = new PlatformFilesReader();
+        return pfr.readBoardsVariables( boardsTxtFile ).getBoardVariables( board );
+    }
+
+    protected File getPathToUnpackedLibrarySourcesDir( Artifact artifact )
+    {
+        File baseDir =
+            new File( new File( "target/generated-sources/" ).getAbsolutePath(),
+                ArtifactUtils.getBaseFileName( artifact ) );
+
+        File dirWithSrc = new File( baseDir, "src" );
+        if( dirWithSrc.exists() )
+        {
+            return dirWithSrc;
+        }
+
+        return baseDir;
+    }
+
+    protected File[] getPathToUnpackedCoreLibrarySourcesDir( Artifact artifact, String arch, String core,
+        String variant )
+    {
+        File baseDir =
+            new File( new File( "target/generated-sources/" ).getAbsolutePath(),
+                ArtifactUtils.getBaseFileName( artifact ) );
+
+        List< File > result = new ArrayList< File >();
+        result.add( new File( baseDir, arch + "/cores/" + core ) );
+        result.add( new File( baseDir, arch + "/variants/" + variant ) );
+
+        return result.toArray( new File[]
+        {} );
     }
 
     private DependencyNode getVerboseDependencyTree()

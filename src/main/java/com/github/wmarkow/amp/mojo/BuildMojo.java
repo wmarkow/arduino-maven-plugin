@@ -3,8 +3,6 @@ package com.github.wmarkow.amp.mojo;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -18,7 +16,6 @@ import org.eclipse.aether.artifact.Artifact;
 import com.github.wmarkow.amp.ArtifactUtils;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
-import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
 import com.github.wmarkow.amp.build.compiler.Compiler;
@@ -152,53 +149,5 @@ public class BuildMojo extends ArduinoAbstractMojo
         File outputElfFile = new File( "target/" + elfFileName );
 
         linker.link( new File( "target/obj" ), outputElfFile );
-    }
-
-    private File getPathToUnpackedLibrarySourcesDir( Artifact artifact )
-    {
-        File baseDir =
-            new File( new File( "target/generated-sources/" ).getAbsolutePath(),
-                ArtifactUtils.getBaseFileName( artifact ) );
-
-        File dirWithSrc = new File( baseDir, "src" );
-        if( dirWithSrc.exists() )
-        {
-            return dirWithSrc;
-        }
-
-        return baseDir;
-    }
-
-    private File[] getPathToUnpackedCoreLibrarySourcesDir( Artifact artifact, String arch, String core,
-        String variant )
-    {
-        File baseDir =
-            new File( new File( "target/generated-sources/" ).getAbsolutePath(),
-                ArtifactUtils.getBaseFileName( artifact ) );
-
-        List< File > result = new ArrayList< File >();
-        result.add( new File( baseDir, arch + "/cores/" + core ) );
-        result.add( new File( baseDir, arch + "/variants/" + variant ) );
-
-        return result.toArray( new File[]
-        {} );
-    }
-
-    private PlatformVariables getPlatformVariables( Artifact arduinoCoreArtifact ) throws IOException
-    {
-        File platformTxtFile =
-            new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), "avr/platform.txt" );
-
-        PlatformFilesReader pfr = new PlatformFilesReader();
-        return pfr.readPlatformVariablesFromFile( platformTxtFile );
-    }
-
-    private BoardVariables getBoardVariables( Artifact arduinoCoreArtifact, String board ) throws IOException
-    {
-        File boardsTxtFile =
-            new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), "avr/boards.txt" );
-
-        PlatformFilesReader pfr = new PlatformFilesReader();
-        return pfr.readBoardsVariables( boardsTxtFile ).getBoardVariables( board );
     }
 }
