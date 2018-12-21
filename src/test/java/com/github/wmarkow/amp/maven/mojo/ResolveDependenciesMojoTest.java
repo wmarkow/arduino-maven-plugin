@@ -5,9 +5,9 @@ import java.io.File;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.junit.Test;
 
-import com.github.wmarkow.amp.maven.mojo.FetchDependenciesMojo;
+import com.github.wmarkow.amp.maven.mojo.ResolveDependenciesMojo;
 
-public class FetchDependenciesMojoTest extends AbstractMojoTestCase
+public class ResolveDependenciesMojoTest extends AbstractMojoTestCase
 {
 
     @Override
@@ -29,7 +29,7 @@ public class FetchDependenciesMojoTest extends AbstractMojoTestCase
         assertNotNull( pom );
         assertTrue( pom.exists() );
 
-        FetchDependenciesMojo mojo = (FetchDependenciesMojo)lookupMojo( "fetch-dependencies", pom );
+        ResolveDependenciesMojo mojo = (ResolveDependenciesMojo)lookupMojo( "fetch-dependencies", pom );
 
         assertNotNull( mojo );
     }

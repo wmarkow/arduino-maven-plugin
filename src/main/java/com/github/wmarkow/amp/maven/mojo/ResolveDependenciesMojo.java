@@ -26,7 +26,7 @@ import com.github.wmarkow.amp.maven.artifact.resolver.GithubFetchDescriptor;
 import com.github.wmarkow.amp.maven.artifact.resolver.LibraryRepacker;
 
 @Mojo( name = "fetch-dependencies", defaultPhase = LifecyclePhase.INITIALIZE, requiresProject = true )
-public class FetchDependenciesMojo extends ArduinoAbstractMojo
+public class ResolveDependenciesMojo extends ArduinoAbstractMojo
 {
 
     @Override
