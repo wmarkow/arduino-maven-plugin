@@ -1,13 +1,13 @@
-package com.github.wmarkow.amp.util.variable;
+package com.github.wmarkow.amp.arduino.variable;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.github.wmarkow.amp.util.variable.DefaultVariableStorage;
-import com.github.wmarkow.amp.util.variable.ExpressionEvaluator;
-import com.github.wmarkow.amp.util.variable.Variable;
-import com.github.wmarkow.amp.util.variable.VariableStorage;
+import com.github.wmarkow.amp.arduino.variable.DefaultVariableStorage;
+import com.github.wmarkow.amp.arduino.variable.ExpressionEvaluator;
+import com.github.wmarkow.amp.arduino.variable.Variable;
+import com.github.wmarkow.amp.arduino.variable.VariableStorage;
 
 public class ExpressionEvaluatorTest
 {

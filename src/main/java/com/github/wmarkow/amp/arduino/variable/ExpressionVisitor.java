@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.util.variable;
+package com.github.wmarkow.amp.arduino.variable;
 
 abstract class ExpressionVisitor
 {
