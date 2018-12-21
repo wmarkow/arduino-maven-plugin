@@ -3,6 +3,8 @@ package com.github.wmarkow.amp.maven.mojo.build;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.aether.artifact.Artifact;
 
@@ -42,6 +44,19 @@ public abstract class ProcessorMojo extends GenericMojo
         return new File( "target/" + elfFileName );
     }
 
+    protected Artifact getArduinoCoreArtifact()
+    {
+        for( Artifact artifact : getArduinoDependencies() )
+        {
+            if( ARDUINO_CORE_EXTENSION.equals( artifact.getExtension() ) )
+            {
+                return artifact;
+            }
+        }
+
+        return null;
+    }
+
     protected Platform getPlatform() throws MalformedURLException
     {
         final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
@@ -73,6 +88,36 @@ public abstract class ProcessorMojo extends GenericMojo
 
         PlatformFilesReader pfr = new PlatformFilesReader();
         return pfr.readBoardsVariables( boardsTxtFile ).getBoardVariables( getBoard() );
+    }
+
+    protected File getPathToUnpackedLibrarySourcesDir( Artifact artifact )
+    {
+        File baseDir =
+            new File( new File( "target/generated-sources/" ).getAbsolutePath(),
+                ArtifactUtils.getBaseFileName( artifact ) );
+
+        File dirWithSrc = new File( baseDir, "src" );
+        if( dirWithSrc.exists() )
+        {
+            return dirWithSrc;
+        }
+
+        return baseDir;
+    }
+
+    protected File[] getPathToUnpackedCoreLibrarySourcesDir( Artifact artifact, String arch, String core,
+        String variant )
+    {
+        File baseDir =
+            new File( new File( "target/generated-sources/" ).getAbsolutePath(),
+                ArtifactUtils.getBaseFileName( artifact ) );
+
+        List< File > result = new ArrayList< File >();
+        result.add( new File( baseDir, arch + "/cores/" + core ) );
+        result.add( new File( baseDir, arch + "/variants/" + variant ) );
+
+        return result.toArray( new File[]
+        {} );
     }
 
     private synchronized PlatformPackageManager getPlatformPackageManager() throws MalformedURLException

@@ -1,6 +1,5 @@
 package com.github.wmarkow.amp.maven.mojo;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -78,49 +77,6 @@ public abstract class GenericMojo extends AbstractMojo
     protected org.eclipse.aether.artifact.Artifact getProjectArtifact()
     {
         return ArtifactUtils.mavenToAether( mavenProject.getArtifact() );
-    }
-
-    protected Artifact getArduinoCoreArtifact()
-    {
-        for( Artifact artifact : getArduinoDependencies() )
-        {
-            if( ARDUINO_CORE_EXTENSION.equals( artifact.getExtension() ) )
-            {
-                return artifact;
-            }
-        }
-
-        return null;
-    }
-
-    protected File getPathToUnpackedLibrarySourcesDir( Artifact artifact )
-    {
-        File baseDir =
-            new File( new File( "target/generated-sources/" ).getAbsolutePath(),
-                ArtifactUtils.getBaseFileName( artifact ) );
-
-        File dirWithSrc = new File( baseDir, "src" );
-        if( dirWithSrc.exists() )
-        {
-            return dirWithSrc;
-        }
-
-        return baseDir;
-    }
-
-    protected File[] getPathToUnpackedCoreLibrarySourcesDir( Artifact artifact, String arch, String core,
-        String variant )
-    {
-        File baseDir =
-            new File( new File( "target/generated-sources/" ).getAbsolutePath(),
-                ArtifactUtils.getBaseFileName( artifact ) );
-
-        List< File > result = new ArrayList< File >();
-        result.add( new File( baseDir, arch + "/cores/" + core ) );
-        result.add( new File( baseDir, arch + "/variants/" + variant ) );
-
-        return result.toArray( new File[]
-        {} );
     }
 
     protected URL getPackageIndexUrl() throws MalformedURLException

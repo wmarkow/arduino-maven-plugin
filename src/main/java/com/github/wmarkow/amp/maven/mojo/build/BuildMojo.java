@@ -34,6 +34,8 @@ public class BuildMojo extends ProcessorMojo
     {
         try
         {
+            FileUtils.forceMkdir( getObjectDir() );
+
             compile();
             archive();
             link();
@@ -55,8 +57,6 @@ public class BuildMojo extends ProcessorMojo
         final BoardVariables boardVariables = getBoardVariables();
 
         Compiler compiler = new Compiler( platform, platformVariables, boardVariables );
-
-        FileUtils.forceMkdir( getObjectDir() );
 
         compiler.setCommandExecutionDirectory( getCommandExecutionDirectory() );
         compiler.setObjDirectory( getObjectDir() );
