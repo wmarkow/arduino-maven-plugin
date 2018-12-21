@@ -21,7 +21,7 @@ import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
-public abstract class ArduinoAbstractMojo extends AbstractMojo
+public abstract class GenericMojo extends AbstractMojo
 {
     protected final static String ARDUINO_CORE_EXTENSION = "arduinocore";
     protected final static String ARDUINO_LIB_EXTENSION = "arduinolib";

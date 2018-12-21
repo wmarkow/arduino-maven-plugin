@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.maven.mojo;
+package com.github.wmarkow.amp.maven.mojo.build;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,9 +11,10 @@ import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
+import com.github.wmarkow.amp.maven.mojo.GenericMojo;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
-public abstract class ProcessorMojo extends ArduinoAbstractMojo
+public abstract class ProcessorMojo extends GenericMojo
 {
     private PlatformPackageManager ppm;
 

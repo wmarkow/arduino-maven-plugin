@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.maven.mojo;
+package com.github.wmarkow.amp.maven.mojo.artifact;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,10 +22,11 @@ import com.github.wmarkow.amp.maven.artifact.resolver.ArduinoCoreArtifactResolve
 import com.github.wmarkow.amp.maven.artifact.resolver.GithubArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.GithubFetchDescriptor;
 import com.github.wmarkow.amp.maven.artifact.resolver.LibraryRepacker;
+import com.github.wmarkow.amp.maven.mojo.GenericMojo;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
 @Mojo( name = "fetch-dependencies", defaultPhase = LifecyclePhase.INITIALIZE, requiresProject = true )
-public class ResolveDependenciesMojo extends ArduinoAbstractMojo
+public class ResolveDependenciesMojo extends GenericMojo
 {
 
     @Override

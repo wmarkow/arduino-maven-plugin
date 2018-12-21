@@ -1,11 +1,11 @@
-package com.github.wmarkow.amp.maven.mojo;
+package com.github.wmarkow.amp.maven.mojo.artifact;
 
 import java.io.File;
 
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.junit.Test;
 
-import com.github.wmarkow.amp.maven.mojo.ResolveDependenciesMojo;
+import com.github.wmarkow.amp.maven.mojo.artifact.ResolveDependenciesMojo;
 
 public class ResolveDependenciesMojoTest extends AbstractMojoTestCase
 {

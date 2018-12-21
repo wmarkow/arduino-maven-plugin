@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.maven.mojo;
+package com.github.wmarkow.amp.maven.mojo.artifact;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +15,13 @@ import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
 
+import com.github.wmarkow.amp.maven.mojo.GenericMojo;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 import com.github.wmarkow.amp.util.CompressUtil;
 
 @Mojo( name = "unpack-dependencies", defaultPhase = LifecyclePhase.GENERATE_SOURCES,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
-public class UnpackDependenciesMojo extends ArduinoAbstractMojo
+public class UnpackDependenciesMojo extends GenericMojo
 {
 
     @Override

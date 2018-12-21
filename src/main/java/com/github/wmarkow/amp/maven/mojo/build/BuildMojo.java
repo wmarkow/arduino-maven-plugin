@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.maven.mojo;
+package com.github.wmarkow.amp.maven.mojo.build;
 
 import java.io.File;
 import java.io.IOException;
