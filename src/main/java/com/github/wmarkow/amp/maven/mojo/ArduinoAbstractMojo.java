@@ -1,7 +1,6 @@
 package com.github.wmarkow.amp.maven.mojo;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,9 +19,6 @@ import org.eclipse.aether.collection.DependencyCollectionException;
 import org.eclipse.aether.graph.DependencyNode;
 import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
-import com.github.wmarkow.amp.arduino.platform.BoardVariables;
-import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
-import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
 public abstract class ArduinoAbstractMojo extends AbstractMojo
@@ -43,7 +39,7 @@ public abstract class ArduinoAbstractMojo extends AbstractMojo
     private String packageIndexUrl;
 
     @Parameter( property = "board", required = true )
-    protected String board;
+    private String board;
 
     protected List< Artifact > getArduinoDependencies()
     {
@@ -95,27 +91,6 @@ public abstract class ArduinoAbstractMojo extends AbstractMojo
         }
 
         return null;
-    }
-
-    protected PlatformVariables getPlatformVariables( Artifact arduinoCoreArtifact ) throws IOException
-    {
-        // FIXME: derive path to platfrom.txt correctly
-        File platformTxtFile =
-            new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), "avr/platform.txt" );
-
-        PlatformFilesReader pfr = new PlatformFilesReader();
-        return pfr.readPlatformVariablesFromFile( platformTxtFile );
-    }
-
-    protected BoardVariables getBoardVariables( Artifact arduinoCoreArtifact, String board )
-        throws IOException
-    {
-        // FIXME: derive path to boards.txt correctly
-        File boardsTxtFile =
-            new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), "avr/boards.txt" );
-
-        PlatformFilesReader pfr = new PlatformFilesReader();
-        return pfr.readBoardsVariables( boardsTxtFile ).getBoardVariables( board );
     }
 
     protected File getPathToUnpackedLibrarySourcesDir( Artifact artifact )

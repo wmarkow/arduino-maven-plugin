@@ -19,13 +19,11 @@ import com.github.wmarkow.amp.arduino.build.linker.Linker;
 import com.github.wmarkow.amp.arduino.build.linker.LinkerCommandBuilder;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
-import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
-import com.github.wmarkow.amp.util.ArtifactUtils;
 
 @Mojo( name = "build", defaultPhase = LifecyclePhase.COMPILE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
-public class BuildMojo extends ArduinoAbstractMojo
+public class BuildMojo extends ProcessorMojo
 {
 
     @Parameter( defaultValue = "${project.build.sourceDirectory}", required = true, readonly = true )
@@ -52,24 +50,16 @@ public class BuildMojo extends ArduinoAbstractMojo
 
     private void compile() throws IOException, InterruptedException
     {
-        PlatformPackageManager ppm = new PlatformPackageManager( new File( "target/arduino-maven-plugin" ) );
-        ppm.addPackageUrl( getPackageIndexUrl() );
-        ppm.update();
-
-        Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
-
-        final Platform platform =
-            ppm.getPlatform( arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
-        final PlatformVariables platformVariables = getPlatformVariables( arduinoCoreArtifact );
-        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, getBoard() );
+        final Platform platform = getPlatform();
+        final PlatformVariables platformVariables = getPlatformVariables();
+        final BoardVariables boardVariables = getBoardVariables();
 
         Compiler compiler = new Compiler( platform, platformVariables, boardVariables );
-        File objDir = new File( "target/obj" );
 
-        FileUtils.forceMkdir( objDir );
+        FileUtils.forceMkdir( getObjectDir() );
 
-        compiler.setCommandExecutionDirectory( new File( "." ) );
-        compiler.setObjDirectory( objDir );
+        compiler.setCommandExecutionDirectory( getCommandExecutionDirectory() );
+        compiler.setObjDirectory( getObjectDir() );
 
         compiler.addSrcDirectory( new File( sourceDirectory ) );
 
@@ -104,49 +94,27 @@ public class BuildMojo extends ArduinoAbstractMojo
 
     private void archive() throws IOException, InterruptedException
     {
-        PlatformPackageManager ppm = new PlatformPackageManager( new File( "target/arduino-maven-plugin" ) );
-        ppm.addPackageUrl( getPackageIndexUrl() );
-        ppm.update();
-
-        Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
-
-        final Platform platform =
-            ppm.getPlatform( arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
-        final PlatformVariables platformVariables = getPlatformVariables( arduinoCoreArtifact );
-        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, getBoard() );
+        final Platform platform = getPlatform();
+        final PlatformVariables platformVariables = getPlatformVariables();
+        final BoardVariables boardVariables = getBoardVariables();
 
         ArchiverCommandBuilder acb = new ArchiverCommandBuilder( platform, platformVariables, boardVariables );
         Archiver archiver = new Archiver( acb );
-        archiver.setCommandExecutionDirectory( new File( "." ) );
+        archiver.setCommandExecutionDirectory( getCommandExecutionDirectory() );
 
-        final Artifact projectArtifact = getProjectArtifact();
-        final String archiveFileName = ArtifactUtils.getBaseFileName( projectArtifact ) + ".ar";
-        File outputArchiveFile = new File( "target/" + archiveFileName );
-
-        archiver.archive( new File( "target/obj" ), outputArchiveFile );
+        archiver.archive( getObjectDir(), getArchiveFile() );
     }
 
     private void link() throws IOException, InterruptedException
     {
-        PlatformPackageManager ppm = new PlatformPackageManager( new File( "target/arduino-maven-plugin" ) );
-        ppm.addPackageUrl( getPackageIndexUrl() );
-        ppm.update();
-
-        Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
-
-        final Platform platform =
-            ppm.getPlatform( arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
-        final PlatformVariables platformVariables = getPlatformVariables( arduinoCoreArtifact );
-        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, getBoard() );
+        final Platform platform = getPlatform();
+        final PlatformVariables platformVariables = getPlatformVariables();
+        final BoardVariables boardVariables = getBoardVariables();
 
         LinkerCommandBuilder lcb = new LinkerCommandBuilder( platform, platformVariables, boardVariables );
         Linker linker = new Linker( lcb );
-        linker.setCommandExecutionDirectory( new File( "." ) );
+        linker.setCommandExecutionDirectory( getCommandExecutionDirectory() );
 
-        final Artifact projectArtifact = getProjectArtifact();
-        final String elfFileName = ArtifactUtils.getBaseFileName( projectArtifact ) + ".elf";
-        File outputElfFile = new File( "target/" + elfFileName );
-
-        linker.link( new File( "target/obj" ), outputElfFile );
+        linker.link( getObjectDir(), getElfFile() );
     }
 }
