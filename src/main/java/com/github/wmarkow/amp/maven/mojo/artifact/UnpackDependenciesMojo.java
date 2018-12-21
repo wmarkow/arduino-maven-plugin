@@ -29,15 +29,14 @@ public class UnpackDependenciesMojo extends GenericMojo
     {
         List< Artifact > arduinoLibs = getArduinoDependencies();
 
-        File dstBaseDir = new File( "target/generated-sources/" );
-
         for( Artifact arduinoLib : arduinoLibs )
         {
             getLog().info( String.format( "Processing library %s", artifactToString( arduinoLib ) ) );
 
             File sourceZip = resolveFileOfDependency( arduinoLib );
 
-            File dstDir = new File( dstBaseDir, ArtifactUtils.getBaseFileName( arduinoLib ) );
+            File dstDir =
+                new File( getGeneratedSourcesDirFile(), ArtifactUtils.getBaseFileName( arduinoLib ) );
             try
             {
                 FileUtils.forceMkdir( dstDir );

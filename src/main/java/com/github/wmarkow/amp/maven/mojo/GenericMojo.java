@@ -1,5 +1,6 @@
 package com.github.wmarkow.amp.maven.mojo;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -18,12 +19,15 @@ import org.eclipse.aether.collection.DependencyCollectionException;
 import org.eclipse.aether.graph.DependencyNode;
 import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
+import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
 public abstract class GenericMojo extends AbstractMojo
 {
     protected final static String ARDUINO_CORE_EXTENSION = "arduinocore";
     protected final static String ARDUINO_LIB_EXTENSION = "arduinolib";
+
+    private PlatformPackageManager ppm;
 
     @Component
     protected MavenProject mavenProject;
@@ -40,22 +44,14 @@ public abstract class GenericMojo extends AbstractMojo
     @Parameter( property = "board", required = true )
     private String board;
 
-    protected List< Artifact > getArduinoDependencies()
+    protected File getGeneratedSourcesDirFile()
     {
-        DependencyNode node = getVerboseDependencyTree();
+        return new File( "target/generated-sources/" );
+    }
 
-        List< Artifact > result = new ArrayList< Artifact >();
-
-        for( DependencyNode dn : node.getChildren() )
-        {
-            if( ARDUINO_CORE_EXTENSION.equals( dn.getArtifact().getExtension() )
-                || ARDUINO_LIB_EXTENSION.equals( dn.getArtifact().getExtension() ) )
-            {
-                result.add( dn.getArtifact() );
-            }
-        }
-
-        return result;
+    protected File getArduinoMavenPluginDirFile()
+    {
+        return new File( "target/arduino-maven-plugin" );
     }
 
     protected String artifactToString( org.eclipse.aether.artifact.Artifact artifact )
@@ -87,6 +83,38 @@ public abstract class GenericMojo extends AbstractMojo
     protected String getBoard() throws MalformedURLException
     {
         return board;
+    }
+
+    protected List< Artifact > getArduinoDependencies()
+    {
+        DependencyNode node = getVerboseDependencyTree();
+
+        List< Artifact > result = new ArrayList< Artifact >();
+
+        for( DependencyNode dn : node.getChildren() )
+        {
+            if( ARDUINO_CORE_EXTENSION.equals( dn.getArtifact().getExtension() )
+                || ARDUINO_LIB_EXTENSION.equals( dn.getArtifact().getExtension() ) )
+            {
+                result.add( dn.getArtifact() );
+            }
+        }
+
+        return result;
+    }
+
+    protected synchronized PlatformPackageManager getPlatformPackageManager() throws MalformedURLException
+    {
+        if( ppm == null )
+        {
+            PlatformPackageManager ppm = new PlatformPackageManager( getArduinoMavenPluginDirFile() );
+            ppm.addPackageUrl( getPackageIndexUrl() );
+            ppm.update();
+
+            this.ppm = ppm;
+        }
+
+        return ppm;
     }
 
     private DependencyNode getVerboseDependencyTree()

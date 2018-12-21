@@ -11,15 +11,12 @@ import org.eclipse.aether.artifact.Artifact;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
-import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
 import com.github.wmarkow.amp.maven.mojo.GenericMojo;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
 public abstract class ProcessorMojo extends GenericMojo
 {
-    private PlatformPackageManager ppm;
-
     protected File getObjectDir()
     {
         return new File( "target/obj" );
@@ -77,8 +74,7 @@ public abstract class ProcessorMojo extends GenericMojo
         return pfr.readPlatformVariablesFromFile( platformTxtFile );
     }
 
-    protected BoardVariables getBoardVariables()
-        throws IOException
+    protected BoardVariables getBoardVariables() throws IOException
     {
         final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
 
@@ -92,9 +88,7 @@ public abstract class ProcessorMojo extends GenericMojo
 
     protected File getPathToUnpackedLibrarySourcesDir( Artifact artifact )
     {
-        File baseDir =
-            new File( new File( "target/generated-sources/" ).getAbsolutePath(),
-                ArtifactUtils.getBaseFileName( artifact ) );
+        File baseDir = new File( getGeneratedSourcesDirFile(), ArtifactUtils.getBaseFileName( artifact ) );
 
         File dirWithSrc = new File( baseDir, "src" );
         if( dirWithSrc.exists() )
@@ -108,9 +102,7 @@ public abstract class ProcessorMojo extends GenericMojo
     protected File[] getPathToUnpackedCoreLibrarySourcesDir( Artifact artifact, String arch, String core,
         String variant )
     {
-        File baseDir =
-            new File( new File( "target/generated-sources/" ).getAbsolutePath(),
-                ArtifactUtils.getBaseFileName( artifact ) );
+        File baseDir = new File( getGeneratedSourcesDirFile(), ArtifactUtils.getBaseFileName( artifact ) );
 
         List< File > result = new ArrayList< File >();
         result.add( new File( baseDir, arch + "/cores/" + core ) );
@@ -118,20 +110,5 @@ public abstract class ProcessorMojo extends GenericMojo
 
         return result.toArray( new File[]
         {} );
-    }
-
-    private synchronized PlatformPackageManager getPlatformPackageManager() throws MalformedURLException
-    {
-        if( ppm == null )
-        {
-            PlatformPackageManager ppm =
-                new PlatformPackageManager( new File( "target/arduino-maven-plugin" ) );
-            ppm.addPackageUrl( getPackageIndexUrl() );
-            ppm.update();
-
-            this.ppm = ppm;
-        }
-
-        return ppm;
     }
 }

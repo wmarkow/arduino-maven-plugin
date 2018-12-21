@@ -17,7 +17,6 @@ import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
 
-import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
 import com.github.wmarkow.amp.maven.artifact.resolver.ArduinoCoreArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.GithubArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.GithubFetchDescriptor;
@@ -32,22 +31,16 @@ public class ResolveDependenciesMojo extends GenericMojo
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        List< Artifact > arduinoLibs = getMissingArduinoDependencies();
-
-        for( Artifact arduinoLib : arduinoLibs )
+        for( Artifact arduinoLib : getMissingArduinoDependencies() )
         {
-
             if( ARDUINO_CORE_EXTENSION.equals( arduinoLib.getExtension() ) )
             {
-                File workDir = new File( "target/arduino-maven-plugin" );
-                PlatformPackageManager ppm = new PlatformPackageManager( workDir );
+                final File workDir = getArduinoMavenPluginDirFile();
 
                 try
                 {
-                    ppm.addPackageUrl( getPackageIndexUrl() );
-                    ppm.update();
-
-                    ArduinoCoreArtifactResolver fetcher = new ArduinoCoreArtifactResolver( ppm );
+                    ArduinoCoreArtifactResolver fetcher =
+                        new ArduinoCoreArtifactResolver( getPlatformPackageManager() );
                     File fetchedCore =
                         fetcher.fetch( arduinoLib.getArtifactId(), arduinoLib.getVersion(), workDir );
                     installLibrary( arduinoLib, fetchedCore );
@@ -117,7 +110,7 @@ public class ResolveDependenciesMojo extends GenericMojo
             descriptor.repoName = "ArduinoCore-avr";
             descriptor.refName = "1.6.23";
 
-            File targetDir = new File( "target/arduino-maven-plugin" );
+            final File targetDir = getArduinoMavenPluginDirFile();
             FileUtils.forceMkdir( targetDir );
 
             File fetchedSources = githubFetcher.fetchLibrary( descriptor, targetDir );
@@ -141,7 +134,7 @@ public class ResolveDependenciesMojo extends GenericMojo
             descriptor.repoName = "ArduinoCore-avr";
             descriptor.refName = "1.6.23";
 
-            File targetDir = new File( "target/arduino-maven-plugin" );
+            final File targetDir = getArduinoMavenPluginDirFile();
             FileUtils.forceMkdir( targetDir );
 
             File fetchedSources = githubFetcher.fetchLibrary( descriptor, targetDir );
