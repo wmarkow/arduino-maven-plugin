@@ -2,7 +2,6 @@ package com.github.wmarkow.amp.maven.mojo;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -54,7 +53,7 @@ public class BuildMojo extends ArduinoAbstractMojo
     private void compile() throws IOException, InterruptedException
     {
         PlatformPackageManager ppm = new PlatformPackageManager( new File( "target/arduino-maven-plugin" ) );
-        ppm.addPackageUrl( new URL( "https://downloads.arduino.cc/packages/package_index.json" ) );
+        ppm.addPackageUrl( getPackageIndexUrl() );
         ppm.update();
 
         Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
@@ -62,7 +61,7 @@ public class BuildMojo extends ArduinoAbstractMojo
         final Platform platform =
             ppm.getPlatform( arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
         final PlatformVariables platformVariables = getPlatformVariables( arduinoCoreArtifact );
-        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, "uno" );
+        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, getBoard() );
 
         Compiler compiler = new Compiler( platform, platformVariables, boardVariables );
         File objDir = new File( "target/obj" );
@@ -106,7 +105,7 @@ public class BuildMojo extends ArduinoAbstractMojo
     private void archive() throws IOException, InterruptedException
     {
         PlatformPackageManager ppm = new PlatformPackageManager( new File( "target/arduino-maven-plugin" ) );
-        ppm.addPackageUrl( new URL( "https://downloads.arduino.cc/packages/package_index.json" ) );
+        ppm.addPackageUrl( getPackageIndexUrl() );
         ppm.update();
 
         Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
@@ -114,7 +113,7 @@ public class BuildMojo extends ArduinoAbstractMojo
         final Platform platform =
             ppm.getPlatform( arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
         final PlatformVariables platformVariables = getPlatformVariables( arduinoCoreArtifact );
-        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, "uno" );
+        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, getBoard() );
 
         ArchiverCommandBuilder acb = new ArchiverCommandBuilder( platform, platformVariables, boardVariables );
         Archiver archiver = new Archiver( acb );
@@ -130,7 +129,7 @@ public class BuildMojo extends ArduinoAbstractMojo
     private void link() throws IOException, InterruptedException
     {
         PlatformPackageManager ppm = new PlatformPackageManager( new File( "target/arduino-maven-plugin" ) );
-        ppm.addPackageUrl( new URL( "https://downloads.arduino.cc/packages/package_index.json" ) );
+        ppm.addPackageUrl( getPackageIndexUrl() );
         ppm.update();
 
         Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
@@ -138,7 +137,7 @@ public class BuildMojo extends ArduinoAbstractMojo
         final Platform platform =
             ppm.getPlatform( arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
         final PlatformVariables platformVariables = getPlatformVariables( arduinoCoreArtifact );
-        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, "uno" );
+        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, getBoard() );
 
         LinkerCommandBuilder lcb = new LinkerCommandBuilder( platform, platformVariables, boardVariables );
         Linker linker = new Linker( lcb );

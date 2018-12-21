@@ -2,6 +2,8 @@ package com.github.wmarkow.amp.maven.mojo;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +38,12 @@ public abstract class ArduinoAbstractMojo extends AbstractMojo
 
     @Parameter( defaultValue = "${repositorySystemSession}" )
     protected RepositorySystemSession repoSession;
+
+    @Parameter( property = "packageIndexUrl", required = true )
+    private String packageIndexUrl;
+
+    @Parameter( property = "board", required = true )
+    protected String board;
 
     protected List< Artifact > getArduinoDependencies()
     {
@@ -138,6 +146,16 @@ public abstract class ArduinoAbstractMojo extends AbstractMojo
 
         return result.toArray( new File[]
         {} );
+    }
+
+    protected URL getPackageIndexUrl() throws MalformedURLException
+    {
+        return new URL( packageIndexUrl );
+    }
+
+    protected String getBoard() throws MalformedURLException
+    {
+        return board;
     }
 
     private DependencyNode getVerboseDependencyTree()

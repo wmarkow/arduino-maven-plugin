@@ -2,7 +2,6 @@ package com.github.wmarkow.amp.maven.mojo;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -43,7 +42,7 @@ public class PackageMojo extends ArduinoAbstractMojo
     private void createHex() throws IOException, InterruptedException
     {
         PlatformPackageManager ppm = new PlatformPackageManager( new File( "target/arduino-maven-plugin" ) );
-        ppm.addPackageUrl( new URL( "https://downloads.arduino.cc/packages/package_index.json" ) );
+        ppm.addPackageUrl( getPackageIndexUrl() );
         ppm.update();
 
         Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
@@ -51,7 +50,7 @@ public class PackageMojo extends ArduinoAbstractMojo
         final Platform platform =
             ppm.getPlatform( arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
         final PlatformVariables platformVariables = getPlatformVariables( arduinoCoreArtifact );
-        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, "uno" );
+        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, getBoard() );
 
         HexDumper hexDumper =
             new HexDumper( new HexImageCommandBuilder( platform, platformVariables, boardVariables ) );
@@ -67,7 +66,7 @@ public class PackageMojo extends ArduinoAbstractMojo
     private void createEeprom() throws IOException, InterruptedException
     {
         PlatformPackageManager ppm = new PlatformPackageManager( new File( "target/arduino-maven-plugin" ) );
-        ppm.addPackageUrl( new URL( "https://downloads.arduino.cc/packages/package_index.json" ) );
+        ppm.addPackageUrl( getPackageIndexUrl() );
         ppm.update();
 
         Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
@@ -75,7 +74,7 @@ public class PackageMojo extends ArduinoAbstractMojo
         final Platform platform =
             ppm.getPlatform( arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
         final PlatformVariables platformVariables = getPlatformVariables( arduinoCoreArtifact );
-        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, "uno" );
+        final BoardVariables boardVariables = getBoardVariables( arduinoCoreArtifact, getBoard() );
 
         EepromDumper eepromDumper =
             new EepromDumper( new EepromImageCommandBuilder( platform, platformVariables, boardVariables ) );

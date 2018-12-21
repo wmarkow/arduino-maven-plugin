@@ -2,7 +2,6 @@ package com.github.wmarkow.amp.maven.mojo;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class ResolveDependenciesMojo extends ArduinoAbstractMojo
 
                 try
                 {
-                    ppm.addPackageUrl( new URL( "https://downloads.arduino.cc/packages/package_index.json" ) );
+                    ppm.addPackageUrl( getPackageIndexUrl() );
                     ppm.update();
 
                     ArduinoCoreArtifactResolver fetcher = new ArduinoCoreArtifactResolver( ppm );
