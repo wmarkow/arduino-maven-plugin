@@ -1,9 +1,11 @@
-package com.github.wmarkow.amp.mojo;
+package com.github.wmarkow.amp.maven.mojo;
 
 import java.io.File;
 
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.junit.Test;
+
+import com.github.wmarkow.amp.maven.mojo.FetchDependenciesMojo;
 
 public class FetchDependenciesMojoTest extends AbstractMojoTestCase
 {

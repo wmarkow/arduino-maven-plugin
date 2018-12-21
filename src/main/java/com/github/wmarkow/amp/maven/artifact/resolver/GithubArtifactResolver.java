@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.dependency;
+package com.github.wmarkow.amp.maven.artifact.resolver;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,9 +9,9 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GithubArtifactFetcher
+public class GithubArtifactResolver
 {
-    private Logger logger = LoggerFactory.getLogger( GithubArtifactFetcher.class );
+    private Logger logger = LoggerFactory.getLogger( GithubArtifactResolver.class );
 
     private final static String GITHUB_ARCHIVE_URL_FORMAT = "https://github.com/%s/%s/archive/%s.zip";
 

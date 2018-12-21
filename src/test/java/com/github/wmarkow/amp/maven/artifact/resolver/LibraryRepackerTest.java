@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.fetch;
+package com.github.wmarkow.amp.maven.artifact.resolver;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -13,7 +13,7 @@ import org.eclipse.aether.artifact.DefaultArtifact;
 import org.junit.Test;
 
 import com.github.wmarkow.amp.ArtifactUtils;
-import com.github.wmarkow.amp.dependency.LibraryRepacker;
+import com.github.wmarkow.amp.maven.artifact.resolver.LibraryRepacker;
 
 public class LibraryRepackerTest
 {

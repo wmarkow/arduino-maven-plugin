@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.mojo;
+package com.github.wmarkow.amp.maven.mojo;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,10 +20,10 @@ import org.eclipse.aether.resolution.ArtifactResult;
 
 import com.github.wmarkow.amp.ArtifactUtils;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
-import com.github.wmarkow.amp.dependency.ArduinoCoreArtifactFetcher;
-import com.github.wmarkow.amp.dependency.GithubArtifactFetcher;
-import com.github.wmarkow.amp.dependency.GithubFetchDescriptor;
-import com.github.wmarkow.amp.dependency.LibraryRepacker;
+import com.github.wmarkow.amp.maven.artifact.resolver.ArduinoCoreArtifactResolver;
+import com.github.wmarkow.amp.maven.artifact.resolver.GithubArtifactResolver;
+import com.github.wmarkow.amp.maven.artifact.resolver.GithubFetchDescriptor;
+import com.github.wmarkow.amp.maven.artifact.resolver.LibraryRepacker;
 
 @Mojo( name = "fetch-dependencies", defaultPhase = LifecyclePhase.INITIALIZE, requiresProject = true )
 public class FetchDependenciesMojo extends ArduinoAbstractMojo
@@ -47,7 +47,7 @@ public class FetchDependenciesMojo extends ArduinoAbstractMojo
                     ppm.addPackageUrl( new URL( "https://downloads.arduino.cc/packages/package_index.json" ) );
                     ppm.update();
 
-                    ArduinoCoreArtifactFetcher fetcher = new ArduinoCoreArtifactFetcher( ppm );
+                    ArduinoCoreArtifactResolver fetcher = new ArduinoCoreArtifactResolver( ppm );
                     File fetchedCore =
                         fetcher.fetch( arduinoLib.getArtifactId(), arduinoLib.getVersion(), workDir );
                     installLibrary( arduinoLib, fetchedCore );
@@ -111,7 +111,7 @@ public class FetchDependenciesMojo extends ArduinoAbstractMojo
             && "1.6.23".equals( arduinoLib.getBaseVersion() ) && "avr".equals( arduinoLib.getClassifier() ) )
         {
             // fetch com.github.arduino:arduino-core-1.6.23-avr
-            GithubArtifactFetcher githubFetcher = new GithubArtifactFetcher();
+            GithubArtifactResolver githubFetcher = new GithubArtifactResolver();
             GithubFetchDescriptor descriptor = new GithubFetchDescriptor();
             descriptor.username = "arduino";
             descriptor.repoName = "ArduinoCore-avr";
@@ -135,7 +135,7 @@ public class FetchDependenciesMojo extends ArduinoAbstractMojo
             && "avr-standard".equals( arduinoLib.getClassifier() ) )
         {
             // fetch com.github.arduino:arduino-core-1.6.23-avr
-            GithubArtifactFetcher githubFetcher = new GithubArtifactFetcher();
+            GithubArtifactResolver githubFetcher = new GithubArtifactResolver();
             GithubFetchDescriptor descriptor = new GithubFetchDescriptor();
             descriptor.username = "arduino";
             descriptor.repoName = "ArduinoCore-avr";

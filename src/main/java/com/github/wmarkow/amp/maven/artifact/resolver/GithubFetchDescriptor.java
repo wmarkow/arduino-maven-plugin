@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.dependency;
+package com.github.wmarkow.amp.maven.artifact.resolver;
 
 public class GithubFetchDescriptor
 {

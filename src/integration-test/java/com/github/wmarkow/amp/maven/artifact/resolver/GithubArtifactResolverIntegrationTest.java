@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.dependency;
+package com.github.wmarkow.amp.maven.artifact.resolver;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -10,10 +10,10 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
-import com.github.wmarkow.amp.dependency.GithubArtifactFetcher;
-import com.github.wmarkow.amp.dependency.GithubFetchDescriptor;
+import com.github.wmarkow.amp.maven.artifact.resolver.GithubArtifactResolver;
+import com.github.wmarkow.amp.maven.artifact.resolver.GithubFetchDescriptor;
 
-public class GithubArtifactFetcherIntegrationTest
+public class GithubArtifactResolverIntegrationTest
 {
     @Test
     public void testFetchLibraryForArduinoCoreFromExistingTag() throws IOException
@@ -24,7 +24,7 @@ public class GithubArtifactFetcherIntegrationTest
         descriptor.repoName = "ArduinoCore-avr";
         descriptor.refName = "1.6.23";
 
-        GithubArtifactFetcher fetcher = new GithubArtifactFetcher();
+        GithubArtifactResolver fetcher = new GithubArtifactResolver();
 
         File targetDir = new File( "target/arduino-maven-plugin/" );
         FileUtils.forceMkdir( targetDir );
@@ -44,7 +44,7 @@ public class GithubArtifactFetcherIntegrationTest
         descriptor.repoName = "ArduinoCore-avr";
         descriptor.refName = "1.6.23blablabla";
 
-        GithubArtifactFetcher fetcher = new GithubArtifactFetcher();
+        GithubArtifactResolver fetcher = new GithubArtifactResolver();
 
         File targetDir = new File( "target/arduino-maven-plugin/" );
         FileUtils.forceMkdir( targetDir );

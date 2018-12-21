@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.dependency;
+package com.github.wmarkow.amp.maven.artifact.resolver;
 
 import static org.junit.Assert.assertTrue;
 
@@ -11,9 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
-import com.github.wmarkow.amp.dependency.ArduinoCoreArtifactFetcher;
+import com.github.wmarkow.amp.maven.artifact.resolver.ArduinoCoreArtifactResolver;
 
-public class ArduinoCoreArtifactFetcherIntegrationTest
+public class ArduinoCoreArtifactResolverIntegrationTest
 {
     private File workDir = new File( "target/amp" );
     private File fetchDir = new File( "target/arduino-maven-plugin/" );
@@ -37,7 +37,7 @@ public class ArduinoCoreArtifactFetcherIntegrationTest
     @Test
     public void testFetchArduinoCore() throws IOException
     {
-        ArduinoCoreArtifactFetcher fetcher = new ArduinoCoreArtifactFetcher( ppm );
+        ArduinoCoreArtifactResolver fetcher = new ArduinoCoreArtifactResolver( ppm );
 
         File file = fetcher.fetch( "arduino-avr", "1.6.23", fetchDir );
 

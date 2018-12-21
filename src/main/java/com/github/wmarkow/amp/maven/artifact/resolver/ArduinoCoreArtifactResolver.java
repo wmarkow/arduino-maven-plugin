@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.dependency;
+package com.github.wmarkow.amp.maven.artifact.resolver;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,13 +12,13 @@ import org.slf4j.LoggerFactory;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
 
-public class ArduinoCoreArtifactFetcher
+public class ArduinoCoreArtifactResolver
 {
-    private Logger logger = LoggerFactory.getLogger( ArduinoCoreArtifactFetcher.class );
+    private Logger logger = LoggerFactory.getLogger( ArduinoCoreArtifactResolver.class );
 
     private PlatformPackageManager ppm;
 
-    public ArduinoCoreArtifactFetcher( PlatformPackageManager ppm )
+    public ArduinoCoreArtifactResolver( PlatformPackageManager ppm )
     {
         this.ppm = ppm;
     }
