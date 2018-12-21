@@ -15,8 +15,8 @@ import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
 
-import com.github.wmarkow.amp.ArtifactUtils;
-import com.github.wmarkow.amp.CompressUtil;
+import com.github.wmarkow.amp.util.ArtifactUtils;
+import com.github.wmarkow.amp.util.CompressUtil;
 
 @Mojo( name = "unpack-dependencies", defaultPhase = LifecyclePhase.GENERATE_SOURCES,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )

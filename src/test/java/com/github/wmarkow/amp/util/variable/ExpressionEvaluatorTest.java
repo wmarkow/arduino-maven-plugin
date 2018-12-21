@@ -1,8 +1,13 @@
-package com.github.wmarkow.amp.variable;
+package com.github.wmarkow.amp.util.variable;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import com.github.wmarkow.amp.util.variable.DefaultVariableStorage;
+import com.github.wmarkow.amp.util.variable.ExpressionEvaluator;
+import com.github.wmarkow.amp.util.variable.Variable;
+import com.github.wmarkow.amp.util.variable.VariableStorage;
 
 public class ExpressionEvaluatorTest
 {

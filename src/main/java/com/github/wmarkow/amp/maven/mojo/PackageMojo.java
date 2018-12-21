@@ -11,7 +11,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.eclipse.aether.artifact.Artifact;
 
-import com.github.wmarkow.amp.ArtifactUtils;
 import com.github.wmarkow.amp.arduino.build.imager.EepromDumper;
 import com.github.wmarkow.amp.arduino.build.imager.EepromImageCommandBuilder;
 import com.github.wmarkow.amp.arduino.build.imager.HexDumper;
@@ -20,6 +19,7 @@ import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
+import com.github.wmarkow.amp.util.ArtifactUtils;
 
 @Mojo( name = "package", defaultPhase = LifecyclePhase.PACKAGE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )

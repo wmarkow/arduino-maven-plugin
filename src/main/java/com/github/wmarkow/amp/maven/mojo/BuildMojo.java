@@ -13,7 +13,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.eclipse.aether.artifact.Artifact;
 
-import com.github.wmarkow.amp.ArtifactUtils;
 import com.github.wmarkow.amp.arduino.build.archiver.Archiver;
 import com.github.wmarkow.amp.arduino.build.archiver.ArchiverCommandBuilder;
 import com.github.wmarkow.amp.arduino.build.compiler.Compiler;
@@ -23,6 +22,7 @@ import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
+import com.github.wmarkow.amp.util.ArtifactUtils;
 
 @Mojo( name = "build", defaultPhase = LifecyclePhase.COMPILE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )

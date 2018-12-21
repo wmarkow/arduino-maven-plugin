@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp;
+package com.github.wmarkow.amp.util;
 
 import java.io.BufferedInputStream;
 import java.io.File;

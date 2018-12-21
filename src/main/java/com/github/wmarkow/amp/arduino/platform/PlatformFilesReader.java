@@ -9,7 +9,7 @@ import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 
-import com.github.wmarkow.amp.variable.Variable;
+import com.github.wmarkow.amp.util.variable.Variable;
 import com.google.gson.Gson;
 
 public class PlatformFilesReader

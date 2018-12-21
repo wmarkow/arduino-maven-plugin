@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import com.github.wmarkow.amp.cmd.CommandExecutor;
+import com.github.wmarkow.amp.util.cmd.CommandExecutor;
 
 public abstract class AbstractProcessor
 {

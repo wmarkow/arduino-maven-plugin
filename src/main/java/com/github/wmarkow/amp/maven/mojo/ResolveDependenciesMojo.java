@@ -18,12 +18,12 @@ import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
 
-import com.github.wmarkow.amp.ArtifactUtils;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
 import com.github.wmarkow.amp.maven.artifact.resolver.ArduinoCoreArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.GithubArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.GithubFetchDescriptor;
 import com.github.wmarkow.amp.maven.artifact.resolver.LibraryRepacker;
+import com.github.wmarkow.amp.util.ArtifactUtils;
 
 @Mojo( name = "fetch-dependencies", defaultPhase = LifecyclePhase.INITIALIZE, requiresProject = true )
 public class ResolveDependenciesMojo extends ArduinoAbstractMojo

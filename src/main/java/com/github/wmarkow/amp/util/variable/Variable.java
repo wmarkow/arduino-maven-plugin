@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.variable;
+package com.github.wmarkow.amp.util.variable;
 
 public class Variable
 {

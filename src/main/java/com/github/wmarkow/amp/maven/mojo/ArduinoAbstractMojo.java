@@ -18,10 +18,10 @@ import org.eclipse.aether.collection.DependencyCollectionException;
 import org.eclipse.aether.graph.DependencyNode;
 import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
-import com.github.wmarkow.amp.ArtifactUtils;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
+import com.github.wmarkow.amp.util.ArtifactUtils;
 
 public abstract class ArduinoAbstractMojo extends AbstractMojo
 {

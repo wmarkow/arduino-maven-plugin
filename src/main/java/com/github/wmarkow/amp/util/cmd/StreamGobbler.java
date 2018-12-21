@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.cmd;
+package com.github.wmarkow.amp.util.cmd;
 
 import java.io.BufferedReader;
 import java.io.IOException;

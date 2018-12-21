@@ -3,9 +3,9 @@ package com.github.wmarkow.amp.arduino.build;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
-import com.github.wmarkow.amp.variable.MultiVariableStorage;
-import com.github.wmarkow.amp.variable.Variable;
-import com.github.wmarkow.amp.variable.VariableStorage;
+import com.github.wmarkow.amp.util.variable.MultiVariableStorage;
+import com.github.wmarkow.amp.util.variable.Variable;
+import com.github.wmarkow.amp.util.variable.VariableStorage;
 
 public abstract class CommandBuilder
 {

@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp;
+package com.github.wmarkow.amp.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -11,6 +11,8 @@ import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.github.wmarkow.amp.util.CompressUtil;
 
 public class CompressUtilTest
 {

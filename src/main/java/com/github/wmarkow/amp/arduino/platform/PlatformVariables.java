@@ -1,6 +1,6 @@
 package com.github.wmarkow.amp.arduino.platform;
 
-import com.github.wmarkow.amp.variable.DefaultVariableStorage;
+import com.github.wmarkow.amp.util.variable.DefaultVariableStorage;
 
 public class PlatformVariables extends DefaultVariableStorage
 {

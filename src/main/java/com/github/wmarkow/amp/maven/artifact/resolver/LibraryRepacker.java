@@ -7,7 +7,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.wmarkow.amp.CompressUtil;
+import com.github.wmarkow.amp.util.CompressUtil;
 
 public class LibraryRepacker
 {
