@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.build.archiver;
+package com.github.wmarkow.amp.arduino.build.archiver;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.wmarkow.amp.build.AbstractProcessor;
+import com.github.wmarkow.amp.arduino.build.AbstractProcessor;
 
 public class Archiver extends AbstractProcessor
 {

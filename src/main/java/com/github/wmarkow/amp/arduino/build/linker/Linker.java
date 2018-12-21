@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.build.linker;
+package com.github.wmarkow.amp.arduino.build.linker;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.wmarkow.amp.build.AbstractProcessor;
+import com.github.wmarkow.amp.arduino.build.AbstractProcessor;
 
 public class Linker extends AbstractProcessor
 {

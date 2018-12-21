@@ -1,14 +1,14 @@
-package com.github.wmarkow.amp.build.compiler;
+package com.github.wmarkow.amp.arduino.build.compiler;
 
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
 
-public class SCompilerCommandBuilder extends CompilerCommandBuilder
+public class CCompilerCommandBuilder extends CompilerCommandBuilder
 {
-    private final static String RECEIPE_S_O_PATTERN = "recipe.S.o.pattern";
+    private final static String RECEIPE_C_O_PATTERN = "recipe.c.o.pattern";
 
-    public SCompilerCommandBuilder( Platform aPlatform, PlatformVariables aPlatformVariables,
+    public CCompilerCommandBuilder( Platform aPlatform, PlatformVariables aPlatformVariables,
         BoardVariables aBoardVariables )
     {
         super( aPlatform, aPlatformVariables, aBoardVariables );
@@ -17,6 +17,6 @@ public class SCompilerCommandBuilder extends CompilerCommandBuilder
     @Override
     protected String getCompileReceipePatternVariableName()
     {
-        return RECEIPE_S_O_PATTERN;
+        return RECEIPE_C_O_PATTERN;
     }
 }

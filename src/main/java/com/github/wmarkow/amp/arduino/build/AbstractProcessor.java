@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.build;
+package com.github.wmarkow.amp.arduino.build;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.build.compiler;
+package com.github.wmarkow.amp.arduino.build.compiler;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.github.wmarkow.amp.arduino.build.compiler.CCompilerCommandBuilder;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.BoardsVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;

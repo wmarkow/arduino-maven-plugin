@@ -1,13 +1,13 @@
-package com.github.wmarkow.amp.build.imager;
+package com.github.wmarkow.amp.arduino.build.imager;
 
 import java.io.File;
 
 import org.apache.commons.io.FilenameUtils;
 
+import com.github.wmarkow.amp.arduino.build.CommandBuilder;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
-import com.github.wmarkow.amp.build.CommandBuilder;
 import com.github.wmarkow.amp.variable.ExpressionEvaluator;
 import com.github.wmarkow.amp.variable.Variable;
 import com.github.wmarkow.amp.variable.VariableStorage;

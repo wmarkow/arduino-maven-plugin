@@ -1,12 +1,12 @@
-package com.github.wmarkow.amp.build.compiler;
+package com.github.wmarkow.amp.arduino.build.compiler;
 
 import java.io.File;
 import java.util.List;
 
+import com.github.wmarkow.amp.arduino.build.CommandBuilder;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
-import com.github.wmarkow.amp.build.CommandBuilder;
 import com.github.wmarkow.amp.variable.ExpressionEvaluator;
 import com.github.wmarkow.amp.variable.Variable;
 

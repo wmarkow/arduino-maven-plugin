@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.build.compiler;
+package com.github.wmarkow.amp.arduino.build.compiler;
 
 
 public class SCompiler extends AbstractCompiler
