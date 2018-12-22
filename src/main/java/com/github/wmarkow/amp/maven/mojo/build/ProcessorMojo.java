@@ -65,10 +65,10 @@ public abstract class ProcessorMojo extends GenericMojo
     protected PlatformVariables getPlatformVariables() throws IOException
     {
         final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
+        final String arch = getPlatform().getArchitecture();
 
-        // FIXME: derive path to platfrom.txt correctly
         File platformTxtFile =
-            new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), "avr/platform.txt" );
+            new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), arch + "/platform.txt" );
 
         PlatformFilesReader pfr = new PlatformFilesReader();
         return pfr.readPlatformVariablesFromFile( platformTxtFile );
@@ -77,10 +77,10 @@ public abstract class ProcessorMojo extends GenericMojo
     protected BoardVariables getBoardVariables() throws IOException
     {
         final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
+        final String arch = getPlatform().getArchitecture();
 
-        // FIXME: derive path to boards.txt correctly
         File boardsTxtFile =
-            new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), "avr/boards.txt" );
+            new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), arch + "/boards.txt" );
 
         PlatformFilesReader pfr = new PlatformFilesReader();
         return pfr.readBoardsVariables( boardsTxtFile ).getBoardVariables( getBoard() );
