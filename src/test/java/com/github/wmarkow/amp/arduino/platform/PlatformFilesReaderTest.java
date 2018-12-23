@@ -21,6 +21,22 @@ public class PlatformFilesReaderTest
     }
 
     @Test
+    public void testReadArduinoIndexForToolsDependencies() throws IOException
+    {
+        PlatformFilesReader pir = new PlatformFilesReader();
+
+        PlatformPackageIndex index = pir.readFromJson( new File( "src/test/resources/package_index.json" ) );
+
+        Platform platform = index.getPackage( "arduino" ).getPlatformByVersion( "1.6.23" );
+
+        assertEquals( 3, platform.getToolsDependencies().size() );
+
+        assertEquals( "arduino", platform.getToolsDependencies().get( 0 ).getPackager() );
+        assertEquals( "avr-gcc", platform.getToolsDependencies().get( 0 ).getName() );
+        assertEquals( "5.4.0-atmel3.6.1-arduino2", platform.getToolsDependencies().get( 0 ).getVersion() );
+    }
+
+    @Test
     public void testReadPlatformVariablesFromFile() throws IOException
     {
         PlatformFilesReader pir = new PlatformFilesReader();
