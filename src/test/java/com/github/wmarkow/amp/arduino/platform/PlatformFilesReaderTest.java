@@ -37,6 +37,29 @@ public class PlatformFilesReaderTest
     }
 
     @Test
+    public void testReadArduinoIndexForTools() throws IOException
+    {
+        PlatformFilesReader pir = new PlatformFilesReader();
+
+        PlatformPackageIndex index = pir.readFromJson( new File( "src/test/resources/package_index.json" ) );
+
+        assertEquals( 44, index.getPackage( "arduino" ).getTools().size() );
+        final Tool tool =
+            index.getPackage( "arduino" ).getToolByNameAndVersion( "avr-gcc", "5.4.0-atmel3.6.1-arduino2" );
+        assertEquals( "avr-gcc", tool.getName() );
+        assertEquals( "5.4.0-atmel3.6.1-arduino2", tool.getVersion() );
+
+        assertEquals( 6, tool.getSystems().size() );
+
+        assertEquals( "arm-linux-gnueabihf", tool.getSystems().get( 0 ).getHost() );
+        assertEquals( "avr-gcc-5.4.0-atmel3.6.1-arduino2-armhf-pc-linux-gnu.tar.bz2",
+            tool.getSystems().get( 0 ).getArchiveFileName() );
+        assertEquals(
+            "http://downloads.arduino.cc/tools/avr-gcc-5.4.0-atmel3.6.1-arduino2-armhf-pc-linux-gnu.tar.bz2",
+            tool.getSystems().get( 0 ).getUrl() );
+    }
+
+    @Test
     public void testReadPlatformVariablesFromFile() throws IOException
     {
         PlatformFilesReader pir = new PlatformFilesReader();

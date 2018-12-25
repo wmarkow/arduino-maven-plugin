@@ -11,6 +11,7 @@ public class Package
     private String name;
     private String maintainer;
     private List< Platform > platforms = new ArrayList< Platform >();
+    private List< Tool > tools = new ArrayList< Tool >();
 
     public String getName()
     {
@@ -27,6 +28,11 @@ public class Package
         return platforms;
     }
 
+    public List< Tool > getTools()
+    {
+        return tools;
+    }
+
     public Platform getPlatformByVersion( String version )
     {
         for( Platform platform : getPlatforms() )
@@ -34,6 +40,19 @@ public class Package
             if( version.equals( platform.getVersion() ) )
             {
                 return platform;
+            }
+        }
+
+        return null;
+    }
+
+    public Tool getToolByNameAndVersion( String name, String version )
+    {
+        for( Tool tool : getTools() )
+        {
+            if( tool.getName().equals( name ) && tool.getVersion().equals( version ) )
+            {
+                return tool;
             }
         }
 
