@@ -11,25 +11,24 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PlatformPackageManager
+public class PlatformPackageManager extends PlatformManager
 {
     private Logger logger = LoggerFactory.getLogger( PlatformPackageManager.class );
 
     private List< URL > packageUrls = new ArrayList< URL >();
-    private File workDir;
 
     private List< PlatformPackageIndex > loadedIndexes = new ArrayList< PlatformPackageIndex >();
 
     public PlatformPackageManager( File workDir )
     {
-        this.workDir = workDir;
+        super( workDir );
     }
 
     public void update()
     {
         try
         {
-            FileUtils.forceMkdir( workDir );
+            FileUtils.forceMkdir( getPlatformDir() );
         }
         catch( IOException e )
         {
@@ -43,7 +42,7 @@ public class PlatformPackageManager
             try
             {
                 final String filename = FilenameUtils.getName( url.getPath() );
-                File file = new File( workDir, filename );
+                File file = new File( getPlatformDir(), filename );
 
                 if( !file.exists() )
                 {
@@ -94,6 +93,23 @@ public class PlatformPackageManager
         }
 
         return result;
+    }
+
+    public Package getPackage( String artifactId, String version )
+    {
+        for( Package _package : getPackages() )
+        {
+            for( Platform platform : _package.getPlatforms() )
+            {
+                final String _artifactId = _package.getName() + "-" + platform.getArchitecture();
+                if( artifactId.equals( _artifactId ) && version.equals( platform.getVersion() ) )
+                {
+                    return _package;
+                }
+            }
+        }
+
+        return null;
     }
 
     public Platform getPlatform( String artifactId, String version )

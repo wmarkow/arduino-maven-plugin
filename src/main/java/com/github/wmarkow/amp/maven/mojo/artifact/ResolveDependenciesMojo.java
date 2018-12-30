@@ -2,6 +2,7 @@ package com.github.wmarkow.amp.maven.mojo.artifact;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
 
+import com.github.wmarkow.amp.arduino.platform.ToolsManager;
 import com.github.wmarkow.amp.maven.artifact.resolver.ArduinoCoreArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.GithubArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.GithubFetchDescriptor;
@@ -31,6 +33,15 @@ public class ResolveDependenciesMojo extends GenericMojo
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException
     {
+        try
+        {
+            updateArduinoPlatform();
+        }
+        catch( MalformedURLException e1 )
+        {
+            throw new MojoFailureException( e1.getMessage() );
+        }
+        
         for( Artifact arduinoLib : getMissingArduinoDependencies() )
         {
             if( ARDUINO_CORE_EXTENSION.equals( arduinoLib.getExtension() ) )
@@ -157,5 +168,13 @@ public class ResolveDependenciesMojo extends GenericMojo
         Artifact newArtifact = arduinoLib.setFile( libraryFile );
         installRequest.addArtifact( newArtifact );
         repoSystem.install( repoSession, installRequest );
+    }
+
+    private void updateArduinoPlatform() throws MalformedURLException
+    {
+        File arduinoPlatformDir = getArduinoPlatformDirFile();
+        ToolsManager toolsManager = new ToolsManager( arduinoPlatformDir );
+
+        toolsManager.resolve( getPackage(), getPlatform() );
     }
 }

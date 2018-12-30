@@ -19,6 +19,8 @@ import org.eclipse.aether.collection.DependencyCollectionException;
 import org.eclipse.aether.graph.DependencyNode;
 import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
+import com.github.wmarkow.amp.arduino.platform.Package;
+import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
@@ -52,6 +54,12 @@ public abstract class GenericMojo extends AbstractMojo
     protected File getArduinoMavenPluginDirFile()
     {
         return new File( "target/arduino-maven-plugin" );
+    }
+
+    protected File getArduinoPlatformDirFile()
+    {
+        String path = System.getProperty( "user.home" );
+        return new File( path, ".arduino-maven-plugin" );
     }
 
     protected String artifactToString( org.eclipse.aether.artifact.Artifact artifact )
@@ -107,7 +115,7 @@ public abstract class GenericMojo extends AbstractMojo
     {
         if( ppm == null )
         {
-            PlatformPackageManager ppm = new PlatformPackageManager( getArduinoMavenPluginDirFile() );
+            PlatformPackageManager ppm = new PlatformPackageManager( getArduinoPlatformDirFile() );
             ppm.addPackageUrl( getPackageIndexUrl() );
             ppm.update();
 
@@ -115,6 +123,35 @@ public abstract class GenericMojo extends AbstractMojo
         }
 
         return ppm;
+    }
+
+    protected Artifact getArduinoCoreArtifact()
+    {
+        for( Artifact artifact : getArduinoDependencies() )
+        {
+            if( ARDUINO_CORE_EXTENSION.equals( artifact.getExtension() ) )
+            {
+                return artifact;
+            }
+        }
+
+        return null;
+    }
+
+    protected Package getPackage() throws MalformedURLException
+    {
+        final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
+
+        return getPlatformPackageManager().getPackage( arduinoCoreArtifact.getArtifactId(),
+            arduinoCoreArtifact.getVersion() );
+    }
+
+    protected Platform getPlatform() throws MalformedURLException
+    {
+        final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
+
+        return getPlatformPackageManager().getPlatform( arduinoCoreArtifact.getArtifactId(),
+            arduinoCoreArtifact.getVersion() );
     }
 
     private DependencyNode getVerboseDependencyTree()
