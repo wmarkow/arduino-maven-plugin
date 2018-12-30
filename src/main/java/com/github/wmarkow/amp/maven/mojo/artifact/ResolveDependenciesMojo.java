@@ -172,9 +172,13 @@ public class ResolveDependenciesMojo extends GenericMojo
 
     private void updateArduinoPlatform() throws MalformedURLException
     {
+        getLog().info( "Updating Arduino platform..." );
+
         File arduinoPlatformDir = getArduinoPlatformDirFile();
         ToolsManager toolsManager = new ToolsManager( arduinoPlatformDir );
 
         toolsManager.resolve( getPackage(), getPlatform() );
+
+        getLog().info( "Arduino platform is up to date." );
     }
 }

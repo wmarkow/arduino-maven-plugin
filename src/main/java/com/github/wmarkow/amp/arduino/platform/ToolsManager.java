@@ -6,11 +6,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.wmarkow.amp.util.CompressUtil;
 
 public class ToolsManager extends PlatformManager
 {
+    private Logger logger = LoggerFactory.getLogger( ToolsManager.class );
+
     private final static String DOWNLOADS_DIR = "downloads";
 
     public ToolsManager( File platformDir )
@@ -20,6 +24,10 @@ public class ToolsManager extends PlatformManager
 
     public void resolve( Package _package, Platform platform )
     {
+        logger.info( String.format( "Resolving tools dependencies for package %s and platform %s ...",
+            _package,
+            platform ) );
+
         for( ToolsDependency td : platform.getToolsDependencies() )
         {
             Tool tool = _package.getToolByNameAndVersion( td.getName(), td.getVersion() );
@@ -31,7 +39,7 @@ public class ToolsManager extends PlatformManager
             }
             catch( IOException e )
             {
-                e.printStackTrace();
+                logger.error( e.getMessage(), e );
             }
         }
     }
@@ -47,6 +55,8 @@ public class ToolsManager extends PlatformManager
         {
             return;
         }
+
+        logger.info( String.format( "Downloading %s into %s", system.getUrl(), downloadFile ) );
 
         FileUtils.copyURLToFile( new URL( system.getUrl() ), downloadFile, 5000, 2500 );
     }
@@ -66,6 +76,8 @@ public class ToolsManager extends PlatformManager
 
         File downloadDir = new File( getPlatformDir(), DOWNLOADS_DIR );
         File downloadFile = new File( downloadDir, system.getArchiveFileName() );
+
+        logger.info( String.format( "Unpacking %s into %s", downloadFile, targetDir ) );
 
         CompressUtil.unpack( downloadFile, targetDir );
     }
