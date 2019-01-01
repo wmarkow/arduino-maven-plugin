@@ -19,6 +19,7 @@ public abstract class AbstractCompiler extends AbstractProcessor
     private List< File > srcDirs = new ArrayList< File >();
     private List< File > incDirs = new ArrayList< File >();
     private File objDir;
+    private String toolchainBinDir;
     private CompilerCommandBuilder compilerCommandBuilder;
 
     public AbstractCompiler( CompilerCommandBuilder compilerCommandBuilder )
@@ -46,8 +47,15 @@ public abstract class AbstractCompiler extends AbstractProcessor
         this.objDir = dir;
     }
 
+    public void setToolchainBinDir( String file )
+    {
+        this.toolchainBinDir = file;
+    }
+
     public void compile() throws IOException, InterruptedException
     {
+        compilerCommandBuilder.setToolchainBinDirPath( toolchainBinDir );
+
         FileUtils.forceMkdir( objDir );
 
         compilerCommandBuilder.setIncludes( incDirs );

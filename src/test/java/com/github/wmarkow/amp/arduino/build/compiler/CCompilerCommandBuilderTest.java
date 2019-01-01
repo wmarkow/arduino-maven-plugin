@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.github.wmarkow.amp.arduino.build.compiler.CCompilerCommandBuilder;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.BoardsVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
@@ -44,6 +43,7 @@ public class CCompilerCommandBuilderTest
         CCompilerCommandBuilder builder =
             new CCompilerCommandBuilder( platform, platformVariables,
                 boardsVariables.getBoardVariables( "uno" ) );
+        builder.setToolchainBinDirPath( "" );
 
         assertEquals(
             "\"avr-gcc\" -c -g -Os -w -std=gnu11 -ffunction-sections -fdata-sections -MMD -flto -fno-fat-lto-objects -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO=10609 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR   {includes} \"{source_file}\" -o \"{object_file}\"",
@@ -67,6 +67,7 @@ public class CCompilerCommandBuilderTest
             new CCompilerCommandBuilder( platform, platformVariables,
                 boardsVariables.getBoardVariables( "uno" ) );
 
+        builder.setToolchainBinDirPath( "" );
         builder.setSourceFile( new File( "src/main/cpp/main.c" ) );
         builder.setObjectFile( new File( "target/obj/main.c.o" ) );
         List< File > includes = new ArrayList< File >();

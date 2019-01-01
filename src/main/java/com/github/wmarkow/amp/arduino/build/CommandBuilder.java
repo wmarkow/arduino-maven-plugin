@@ -16,6 +16,8 @@ public abstract class CommandBuilder
     protected MultiVariableStorage variableStorage;
     protected Platform platform;
 
+    private String toolchainBinDirPath;
+
     public CommandBuilder( Platform platform, PlatformVariables platformVariables,
         BoardVariables boardVariables )
     {
@@ -38,6 +40,11 @@ public abstract class CommandBuilder
 
     public abstract String buildCommand();
 
+    public void setToolchainBinDirPath( String toolchainBinDirPath )
+    {
+        this.toolchainBinDirPath = toolchainBinDirPath;
+    }
+
     /***
      * A way to set build.arch variable. More details here: https://github.com/arduino/Arduino/issues/4878
      * 
@@ -58,8 +65,6 @@ public abstract class CommandBuilder
 
     protected void setCompilerPath( VariableStorage storage )
     {
-        variableStorage.putVariable( new Variable( VAR_COMPILER_PATH, "" ) );
+        variableStorage.putVariable( new Variable( VAR_COMPILER_PATH, this.toolchainBinDirPath ) );
     }
 }
-
-

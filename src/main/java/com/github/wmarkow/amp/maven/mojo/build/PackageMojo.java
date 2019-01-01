@@ -41,8 +41,11 @@ public class PackageMojo extends ProcessorMojo
         final PlatformVariables platformVariables = getPlatformVariables();
         final BoardVariables boardVariables = getBoardVariables();
 
-        HexDumper hexDumper =
-            new HexDumper( new HexImageCommandBuilder( platform, platformVariables, boardVariables ) );
+        HexImageCommandBuilder hicb =
+            new HexImageCommandBuilder( platform, platformVariables, boardVariables );
+        hicb.setToolchainBinDirPath( getToolChainBinDirPath() );
+        HexDumper hexDumper = new HexDumper( hicb );
+
         hexDumper.setCommandExecutionDirectory( getCommandExecutionDirectory() );
 
         hexDumper.makeHex( getElfFile() );
@@ -54,8 +57,11 @@ public class PackageMojo extends ProcessorMojo
         final PlatformVariables platformVariables = getPlatformVariables();
         final BoardVariables boardVariables = getBoardVariables();
 
-        EepromDumper eepromDumper =
-            new EepromDumper( new EepromImageCommandBuilder( platform, platformVariables, boardVariables ) );
+        EepromImageCommandBuilder eicb =
+            new EepromImageCommandBuilder( platform, platformVariables, boardVariables );
+        eicb.setToolchainBinDirPath( getToolChainBinDirPath() );
+
+        EepromDumper eepromDumper = new EepromDumper( eicb );
 
         eepromDumper.setCommandExecutionDirectory( getCommandExecutionDirectory() );
 

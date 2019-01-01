@@ -58,6 +58,7 @@ public class BuildMojo extends ProcessorMojo
 
         Compiler compiler = new Compiler( platform, platformVariables, boardVariables );
 
+        compiler.setToolchainBinDirPath( getToolChainBinDirPath() );
         compiler.setCommandExecutionDirectory( getCommandExecutionDirectory() );
         compiler.setObjDirectory( getObjectDir() );
 
@@ -99,6 +100,8 @@ public class BuildMojo extends ProcessorMojo
         final BoardVariables boardVariables = getBoardVariables();
 
         ArchiverCommandBuilder acb = new ArchiverCommandBuilder( platform, platformVariables, boardVariables );
+        acb.setToolchainBinDirPath( getToolChainBinDirPath() );
+
         Archiver archiver = new Archiver( acb );
         archiver.setCommandExecutionDirectory( getCommandExecutionDirectory() );
 
@@ -112,6 +115,8 @@ public class BuildMojo extends ProcessorMojo
         final BoardVariables boardVariables = getBoardVariables();
 
         LinkerCommandBuilder lcb = new LinkerCommandBuilder( platform, platformVariables, boardVariables );
+        lcb.setToolchainBinDirPath( getToolChainBinDirPath() );
+
         Linker linker = new Linker( lcb );
         linker.setCommandExecutionDirectory( getCommandExecutionDirectory() );
 

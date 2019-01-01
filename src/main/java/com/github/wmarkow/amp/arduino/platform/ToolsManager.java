@@ -25,8 +25,7 @@ public class ToolsManager extends PlatformManager
     public void resolve( Package _package, Platform platform )
     {
         logger.info( String.format( "Resolving tools dependencies for package %s and platform %s ...",
-            _package,
-            platform ) );
+            _package, platform ) );
 
         for( ToolsDependency td : platform.getToolsDependencies() )
         {
@@ -42,6 +41,31 @@ public class ToolsManager extends PlatformManager
                 logger.error( e.getMessage(), e );
             }
         }
+    }
+
+    public File getToolchainBinDirPath( Package _package, Platform platform )
+    {
+        for( ToolsDependency td : platform.getToolsDependencies() )
+        {
+            if( td.getName().toLowerCase().contains( "gcc" ) )
+            {
+                Tool tool = _package.getToolByNameAndVersion( td.getName(), td.getVersion() );
+
+                File packagesDir = new File( getPlatformDir(), "packages" );
+                File dir =
+                    new File( packagesDir, _package.getName() + "/tools/" + tool.getName() + "/"
+                        + tool.getVersion() );
+
+                // sometimes the distribution contains one additional dir in the structure. Strip it.
+                File[] filesInside = dir.listFiles();
+                if( filesInside.length == 1 )
+                {
+                    return new File( filesInside[ 0 ], "/bin/" );
+                }
+            }
+        }
+
+        return null;
     }
 
     private void downlaodToolIfNeeded( String packageName, Tool tool ) throws MalformedURLException,

@@ -23,10 +23,12 @@ import com.github.wmarkow.amp.arduino.build.imager.HexImageCommandBuilder;
 import com.github.wmarkow.amp.arduino.build.linker.Linker;
 import com.github.wmarkow.amp.arduino.build.linker.LinkerCommandBuilder;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
+import com.github.wmarkow.amp.arduino.platform.Package;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageIndex;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
+import com.github.wmarkow.amp.arduino.platform.ToolsManager;
 
 @Category( IntegrationTest.class )
 public class BuildAllIntegrationTest
@@ -114,7 +116,13 @@ public class BuildAllIntegrationTest
 
         PlatformPackageIndex platformPackageIndex =
             pfr.readFromJson( new File( "src/test/resources/package_index.json" ) );
-        Platform platform = platformPackageIndex.getPackage( "arduino" ).getPlatformByVersion( "1.6.17" );
+        Package _package = platformPackageIndex.getPackage( "arduino" );
+        Platform platform = _package.getPlatformByVersion( "1.6.17" );
+
+        // update Arduino Platform so 1.6.17 is available
+        ToolsManager tm = new ToolsManager( getPlatformDir() );
+        tm.resolve( _package, platform );
+
         PlatformVariables platformVariables =
             pfr.readPlatformVariablesFromFile( new File( "src/test/resources/arduino/platform.txt" ) );
         BoardVariables boardVariables =
@@ -122,6 +130,11 @@ public class BuildAllIntegrationTest
                 "uno" );
 
         compiler = new Compiler( platform, platformVariables, boardVariables );
+        ToolsManager toolsManager = new ToolsManager( getPlatformDir() );
+        File toolchainBinDirPath =
+            toolsManager.getToolchainBinDirPath( platformPackageIndex.getPackage( "arduino" ), platform );
+
+        compiler.setToolchainBinDirPath( toolchainBinDirPath.getPath() + "/" );
 
         compiler.addSrcDirectory( new File( "src/test/resources/arduino-blink-project" ) );
         compiler.addSrcDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
@@ -132,17 +145,26 @@ public class BuildAllIntegrationTest
         compiler.setObjDirectory( objDir );
         compiler.setCommandExecutionDirectory( new File( "." ) );
 
-        archiver = new Archiver( new ArchiverCommandBuilder( platform, platformVariables, boardVariables ) );
+        ArchiverCommandBuilder acb = new ArchiverCommandBuilder( platform, platformVariables, boardVariables );
+        acb.setToolchainBinDirPath( toolchainBinDirPath.getPath() + "/" );
+        archiver = new Archiver( acb );
         archiver.setCommandExecutionDirectory( new File( "." ) );
 
-        linker = new Linker( new LinkerCommandBuilder( platform, platformVariables, boardVariables ) );
+        LinkerCommandBuilder lcb = new LinkerCommandBuilder( platform, platformVariables, boardVariables );
+        lcb.setToolchainBinDirPath( toolchainBinDirPath.getPath() + "/" );
+        linker = new Linker( lcb );
         linker.setCommandExecutionDirectory( new File( "." ) );
 
-        eepromDumper =
-            new EepromDumper( new EepromImageCommandBuilder( platform, platformVariables, boardVariables ) );
+        EepromImageCommandBuilder eicb =
+            new EepromImageCommandBuilder( platform, platformVariables, boardVariables );
+        eicb.setToolchainBinDirPath( toolchainBinDirPath + "/" );
+        eepromDumper = new EepromDumper( eicb );
         eepromDumper.setCommandExecutionDirectory( new File( "." ) );
 
-        hexDumper = new HexDumper( new HexImageCommandBuilder( platform, platformVariables, boardVariables ) );
+        HexImageCommandBuilder hicb =
+            new HexImageCommandBuilder( platform, platformVariables, boardVariables );
+        hicb.setToolchainBinDirPath( toolchainBinDirPath + "/" );
+        hexDumper = new HexDumper( hicb );
         hexDumper.setCommandExecutionDirectory( new File( "." ) );
 
         FileUtils.forceMkdir( objDir );
@@ -153,4 +175,9 @@ public class BuildAllIntegrationTest
         FileUtils.deleteQuietly( hexFile );
     }
 
+    private File getPlatformDir()
+    {
+        String path = System.getProperty( "user.home" );
+        return new File( path, ".arduino-maven-plugin" );
+    }
 }

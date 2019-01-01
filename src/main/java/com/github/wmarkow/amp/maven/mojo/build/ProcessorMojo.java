@@ -2,6 +2,7 @@ package com.github.wmarkow.amp.maven.mojo.build;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.eclipse.aether.artifact.Artifact;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
+import com.github.wmarkow.amp.arduino.platform.ToolsManager;
 import com.github.wmarkow.amp.maven.mojo.GenericMojo;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
@@ -87,5 +89,15 @@ public abstract class ProcessorMojo extends GenericMojo
 
         return result.toArray( new File[]
         {} );
+    }
+
+    protected String getToolChainBinDirPath() throws MalformedURLException
+    {
+        File arduinoPlatformDir = getArduinoPlatformDirFile();
+        ToolsManager toolsManager = new ToolsManager( arduinoPlatformDir );
+
+        File toolchainBinDirPath = toolsManager.getToolchainBinDirPath( getPackage(), getPlatform() );
+
+        return toolchainBinDirPath.getPath() + "/";
     }
 }

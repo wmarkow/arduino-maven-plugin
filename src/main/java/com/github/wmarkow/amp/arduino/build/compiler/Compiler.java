@@ -16,11 +16,11 @@ public class Compiler
     public Compiler( Platform platform, PlatformVariables platformVariables, BoardVariables boardVariables )
     {
         cppCompiler =
-            new CppCompiler( new CCompilerCommandBuilder( platform, platformVariables, boardVariables ) );
+            new CppCompiler( new CppCompilerCommandBuilder( platform, platformVariables, boardVariables ) );
         cCompiler =
             new CCompiler( new CCompilerCommandBuilder( platform, platformVariables, boardVariables ) );
         sCompiler =
-            new SCompiler( new CCompilerCommandBuilder( platform, platformVariables, boardVariables ) );
+            new SCompiler( new SCompilerCommandBuilder( platform, platformVariables, boardVariables ) );
     }
 
     public void setCommandExecutionDirectory( File dir )
@@ -56,5 +56,12 @@ public class Compiler
         cppCompiler.compile();
         cCompiler.compile();
         sCompiler.compile();
+    }
+    
+    public void setToolchainBinDirPath( String file )
+    {
+        cppCompiler.setToolchainBinDir( file );
+        cCompiler.setToolchainBinDir( file );
+        sCompiler.setToolchainBinDir( file );
     }
 }
