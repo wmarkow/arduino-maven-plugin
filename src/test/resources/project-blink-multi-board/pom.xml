@@ -1,0 +1,82 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.wmarkow.amp</groupId>
+    <artifactId>test-project-blink</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>uno</id>
+            <properties>
+                <packageIndexUrl>https://downloads.arduino.cc/packages/package_index.json</packageIndexUrl>
+                <board>uno</board>
+            </properties>
+        </profile>
+        <profile>
+            <id>nano</id>
+            <properties>
+                <packageIndexUrl>https://downloads.arduino.cc/packages/package_index.json</packageIndexUrl>
+                <board>nano</board>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <sourceDirectory>src/main/cpp</sourceDirectory>
+
+        <plugins>
+
+            <plugin>
+                <groupId>com.github.wmarkow.amp</groupId>
+                <artifactId>arduino-maven-plugin</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <id>fetch-dependencies</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>fetch-dependencies</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>build</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.arduino</groupId>
+            <artifactId>arduino-avr</artifactId>
+            <version>1.6.23</version>
+            <type>arduinocore</type>
+        </dependency>
+    </dependencies>
+</project>
