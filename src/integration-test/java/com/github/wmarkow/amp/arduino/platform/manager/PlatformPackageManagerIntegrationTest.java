@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.arduino.platform;
+package com.github.wmarkow.amp.arduino.platform.manager;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -11,7 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
+import com.github.wmarkow.amp.arduino.platform.manager.PlatformPackageManager;
 
 public class PlatformPackageManagerIntegrationTest
 {

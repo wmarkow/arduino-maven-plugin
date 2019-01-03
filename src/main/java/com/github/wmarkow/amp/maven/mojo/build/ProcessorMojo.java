@@ -11,7 +11,7 @@ import org.eclipse.aether.artifact.Artifact;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
-import com.github.wmarkow.amp.arduino.platform.ToolsManager;
+import com.github.wmarkow.amp.arduino.platform.manager.ToolsManager;
 import com.github.wmarkow.amp.maven.mojo.GenericMojo;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 

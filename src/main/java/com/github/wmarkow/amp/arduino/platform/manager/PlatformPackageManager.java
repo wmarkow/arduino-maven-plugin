@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.arduino.platform;
+package com.github.wmarkow.amp.arduino.platform.manager;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +10,11 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.wmarkow.amp.arduino.platform.Package;
+import com.github.wmarkow.amp.arduino.platform.Platform;
+import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
+import com.github.wmarkow.amp.arduino.platform.PlatformPackageIndex;
 
 public class PlatformPackageManager extends PlatformManager
 {

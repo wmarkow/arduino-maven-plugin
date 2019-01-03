@@ -28,7 +28,7 @@ import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageIndex;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
-import com.github.wmarkow.amp.arduino.platform.ToolsManager;
+import com.github.wmarkow.amp.arduino.platform.manager.ToolsManager;
 
 @Category( IntegrationTest.class )
 public class BuildAllIntegrationTest

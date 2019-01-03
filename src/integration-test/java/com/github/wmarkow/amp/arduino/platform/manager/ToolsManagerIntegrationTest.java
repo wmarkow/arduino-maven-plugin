@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.arduino.platform;
+package com.github.wmarkow.amp.arduino.platform.manager;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -9,6 +9,12 @@ import java.io.IOException;
 import org.codehaus.plexus.util.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.github.wmarkow.amp.arduino.platform.Package;
+import com.github.wmarkow.amp.arduino.platform.Platform;
+import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
+import com.github.wmarkow.amp.arduino.platform.PlatformPackageIndex;
+import com.github.wmarkow.amp.arduino.platform.manager.ToolsManager;
 
 public class ToolsManagerIntegrationTest
 {

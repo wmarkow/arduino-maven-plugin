@@ -21,7 +21,7 @@ import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
 import com.github.wmarkow.amp.arduino.platform.Package;
 import com.github.wmarkow.amp.arduino.platform.Platform;
-import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
+import com.github.wmarkow.amp.arduino.platform.manager.PlatformPackageManager;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
 public abstract class GenericMojo extends AbstractMojo

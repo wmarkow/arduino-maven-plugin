@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.wmarkow.amp.arduino.platform.Platform;
-import com.github.wmarkow.amp.arduino.platform.PlatformPackageManager;
+import com.github.wmarkow.amp.arduino.platform.manager.PlatformPackageManager;
 
 public class ArduinoCoreArtifactResolver
 {

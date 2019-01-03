@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.arduino.platform;
+package com.github.wmarkow.amp.arduino.platform.manager;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +9,11 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.wmarkow.amp.arduino.platform.Package;
+import com.github.wmarkow.amp.arduino.platform.Platform;
+import com.github.wmarkow.amp.arduino.platform.System;
+import com.github.wmarkow.amp.arduino.platform.Tool;
+import com.github.wmarkow.amp.arduino.platform.ToolsDependency;
 import com.github.wmarkow.amp.util.CompressUtil;
 
 public class ToolsManager extends PlatformManager

@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.arduino.platform;
+package com.github.wmarkow.amp.arduino.platform.manager;
 
 import java.io.File;
 

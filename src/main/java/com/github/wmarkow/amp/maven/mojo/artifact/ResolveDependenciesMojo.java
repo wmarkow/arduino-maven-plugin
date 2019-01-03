@@ -18,7 +18,7 @@ import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
 
-import com.github.wmarkow.amp.arduino.platform.ToolsManager;
+import com.github.wmarkow.amp.arduino.platform.manager.ToolsManager;
 import com.github.wmarkow.amp.maven.artifact.resolver.ArduinoCoreArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.GithubArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.GithubFetchDescriptor;
