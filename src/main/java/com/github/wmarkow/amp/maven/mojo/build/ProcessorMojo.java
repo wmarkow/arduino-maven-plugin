@@ -11,7 +11,7 @@ import org.eclipse.aether.artifact.Artifact;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
-import com.github.wmarkow.amp.arduino.platform.manager.ToolsManager;
+import com.github.wmarkow.amp.arduino.platform.manager.PlatformToolsManager;
 import com.github.wmarkow.amp.maven.mojo.GenericMojo;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
@@ -94,7 +94,7 @@ public abstract class ProcessorMojo extends GenericMojo
     protected String getToolChainBinDirPath() throws MalformedURLException
     {
         File arduinoPlatformDir = getArduinoPlatformDirFile();
-        ToolsManager toolsManager = new ToolsManager( arduinoPlatformDir );
+        PlatformToolsManager toolsManager = new PlatformToolsManager( arduinoPlatformDir );
 
         File toolchainBinDirPath = toolsManager.getToolchainBinDirPath( getPackage(), getPlatform() );
 

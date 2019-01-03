@@ -16,13 +16,13 @@ import com.github.wmarkow.amp.arduino.platform.Tool;
 import com.github.wmarkow.amp.arduino.platform.ToolsDependency;
 import com.github.wmarkow.amp.util.CompressUtil;
 
-public class ToolsManager extends PlatformManager
+public class PlatformToolsManager extends PlatformManager
 {
-    private Logger logger = LoggerFactory.getLogger( ToolsManager.class );
+    private Logger logger = LoggerFactory.getLogger( PlatformToolsManager.class );
 
     private final static String DOWNLOADS_DIR = "downloads";
 
-    public ToolsManager( File platformDir )
+    public PlatformToolsManager( File platformDir )
     {
         super( platformDir );
     }

@@ -14,9 +14,9 @@ import com.github.wmarkow.amp.arduino.platform.Package;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageIndex;
-import com.github.wmarkow.amp.arduino.platform.manager.ToolsManager;
+import com.github.wmarkow.amp.arduino.platform.manager.PlatformToolsManager;
 
-public class ToolsManagerIntegrationTest
+public class PlatformToolsManagerIntegrationTest
 {
     private final static File PLATFORM_DIR = new File( "target/arduino-maven-plugin" );
 
@@ -50,7 +50,7 @@ public class ToolsManagerIntegrationTest
         PlatformFilesReader pir = new PlatformFilesReader();
         PlatformPackageIndex index = pir.readFromJson( new File( "src/test/resources/package_index.json" ) );
 
-        ToolsManager tm = new ToolsManager( PLATFORM_DIR );
+        PlatformToolsManager tm = new PlatformToolsManager( PLATFORM_DIR );
 
         Package _package = index.getPackage( "arduino" );
         Platform platform = _package.getPlatformByVersion( "1.6.23" );

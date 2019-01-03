@@ -18,7 +18,7 @@ import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
 
-import com.github.wmarkow.amp.arduino.platform.manager.ToolsManager;
+import com.github.wmarkow.amp.arduino.platform.manager.PlatformToolsManager;
 import com.github.wmarkow.amp.maven.artifact.resolver.ArduinoCoreArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.GithubArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.GithubFetchDescriptor;
@@ -175,7 +175,7 @@ public class ResolveDependenciesMojo extends GenericMojo
         getLog().info( "Updating Arduino platform..." );
 
         File arduinoPlatformDir = getArduinoPlatformDirFile();
-        ToolsManager toolsManager = new ToolsManager( arduinoPlatformDir );
+        PlatformToolsManager toolsManager = new PlatformToolsManager( arduinoPlatformDir );
 
         toolsManager.resolve( getPackage(), getPlatform() );
 

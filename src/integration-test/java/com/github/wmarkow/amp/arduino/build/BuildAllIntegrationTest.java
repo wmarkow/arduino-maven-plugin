@@ -28,7 +28,7 @@ import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformPackageIndex;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
-import com.github.wmarkow.amp.arduino.platform.manager.ToolsManager;
+import com.github.wmarkow.amp.arduino.platform.manager.PlatformToolsManager;
 
 @Category( IntegrationTest.class )
 public class BuildAllIntegrationTest
@@ -120,7 +120,7 @@ public class BuildAllIntegrationTest
         Platform platform = _package.getPlatformByVersion( "1.6.17" );
 
         // update Arduino Platform so 1.6.17 is available
-        ToolsManager tm = new ToolsManager( getPlatformDir() );
+        PlatformToolsManager tm = new PlatformToolsManager( getPlatformDir() );
         tm.resolve( _package, platform );
 
         PlatformVariables platformVariables =
@@ -130,7 +130,7 @@ public class BuildAllIntegrationTest
                 "uno" );
 
         compiler = new Compiler( platform, platformVariables, boardVariables );
-        ToolsManager toolsManager = new ToolsManager( getPlatformDir() );
+        PlatformToolsManager toolsManager = new PlatformToolsManager( getPlatformDir() );
         File toolchainBinDirPath =
             toolsManager.getToolchainBinDirPath( platformPackageIndex.getPackage( "arduino" ), platform );
 
