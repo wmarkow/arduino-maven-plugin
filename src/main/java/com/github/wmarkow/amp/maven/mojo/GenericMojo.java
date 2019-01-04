@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Component;
@@ -45,6 +46,9 @@ public abstract class GenericMojo extends AbstractMojo
 
     @Parameter( property = "arduino-maven-plugin.board", required = true )
     private String board;
+
+    @Parameter( property = "arduino-maven-plugin.buildVariables", required = false )
+    protected Map< String, String > buildVariables;
 
     protected File getGeneratedSourcesDirFile()
     {
@@ -91,6 +95,11 @@ public abstract class GenericMojo extends AbstractMojo
     protected String getBoard() throws MalformedURLException
     {
         return board;
+    }
+
+    protected Map< String, String > getBuildVariables()
+    {
+        return buildVariables;
     }
 
     protected List< Artifact > getArduinoDependencies()

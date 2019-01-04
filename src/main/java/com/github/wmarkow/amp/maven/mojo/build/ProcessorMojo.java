@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.aether.artifact.Artifact;
 
@@ -12,6 +13,7 @@ import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
 import com.github.wmarkow.amp.arduino.platform.manager.PlatformToolsManager;
+import com.github.wmarkow.amp.arduino.variable.Variable;
 import com.github.wmarkow.amp.maven.mojo.GenericMojo;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
@@ -62,7 +64,16 @@ public abstract class ProcessorMojo extends GenericMojo
             new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), arch + "/boards.txt" );
 
         PlatformFilesReader pfr = new PlatformFilesReader();
-        return pfr.readBoardsVariables( boardsTxtFile ).getBoardVariables( getBoard() );
+        BoardVariables boardVariables =
+            pfr.readBoardsVariables( boardsTxtFile ).getBoardVariables( getBoard() );
+
+        final Map< String, String > buildVariables = getBuildVariables();
+        for( String key : buildVariables.keySet() )
+        {
+            boardVariables.putVariable( new Variable( key, buildVariables.get( key ) ) );
+        }
+
+        return boardVariables;
     }
 
     protected File getPathToUnpackedLibrarySourcesDir( Artifact artifact )

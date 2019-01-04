@@ -37,6 +37,9 @@
                         <configuration>
                             <packageIndexUrl>https://downloads.arduino.cc/packages/package_index.json</packageIndexUrl>
                             <board>nano</board>
+                            <buildVariables>
+                                <build.mcu>atmega328p</build.mcu>
+                            </buildVariables>
                         </configuration>
                     </plugin>
                 </plugins>
