@@ -14,17 +14,33 @@
     <profiles>
         <profile>
             <id>uno</id>
-            <properties>
-                <packageIndexUrl>https://downloads.arduino.cc/packages/package_index.json</packageIndexUrl>
-                <board>uno</board>
-            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.wmarkow.amp</groupId>
+                        <artifactId>arduino-maven-plugin</artifactId>
+                        <configuration>
+                            <packageIndexUrl>https://downloads.arduino.cc/packages/package_index.json</packageIndexUrl>
+                            <board>uno</board>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>nano</id>
-            <properties>
-                <packageIndexUrl>https://downloads.arduino.cc/packages/package_index.json</packageIndexUrl>
-                <board>nano</board>
-            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.wmarkow.amp</groupId>
+                        <artifactId>arduino-maven-plugin</artifactId>
+                        <configuration>
+                            <packageIndexUrl>https://downloads.arduino.cc/packages/package_index.json</packageIndexUrl>
+                            <board>nano</board>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 

@@ -40,10 +40,10 @@ public abstract class GenericMojo extends AbstractMojo
     @Parameter( defaultValue = "${repositorySystemSession}" )
     protected RepositorySystemSession repoSession;
 
-    @Parameter( property = "packageIndexUrl", required = true )
+    @Parameter( property = "arduino-maven-plugin.packageIndexUrl", required = true )
     private String packageIndexUrl;
 
-    @Parameter( property = "board", required = true )
+    @Parameter( property = "arduino-maven-plugin.board", required = true )
     private String board;
 
     protected File getGeneratedSourcesDirFile()
