@@ -21,6 +21,7 @@ public class LinkerCommandBuilder extends CommandBuilder
     private final static String VAR_BUILD_PATH = "build.path";
     private final static String VAR_BUILD_PROJECT_NAME = "build.project_name";
     private final static String VAR_ARCHIVE_FILE = "archive_file";
+    private final static String VAR_ARCHIVE_FILE_PATH = "archive_file_path";
 
     private File objDir;
     private File targetElfFile;
@@ -52,7 +53,6 @@ public class LinkerCommandBuilder extends CommandBuilder
         this.objDir = objDir;
     }
 
-
     public void setOutputElfFile( File elfFile )
     {
         this.targetElfFile = elfFile;
@@ -76,9 +76,11 @@ public class LinkerCommandBuilder extends CommandBuilder
     private void setArchiveFile( VariableStorage variableStorage, File targetElfFile )
     {
         final String buildPath = targetElfFile.getParentFile().getPath();
-        final String archiveFile = FilenameUtils.getBaseName( targetElfFile.getName() ) + ".ar";
+        final String archiveFileName = FilenameUtils.getBaseName( targetElfFile.getName() ) + ".ar";
 
-        variableStorage.putVariable( new Variable( VAR_ARCHIVE_FILE, archiveFile ) );
+        variableStorage.putVariable( new Variable( VAR_ARCHIVE_FILE, archiveFileName ) );
+        variableStorage.putVariable( new Variable( VAR_ARCHIVE_FILE_PATH, new File( buildPath,
+            archiveFileName ).getPath() ) );
     }
 
     private void setTargetElfFile( VariableStorage variableStorage, File targetElfFile )
