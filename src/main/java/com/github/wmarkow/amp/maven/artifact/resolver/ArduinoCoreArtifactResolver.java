@@ -26,7 +26,7 @@ public class ArduinoCoreArtifactResolver
     public File fetch( String artifactId, String version, File targetDir ) throws IOException
     {
         logger.info( String.format( "Trying to fetch artifact %s-%s ...", artifactId, version ) );
-        Platform platform = ppm.getPlatform( artifactId, version );
+        Platform platform = ppm.getPlatformRepository().getPlatform( artifactId, version );
 
         if( platform == null )
         {

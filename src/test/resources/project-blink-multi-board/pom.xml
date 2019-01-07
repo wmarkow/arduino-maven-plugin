@@ -20,12 +20,22 @@
                         <groupId>com.github.wmarkow.amp</groupId>
                         <artifactId>arduino-maven-plugin</artifactId>
                         <configuration>
-                            <packageIndexUrl>https://downloads.arduino.cc/packages/package_index.json</packageIndexUrl>
+                            <packageIndexes>
+                                <packageIndex>https://downloads.arduino.cc/packages/package_index.json</packageIndex>
+                            </packageIndexes>
                             <board>uno</board>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
+            <dependencies>
+                <dependency>
+                    <groupId>com.github.arduino</groupId>
+                    <artifactId>arduino-avr</artifactId>
+                    <version>1.6.23</version>
+                    <type>arduinocore</type>
+                </dependency>
+            </dependencies>
         </profile>
         <profile>
             <id>nano</id>
@@ -35,7 +45,9 @@
                         <groupId>com.github.wmarkow.amp</groupId>
                         <artifactId>arduino-maven-plugin</artifactId>
                         <configuration>
-                            <packageIndexUrl>https://downloads.arduino.cc/packages/package_index.json</packageIndexUrl>
+                            <packageIndexes>
+                                <packageIndex>https://downloads.arduino.cc/packages/package_index.json</packageIndex>
+                            </packageIndexes>
                             <board>nano</board>
                             <buildVariables>
                                 <build.mcu>atmega328p</build.mcu>
@@ -44,6 +56,40 @@
                     </plugin>
                 </plugins>
             </build>
+            <dependencies>
+                <dependency>
+                    <groupId>com.github.arduino</groupId>
+                    <artifactId>arduino-avr</artifactId>
+                    <version>1.6.23</version>
+                    <type>arduinocore</type>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>digispark</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.wmarkow.amp</groupId>
+                        <artifactId>arduino-maven-plugin</artifactId>
+                        <configuration>
+                            <packageIndexes>
+                                <packageIndex>https://downloads.arduino.cc/packages/package_index.json</packageIndex>
+                                <packageIndexUrl>https://raw.githubusercontent.com/digistump/arduino-boards-index/master/package_digistump_index.json</packageIndexUrl>
+                            </packageIndexes>
+                            <board>digispark-tiny</board>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <dependency>
+                    <groupId>com.github.digistump</groupId>
+                    <artifactId>digistump-avr</artifactId>
+                    <version>1.6.7</version>
+                    <type>arduinocore</type>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 
@@ -89,13 +135,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.github.arduino</groupId>
-            <artifactId>arduino-avr</artifactId>
-            <version>1.6.23</version>
-            <type>arduinocore</type>
-        </dependency>
-    </dependencies>
 </project>

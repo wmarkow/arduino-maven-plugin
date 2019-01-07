@@ -11,10 +11,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.wmarkow.amp.arduino.platform.Package;
-import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
-import com.github.wmarkow.amp.arduino.platform.PlatformPackageIndex;
+import com.github.wmarkow.amp.arduino.platform.PlatformRepository;
 
 public class PlatformPackageManager extends PlatformManager
 {
@@ -22,7 +20,7 @@ public class PlatformPackageManager extends PlatformManager
 
     private List< URL > packageUrls = new ArrayList< URL >();
 
-    private List< PlatformPackageIndex > loadedIndexes = new ArrayList< PlatformPackageIndex >();
+    private PlatformRepository platformRepository = new PlatformRepository();
 
     public PlatformPackageManager( File workDir )
     {
@@ -40,7 +38,7 @@ public class PlatformPackageManager extends PlatformManager
             throw new RuntimeException( e );
         }
 
-        loadedIndexes.clear();
+        platformRepository = new PlatformRepository();
 
         for( URL url : packageUrls )
         {
@@ -56,7 +54,7 @@ public class PlatformPackageManager extends PlatformManager
 
                 PlatformFilesReader pir = new PlatformFilesReader();
 
-                loadedIndexes.add( pir.readFromJson( file ) );
+                platformRepository.addIndex( pir.readFromJson( file ) );
             }
             catch( IOException e )
             {
@@ -70,67 +68,8 @@ public class PlatformPackageManager extends PlatformManager
         packageUrls.add( url );
     }
 
-    public List< Package > getPackages()
+    public PlatformRepository getPlatformRepository()
     {
-        List< Package > result = new ArrayList< Package >();
-
-        for( PlatformPackageIndex index : loadedIndexes )
-        {
-            result.addAll( index.getPackages() );
-        }
-
-        return result;
-    }
-
-    public List< String > getLatestPlatformsAsArtifacts()
-    {
-        List< String > result = new ArrayList< String >();
-        for( PlatformPackageIndex index : loadedIndexes )
-        {
-            for( Package _package : index.getPackages() )
-            {
-                for( Platform platform : _package.getPlatforms() )
-                {
-                    result.add( _package.getName() + "-" + platform.getArchitecture() + "-"
-                        + platform.getVersion() );
-                }
-            }
-        }
-
-        return result;
-    }
-
-    public Package getPackage( String artifactId, String version )
-    {
-        for( Package _package : getPackages() )
-        {
-            for( Platform platform : _package.getPlatforms() )
-            {
-                final String _artifactId = _package.getName() + "-" + platform.getArchitecture();
-                if( artifactId.equals( _artifactId ) && version.equals( platform.getVersion() ) )
-                {
-                    return _package;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public Platform getPlatform( String artifactId, String version )
-    {
-        for( Package _package : getPackages() )
-        {
-            for( Platform platform : _package.getPlatforms() )
-            {
-                final String _artifactId = _package.getName() + "-" + platform.getArchitecture();
-                if( artifactId.equals( _artifactId ) && version.equals( platform.getVersion() ) )
-                {
-                    return platform;
-                }
-            }
-        }
-
-        return null;
+        return platformRepository;
     }
 }

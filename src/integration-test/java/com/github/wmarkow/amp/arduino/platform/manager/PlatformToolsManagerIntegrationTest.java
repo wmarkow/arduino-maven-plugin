@@ -10,11 +10,9 @@ import org.codehaus.plexus.util.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.wmarkow.amp.arduino.platform.Package;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
-import com.github.wmarkow.amp.arduino.platform.PlatformPackageIndex;
-import com.github.wmarkow.amp.arduino.platform.manager.PlatformToolsManager;
+import com.github.wmarkow.amp.arduino.platform.PlatformRepository;
 
 public class PlatformToolsManagerIntegrationTest
 {
@@ -48,14 +46,13 @@ public class PlatformToolsManagerIntegrationTest
             .exists() );
 
         PlatformFilesReader pir = new PlatformFilesReader();
-        PlatformPackageIndex index = pir.readFromJson( new File( "src/test/resources/package_index.json" ) );
+        PlatformRepository platformRepository = new PlatformRepository();
+        platformRepository.addIndex( pir.readFromJson( new File( "src/test/resources/package_index.json" ) ) );
 
         PlatformToolsManager tm = new PlatformToolsManager( PLATFORM_DIR );
+        Platform platform = platformRepository.getPackageByName( "arduino" ).getPlatformByVersion( "1.6.23" );
 
-        Package _package = index.getPackage( "arduino" );
-        Platform platform = _package.getPlatformByVersion( "1.6.23" );
-
-        tm.resolve( _package, platform );
+        tm.resolve( platformRepository, platform );
 
         assertTrue( new File( downloadsDir, "arduinoOTA-1.2.1-windows_386.zip" ).exists() );
         assertTrue( new File( downloadsDir, "avrdude-6.3.0-arduino14-i686-w64-mingw32.zip" ).exists() );

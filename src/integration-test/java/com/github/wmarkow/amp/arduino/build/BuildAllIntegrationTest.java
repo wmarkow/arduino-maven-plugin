@@ -26,7 +26,7 @@ import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Package;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
-import com.github.wmarkow.amp.arduino.platform.PlatformPackageIndex;
+import com.github.wmarkow.amp.arduino.platform.PlatformRepository;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
 import com.github.wmarkow.amp.arduino.platform.manager.PlatformToolsManager;
 
@@ -113,15 +113,15 @@ public class BuildAllIntegrationTest
     public void init() throws IOException
     {
         PlatformFilesReader pfr = new PlatformFilesReader();
+        PlatformRepository platformRepository = new PlatformRepository();
+        platformRepository.addIndex( pfr.readFromJson( new File( "src/test/resources/package_index.json" ) ) );
 
-        PlatformPackageIndex platformPackageIndex =
-            pfr.readFromJson( new File( "src/test/resources/package_index.json" ) );
-        Package _package = platformPackageIndex.getPackage( "arduino" );
+        Package _package = platformRepository.getPackageByName( "arduino" );
         Platform platform = _package.getPlatformByVersion( "1.6.17" );
 
         // update Arduino Platform so 1.6.17 is available
         PlatformToolsManager tm = new PlatformToolsManager( getPlatformDir() );
-        tm.resolve( _package, platform );
+        tm.resolve( platformRepository, platform );
 
         PlatformVariables platformVariables =
             pfr.readPlatformVariablesFromFile( new File( "src/test/resources/arduino/platform.txt" ) );
@@ -131,8 +131,7 @@ public class BuildAllIntegrationTest
 
         compiler = new Compiler( platform, platformVariables, boardVariables );
         PlatformToolsManager toolsManager = new PlatformToolsManager( getPlatformDir() );
-        File toolchainBinDirPath =
-            toolsManager.getToolchainBinDirPath( platformPackageIndex.getPackage( "arduino" ), platform );
+        File toolchainBinDirPath = toolsManager.getToolchainBinDirPath( platformRepository, platform );
 
         compiler.setToolchainBinDirPath( toolchainBinDirPath.getPath() + "/" );
 

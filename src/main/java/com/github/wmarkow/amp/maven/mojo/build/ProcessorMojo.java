@@ -2,7 +2,6 @@ package com.github.wmarkow.amp.maven.mojo.build;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +14,7 @@ import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
 import com.github.wmarkow.amp.arduino.platform.manager.PlatformToolsManager;
 import com.github.wmarkow.amp.arduino.variable.Variable;
 import com.github.wmarkow.amp.maven.mojo.GenericMojo;
+import com.github.wmarkow.amp.util.AmpFileUtils;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
 public abstract class ProcessorMojo extends GenericMojo
@@ -46,10 +46,9 @@ public abstract class ProcessorMojo extends GenericMojo
     protected PlatformVariables getPlatformVariables() throws IOException
     {
         final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
-        final String arch = getPlatform().getArchitecture();
 
         File platformTxtFile =
-            new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), arch + "/platform.txt" );
+            new File( getPathToUnpackedCoreLibrary( arduinoCoreArtifact ), "/platform.txt" );
 
         PlatformFilesReader pfr = new PlatformFilesReader();
         return pfr.readPlatformVariablesFromFile( platformTxtFile );
@@ -58,10 +57,8 @@ public abstract class ProcessorMojo extends GenericMojo
     protected BoardVariables getBoardVariables() throws IOException
     {
         final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
-        final String arch = getPlatform().getArchitecture();
 
-        File boardsTxtFile =
-            new File( getPathToUnpackedLibrarySourcesDir( arduinoCoreArtifact ), arch + "/boards.txt" );
+        File boardsTxtFile = new File( getPathToUnpackedCoreLibrary( arduinoCoreArtifact ), "/boards.txt" );
 
         PlatformFilesReader pfr = new PlatformFilesReader();
         BoardVariables boardVariables =
@@ -89,26 +86,36 @@ public abstract class ProcessorMojo extends GenericMojo
         return baseDir;
     }
 
+    // FIXME: remove arch
     protected File[] getPathToUnpackedCoreLibrarySourcesDir( Artifact artifact, String arch, String core,
         String variant )
     {
-        File baseDir = new File( getGeneratedSourcesDirFile(), ArtifactUtils.getBaseFileName( artifact ) );
+        File baseDir = getPathToUnpackedCoreLibrary( artifact );
 
         List< File > result = new ArrayList< File >();
-        result.add( new File( baseDir, arch + "/cores/" + core ) );
-        result.add( new File( baseDir, arch + "/variants/" + variant ) );
+        result.add( new File( baseDir, "/cores/" + core ) );
+        result.add( new File( baseDir, "/variants/" + variant ) );
 
         return result.toArray( new File[]
         {} );
     }
 
-    protected String getToolChainBinDirPath() throws MalformedURLException
+    protected String getToolChainBinDirPath()
     {
         File arduinoPlatformDir = getArduinoPlatformDirFile();
         PlatformToolsManager toolsManager = new PlatformToolsManager( arduinoPlatformDir );
 
-        File toolchainBinDirPath = toolsManager.getToolchainBinDirPath( getPackage(), getPlatform() );
+        File toolchainBinDirPath =
+            toolsManager.getToolchainBinDirPath( getPlatformPackageManager().getPlatformRepository(),
+                getPlatform() );
 
         return toolchainBinDirPath.getPath() + "/";
+    }
+
+    private File getPathToUnpackedCoreLibrary( Artifact artifact )
+    {
+        File baseDir = new File( getGeneratedSourcesDirFile(), ArtifactUtils.getBaseFileName( artifact ) );
+
+        return AmpFileUtils.stepIntoSingleFolderIfPossible( baseDir );
     }
 }

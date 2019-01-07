@@ -41,8 +41,8 @@ public abstract class GenericMojo extends AbstractMojo
     @Parameter( defaultValue = "${repositorySystemSession}" )
     protected RepositorySystemSession repoSession;
 
-    @Parameter( property = "arduino-maven-plugin.packageIndexUrl", required = true )
-    private String packageIndexUrl;
+    @Parameter( property = "arduino-maven-plugin.packageIndexes", required = true )
+    private URL[] packageIndexes;
 
     @Parameter( property = "arduino-maven-plugin.board", required = true )
     private String board;
@@ -87,9 +87,9 @@ public abstract class GenericMojo extends AbstractMojo
         return ArtifactUtils.mavenToAether( mavenProject.getArtifact() );
     }
 
-    protected URL getPackageIndexUrl() throws MalformedURLException
+    protected URL[] getPackageIndexesUrls()
     {
-        return new URL( packageIndexUrl );
+        return packageIndexes;
     }
 
     protected String getBoard() throws MalformedURLException
@@ -120,12 +120,15 @@ public abstract class GenericMojo extends AbstractMojo
         return result;
     }
 
-    protected synchronized PlatformPackageManager getPlatformPackageManager() throws MalformedURLException
+    protected synchronized PlatformPackageManager getPlatformPackageManager()
     {
         if( ppm == null )
         {
             PlatformPackageManager ppm = new PlatformPackageManager( getArduinoPlatformDirFile() );
-            ppm.addPackageUrl( getPackageIndexUrl() );
+            for( URL url : getPackageIndexesUrls() )
+            {
+                ppm.addPackageUrl( url );
+            }
             ppm.update();
 
             this.ppm = ppm;
@@ -147,20 +150,20 @@ public abstract class GenericMojo extends AbstractMojo
         return null;
     }
 
-    protected Package getPackage() throws MalformedURLException
+    protected Package getPackage()
     {
         final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
 
-        return getPlatformPackageManager().getPackage( arduinoCoreArtifact.getArtifactId(),
-            arduinoCoreArtifact.getVersion() );
+        return getPlatformPackageManager().getPlatformRepository().getPackage(
+            arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
     }
 
-    protected Platform getPlatform() throws MalformedURLException
+    protected Platform getPlatform()
     {
         final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
 
-        return getPlatformPackageManager().getPlatform( arduinoCoreArtifact.getArtifactId(),
-            arduinoCoreArtifact.getVersion() );
+        return getPlatformPackageManager().getPlatformRepository().getPlatform(
+            arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
     }
 
     private DependencyNode getVerboseDependencyTree()

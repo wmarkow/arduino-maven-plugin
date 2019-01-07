@@ -2,7 +2,6 @@ package com.github.wmarkow.amp.maven.mojo.artifact;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,11 +36,11 @@ public class ResolveDependenciesMojo extends GenericMojo
         {
             updateArduinoPlatform();
         }
-        catch( MalformedURLException e1 )
+        catch( IOException e1 )
         {
             throw new MojoFailureException( e1.getMessage() );
         }
-        
+
         for( Artifact arduinoLib : getMissingArduinoDependencies() )
         {
             if( ARDUINO_CORE_EXTENSION.equals( arduinoLib.getExtension() ) )
@@ -170,14 +169,14 @@ public class ResolveDependenciesMojo extends GenericMojo
         repoSystem.install( repoSession, installRequest );
     }
 
-    private void updateArduinoPlatform() throws MalformedURLException
+    private void updateArduinoPlatform() throws IOException
     {
         getLog().info( "Updating Arduino platform..." );
 
         File arduinoPlatformDir = getArduinoPlatformDirFile();
         PlatformToolsManager toolsManager = new PlatformToolsManager( arduinoPlatformDir );
 
-        toolsManager.resolve( getPackage(), getPlatform() );
+        toolsManager.resolve( getPlatformPackageManager().getPlatformRepository(), getPlatform() );
 
         getLog().info( "Arduino platform is up to date." );
     }
