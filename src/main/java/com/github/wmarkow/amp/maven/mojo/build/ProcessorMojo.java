@@ -4,17 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.aether.artifact.Artifact;
 
-import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
 import com.github.wmarkow.amp.arduino.platform.manager.PlatformToolsManager;
-import com.github.wmarkow.amp.arduino.variable.Variable;
 import com.github.wmarkow.amp.maven.mojo.GenericMojo;
-import com.github.wmarkow.amp.util.AmpFileUtils;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
 public abstract class ProcessorMojo extends GenericMojo
@@ -49,23 +45,6 @@ public abstract class ProcessorMojo extends GenericMojo
 
         PlatformFilesReader pfr = new PlatformFilesReader();
         return pfr.readPlatformVariablesFromFile( platformTxtFile );
-    }
-
-    protected BoardVariables getBoardVariables() throws IOException
-    {
-        File boardsTxtFile = new File( getPathToUnpackedCoreLibrary(), "/boards.txt" );
-
-        PlatformFilesReader pfr = new PlatformFilesReader();
-        BoardVariables boardVariables =
-            pfr.readBoardsVariables( boardsTxtFile ).getBoardVariables( getBoard() );
-
-        final Map< String, String > buildVariables = getBuildVariables();
-        for( String key : buildVariables.keySet() )
-        {
-            boardVariables.putVariable( new Variable( key, buildVariables.get( key ) ) );
-        }
-
-        return boardVariables;
     }
 
     protected File getPathToUnpackedLibrarySourcesDir( Artifact artifact )
@@ -104,20 +83,5 @@ public abstract class ProcessorMojo extends GenericMojo
                 getPlatform() );
 
         return toolchainBinDirPath.getPath() + "/";
-    }
-
-    protected File getPathToUnpackedCoreLibrary()
-    {
-        final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
-
-        return getPathToUnpackedCoreLibrary( arduinoCoreArtifact );
-    }
-
-    protected File getPathToUnpackedCoreLibrary( Artifact arduinoCoreArtifact )
-    {
-        File baseDir =
-            new File( getGeneratedSourcesDirFile(), ArtifactUtils.getBaseFileName( arduinoCoreArtifact ) );
-
-        return AmpFileUtils.stepIntoSingleFolderIfPossible( baseDir );
     }
 }

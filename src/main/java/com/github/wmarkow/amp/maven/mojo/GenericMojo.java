@@ -1,6 +1,7 @@
 package com.github.wmarkow.amp.maven.mojo;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,15 +21,20 @@ import org.eclipse.aether.collection.DependencyCollectionException;
 import org.eclipse.aether.graph.DependencyNode;
 import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
+import com.github.wmarkow.amp.arduino.platform.BoardVariables;
+import com.github.wmarkow.amp.arduino.platform.BoardsVariables;
 import com.github.wmarkow.amp.arduino.platform.Package;
 import com.github.wmarkow.amp.arduino.platform.Platform;
+import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.manager.PlatformPackageManager;
+import com.github.wmarkow.amp.arduino.variable.Variable;
+import com.github.wmarkow.amp.util.AmpFileUtils;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
 public abstract class GenericMojo extends AbstractMojo
 {
-    protected final static String ARDUINO_CORE_EXTENSION = "arduinocore";
-    protected final static String ARDUINO_LIB_EXTENSION = "arduinolib";
+    public final static String ARDUINO_CORE_EXTENSION = "arduinocore";
+    public final static String ARDUINO_LIB_EXTENSION = "arduinolib";
 
     private PlatformPackageManager ppm;
 
@@ -164,6 +170,43 @@ public abstract class GenericMojo extends AbstractMojo
 
         return getPlatformPackageManager().getPlatformRepository().getPlatform(
             arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
+    }
+
+    protected BoardVariables getBoardVariables() throws IOException
+    {
+        BoardVariables boardVariables = getBoardsVariables().getBoardVariables( getBoard() );
+
+        final Map< String, String > buildVariables = getBuildVariables();
+        for( String key : buildVariables.keySet() )
+        {
+            boardVariables.putVariable( new Variable( key, buildVariables.get( key ) ) );
+        }
+
+        return boardVariables;
+    }
+
+    protected BoardsVariables getBoardsVariables() throws IOException
+    {
+        File boardsTxtFile = new File( getPathToUnpackedCoreLibrary(), "/boards.txt" );
+
+        PlatformFilesReader pfr = new PlatformFilesReader();
+
+        return pfr.readBoardsVariables( boardsTxtFile );
+    }
+
+    protected File getPathToUnpackedCoreLibrary()
+    {
+        final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
+
+        return getPathToUnpackedCoreLibrary( arduinoCoreArtifact );
+    }
+
+    protected File getPathToUnpackedCoreLibrary( Artifact arduinoCoreArtifact )
+    {
+        File baseDir =
+            new File( getGeneratedSourcesDirFile(), ArtifactUtils.getBaseFileName( arduinoCoreArtifact ) );
+
+        return AmpFileUtils.stepIntoSingleFolderIfPossible( baseDir );
     }
 
     private DependencyNode getVerboseDependencyTree()

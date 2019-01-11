@@ -3,6 +3,8 @@ package com.github.wmarkow.amp.arduino.platform;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.wmarkow.amp.util.ArtifactUtils;
+
 public class PlatformRepository
 {
     private List< PlatformPackageIndex > indexes = new ArrayList< PlatformPackageIndex >();
@@ -60,7 +62,7 @@ public class PlatformRepository
         {
             for( Platform platform : _package.getPlatforms() )
             {
-                final String _artifactId = _package.getName() + "-" + platform.getArchitecture();
+                final String _artifactId = ArtifactUtils.toArtifactId( _package, platform );
                 if( artifactId.equals( _artifactId ) && version.equals( platform.getVersion() ) )
                 {
                     return platform;
