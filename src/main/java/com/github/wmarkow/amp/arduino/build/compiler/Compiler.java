@@ -57,11 +57,18 @@ public class Compiler
         cCompiler.compile();
         sCompiler.compile();
     }
-    
+
     public void setToolchainBinDirPath( String file )
     {
         cppCompiler.setToolchainBinDir( file );
         cCompiler.setToolchainBinDir( file );
         sCompiler.setToolchainBinDir( file );
+    }
+
+    public void setCurrentArduinoCorePath( String file )
+    {
+        cppCompiler.setCurrentArduinoCorePath( file );
+        cCompiler.setCurrentArduinoCorePath( file );
+        sCompiler.setCurrentArduinoCorePath( file );
     }
 }

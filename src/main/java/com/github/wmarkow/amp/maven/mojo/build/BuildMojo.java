@@ -59,6 +59,7 @@ public class BuildMojo extends ProcessorMojo
         Compiler compiler = new Compiler( platform, platformVariables, boardVariables );
 
         compiler.setToolchainBinDirPath( getToolChainBinDirPath() );
+        compiler.setCurrentArduinoCorePath( getPathToUnpackedCoreLibrary().getAbsolutePath() );
         compiler.setCommandExecutionDirectory( getCommandExecutionDirectory() );
         compiler.setObjDirectory( getObjectDir() );
 
@@ -79,8 +80,7 @@ public class BuildMojo extends ProcessorMojo
 
             if( ARDUINO_CORE_EXTENSION.equals( arduinoDependency.getExtension() ) )
             {
-                File[] paths =
-                    getPathToUnpackedCoreLibrarySourcesDir( arduinoDependency, arch, core, variant );
+                File[] paths = getPathToUnpackedCoreLibrarySourcesDir( arduinoDependency, core, variant );
 
                 for( File path : paths )
                 {
@@ -116,6 +116,7 @@ public class BuildMojo extends ProcessorMojo
 
         LinkerCommandBuilder lcb = new LinkerCommandBuilder( platform, platformVariables, boardVariables );
         lcb.setToolchainBinDirPath( getToolChainBinDirPath() );
+        lcb.setCurrentArduinoCorePath( getPathToUnpackedCoreLibrary().getAbsolutePath() );
 
         Linker linker = new Linker( lcb );
         linker.setCommandExecutionDirectory( getCommandExecutionDirectory() );

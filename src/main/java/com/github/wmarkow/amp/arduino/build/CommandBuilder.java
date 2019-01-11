@@ -12,11 +12,13 @@ public abstract class CommandBuilder
     private final static String VAR_BUILD_ARCH = "build.arch";
     private final static String VAR_RUNTIME_IDE_VERSION = "runtime.ide.version";
     private final static String VAR_COMPILER_PATH = "compiler.path";
+    private final static String VAR_RUNTIME_PLATFORM_PATH = "runtime.platform.path";
 
     protected MultiVariableStorage variableStorage;
     protected Platform platform;
 
     private String toolchainBinDirPath;
+    private String currentArduinoCorePath;
 
     public CommandBuilder( Platform platform, PlatformVariables platformVariables,
         BoardVariables boardVariables )
@@ -45,6 +47,11 @@ public abstract class CommandBuilder
         this.toolchainBinDirPath = toolchainBinDirPath;
     }
 
+    public void setCurrentArduinoCorePath( String currentArduinoCorePath )
+    {
+        this.currentArduinoCorePath = currentArduinoCorePath;
+    }
+
     /***
      * A way to set build.arch variable. More details here: https://github.com/arduino/Arduino/issues/4878
      * 
@@ -66,5 +73,10 @@ public abstract class CommandBuilder
     protected void setCompilerPath( VariableStorage storage )
     {
         variableStorage.putVariable( new Variable( VAR_COMPILER_PATH, this.toolchainBinDirPath ) );
+    }
+
+    protected void setRuntimePlatformPath( VariableStorage storage )
+    {
+        variableStorage.putVariable( new Variable( VAR_RUNTIME_PLATFORM_PATH, this.currentArduinoCorePath ) );
     }
 }

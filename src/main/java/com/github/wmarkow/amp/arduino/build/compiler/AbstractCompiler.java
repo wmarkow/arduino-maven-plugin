@@ -20,6 +20,7 @@ public abstract class AbstractCompiler extends AbstractProcessor
     private List< File > incDirs = new ArrayList< File >();
     private File objDir;
     private String toolchainBinDir;
+    private String currentArduinoCorePath;
     private CompilerCommandBuilder compilerCommandBuilder;
 
     public AbstractCompiler( CompilerCommandBuilder compilerCommandBuilder )
@@ -52,9 +53,15 @@ public abstract class AbstractCompiler extends AbstractProcessor
         this.toolchainBinDir = file;
     }
 
+    public void setCurrentArduinoCorePath( String file )
+    {
+        this.currentArduinoCorePath = file;
+    }
+
     public void compile() throws IOException, InterruptedException
     {
         compilerCommandBuilder.setToolchainBinDirPath( toolchainBinDir );
+        compilerCommandBuilder.setCurrentArduinoCorePath( currentArduinoCorePath );
 
         FileUtils.forceMkdir( objDir );
 

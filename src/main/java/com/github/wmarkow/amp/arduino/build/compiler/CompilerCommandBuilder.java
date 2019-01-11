@@ -12,7 +12,6 @@ import com.github.wmarkow.amp.arduino.variable.Variable;
 
 public abstract class CompilerCommandBuilder extends CommandBuilder
 {
-
     private final static String VAR_INCLUDES = "includes";
     private final static String VAR_SOURCE_FILE = "source_file";
     private final static String VAR_OBJECT_FILE = "object_file";
@@ -55,6 +54,7 @@ public abstract class CompilerCommandBuilder extends CommandBuilder
         setBuildArch( platform, variableStorage );
         setRuntimeIdeVersion( variableStorage );
         setCompilerPath( variableStorage );
+        setRuntimePlatformPath( variableStorage );
 
         final String compileReceipePatternVariableName = getCompileReceipePatternVariableName();
         final String compilePatternExpression =

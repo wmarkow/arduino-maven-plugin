@@ -38,6 +38,7 @@ public class LinkerCommandBuilder extends CommandBuilder
         setBuildArch( platform, variableStorage );
         setRuntimeIdeVersion( variableStorage );
         setCompilerPath( variableStorage );
+        setRuntimePlatformPath( variableStorage );
         setObjectFiles( variableStorage, objDir );
         setArchiveFile( variableStorage, targetElfFile );
         setTargetElfFile( variableStorage, targetElfFile );
