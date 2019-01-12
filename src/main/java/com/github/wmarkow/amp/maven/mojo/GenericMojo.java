@@ -12,12 +12,11 @@ import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.collection.DependencyCollectionException;
 import org.eclipse.aether.graph.DependencyNode;
 import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
-
-import com.github.wmarkow.amp.util.ArtifactUtils;
 
 public abstract class GenericMojo extends AbstractMojo
 {
@@ -66,9 +65,12 @@ public abstract class GenericMojo extends AbstractMojo
         return sb.toString();
     }
 
-    protected org.eclipse.aether.artifact.Artifact getProjectArtifact()
+    protected Artifact getProjectArtifact()
     {
-        return ArtifactUtils.mavenToAether( mavenProject.getArtifact() );
+        final org.apache.maven.artifact.Artifact mavenArtifact = mavenProject.getArtifact();
+
+        return new DefaultArtifact( mavenArtifact.getGroupId(), mavenArtifact.getArtifactId(),
+            mavenArtifact.getClassifier(), mavenArtifact.getType(), mavenArtifact.getVersion() );
     }
 
     protected List< Artifact > getArduinoDependencies()

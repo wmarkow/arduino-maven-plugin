@@ -30,12 +30,6 @@ public class ArtifactUtils
         return getBaseFileName( artifact ) + ".zip";
     }
 
-    public static Artifact mavenToAether( org.apache.maven.artifact.Artifact mavenArtifact )
-    {
-        return new DefaultArtifact( mavenArtifact.getGroupId(), mavenArtifact.getArtifactId(),
-            mavenArtifact.getClassifier(), mavenArtifact.getType(), mavenArtifact.getVersion() );
-    }
-
     public static Artifact toArtifact( Package _package, Platform platform )
     {
         final String groupId = "put whatever you want";
