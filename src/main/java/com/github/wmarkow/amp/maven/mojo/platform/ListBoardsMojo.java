@@ -8,15 +8,17 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
-import com.github.wmarkow.amp.maven.mojo.GenericMojo;
+import com.github.wmarkow.amp.maven.mojo.artifact.UnpackDependenciesMojo;
 
 @Mojo( name = "list-boards", defaultPhase = LifecyclePhase.NONE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
-public class ListBoardsMojo extends GenericMojo
+public class ListBoardsMojo extends UnpackDependenciesMojo
 {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException
     {
+        super.execute();
+
         try
         {
             for( String board : getBoardsVariables().getBoardNames() )

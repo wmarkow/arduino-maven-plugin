@@ -9,12 +9,12 @@ import org.eclipse.aether.artifact.Artifact;
 
 import com.github.wmarkow.amp.arduino.platform.Package;
 import com.github.wmarkow.amp.arduino.platform.Platform;
-import com.github.wmarkow.amp.maven.mojo.GenericMojo;
+import com.github.wmarkow.amp.maven.mojo.GenericPlatformMojo;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
 @Mojo( name = "list-platforms", defaultPhase = LifecyclePhase.NONE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
-public class ListPlatformsMojo extends GenericMojo
+public class ListPlatformsMojo extends GenericPlatformMojo
 {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException

@@ -15,13 +15,13 @@ import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
 
-import com.github.wmarkow.amp.maven.mojo.GenericMojo;
+import com.github.wmarkow.amp.maven.mojo.GenericPlatformMojo;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 import com.github.wmarkow.amp.util.CompressUtil;
 
 @Mojo( name = "unpack-dependencies", defaultPhase = LifecyclePhase.GENERATE_SOURCES,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
-public class UnpackDependenciesMojo extends GenericMojo
+public class UnpackDependenciesMojo extends GenericPlatformMojo
 {
 
     @Override

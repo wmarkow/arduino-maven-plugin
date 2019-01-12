@@ -4,17 +4,24 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.maven.plugins.annotations.Parameter;
 import org.eclipse.aether.artifact.Artifact;
 
+import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
 import com.github.wmarkow.amp.arduino.platform.manager.PlatformToolsManager;
-import com.github.wmarkow.amp.maven.mojo.GenericMojo;
+import com.github.wmarkow.amp.arduino.variable.Variable;
+import com.github.wmarkow.amp.maven.mojo.GenericBoardMojo;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 
-public abstract class ProcessorMojo extends GenericMojo
+public abstract class ProcessorMojo extends GenericBoardMojo
 {
+    @Parameter( property = "arduino-maven-plugin.buildVariables", required = false )
+    private Map< String, String > buildVariables;
+
     protected File getObjectDir()
     {
         return new File( "target/obj" );
@@ -23,6 +30,24 @@ public abstract class ProcessorMojo extends GenericMojo
     protected File getCommandExecutionDirectory()
     {
         return new File( "." );
+    }
+
+    protected Map< String, String > getBuildVariables()
+    {
+        return buildVariables;
+    }
+
+    protected BoardVariables getBoardVariables() throws IOException
+    {
+        BoardVariables boardVariables = getBoardsVariables().getBoardVariables( getBoard() );
+
+        final Map< String, String > buildVariables = getBuildVariables();
+        for( String key : buildVariables.keySet() )
+        {
+            boardVariables.putVariable( new Variable( key, buildVariables.get( key ) ) );
+        }
+
+        return boardVariables;
     }
 
     protected File getArchiveFile()
