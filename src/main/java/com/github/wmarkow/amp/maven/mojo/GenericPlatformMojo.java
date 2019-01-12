@@ -17,6 +17,7 @@ import com.github.wmarkow.amp.util.ArtifactUtils;
 
 public abstract class GenericPlatformMojo extends GenericMojo
 {
+
     @Parameter( property = "arduino-maven-plugin.packageIndexes", required = true )
     private URL[] packageIndexes;
 
@@ -46,7 +47,7 @@ public abstract class GenericPlatformMojo extends GenericMojo
 
     protected Package getPackage()
     {
-        final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
+        final Artifact arduinoCoreArtifact = getArduinoCoreDependency();
 
         return getPlatformPackageManager().getPlatformRepository().getPackage(
             arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
@@ -54,33 +55,33 @@ public abstract class GenericPlatformMojo extends GenericMojo
 
     protected Platform getPlatform()
     {
-        final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
+        final Artifact arduinoCoreArtifact = getArduinoCoreDependency();
 
         return getPlatformPackageManager().getPlatformRepository().getPlatform(
             arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
     }
 
-    protected File getPathToUnpackedCoreLibrary()
+    protected File getPathToUnpackedArduinoCore()
     {
-        final Artifact arduinoCoreArtifact = getArduinoCoreArtifact();
+        final Artifact arduinoCoreArtifact = getArduinoCoreDependency();
 
-        return getPathToUnpackedCoreLibrary( arduinoCoreArtifact );
+        return getPathToUnpackedArduinoCore( arduinoCoreArtifact );
     }
 
-    protected File getPathToUnpackedCoreLibrary( Artifact arduinoCoreArtifact )
+    protected BoardsVariables getBoardsVariables() throws IOException
+    {
+        File boardsTxtFile = new File( getPathToUnpackedArduinoCore(), "/boards.txt" );
+
+        PlatformFilesReader pfr = new PlatformFilesReader();
+
+        return pfr.readBoardsVariables( boardsTxtFile );
+    }
+
+    private File getPathToUnpackedArduinoCore( Artifact arduinoCoreArtifact )
     {
         File baseDir =
             new File( getGeneratedSourcesDirFile(), ArtifactUtils.getBaseFileName( arduinoCoreArtifact ) );
 
         return AmpFileUtils.stepIntoSingleFolderIfPossible( baseDir );
-    }
-
-    protected BoardsVariables getBoardsVariables() throws IOException
-    {
-        File boardsTxtFile = new File( getPathToUnpackedCoreLibrary(), "/boards.txt" );
-
-        PlatformFilesReader pfr = new PlatformFilesReader();
-
-        return pfr.readBoardsVariables( boardsTxtFile );
     }
 }

@@ -66,7 +66,7 @@ public abstract class ProcessorMojo extends GenericBoardMojo
 
     protected PlatformVariables getPlatformVariables() throws IOException
     {
-        File platformTxtFile = new File( getPathToUnpackedCoreLibrary(), "/platform.txt" );
+        File platformTxtFile = new File( getPathToUnpackedArduinoCore(), "/platform.txt" );
 
         PlatformFilesReader pfr = new PlatformFilesReader();
         return pfr.readPlatformVariablesFromFile( platformTxtFile );
@@ -85,10 +85,9 @@ public abstract class ProcessorMojo extends GenericBoardMojo
         return baseDir;
     }
 
-    protected File[] getPathToUnpackedCoreLibrarySourcesDir( Artifact artifact, String core,
-        String variant )
+    protected File[] getPathToUnpackedArduinoCoreSourcesDir( String core, String variant )
     {
-        File baseDir = getPathToUnpackedCoreLibrary( artifact );
+        File baseDir = getPathToUnpackedArduinoCore();
 
         List< File > result = new ArrayList< File >();
         result.add( new File( baseDir, "/cores/" + core ) );

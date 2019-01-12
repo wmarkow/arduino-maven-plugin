@@ -32,7 +32,6 @@ public abstract class GenericMojo extends AbstractMojo
     @Parameter( defaultValue = "${repositorySystemSession}" )
     protected RepositorySystemSession repoSession;
 
-
     protected File getGeneratedSourcesDirFile()
     {
         return new File( "target/generated-sources/" );
@@ -73,6 +72,34 @@ public abstract class GenericMojo extends AbstractMojo
             mavenArtifact.getClassifier(), mavenArtifact.getType(), mavenArtifact.getVersion() );
     }
 
+    protected Artifact getArduinoCoreDependency()
+    {
+        for( Artifact artifact : getArduinoDependencies() )
+        {
+            if( ARDUINO_CORE_EXTENSION.equals( artifact.getExtension() ) )
+            {
+                return artifact;
+            }
+        }
+
+        return null;
+    }
+
+    protected List< Artifact > getArduinoLibDependencies()
+    {
+        List< Artifact > result = new ArrayList< Artifact >();
+
+        for( Artifact artifact : getArduinoDependencies() )
+        {
+            if( ARDUINO_LIB_EXTENSION.equals( artifact.getExtension() ) )
+            {
+                result.add( artifact );
+            }
+        }
+
+        return result;
+    }
+
     protected List< Artifact > getArduinoDependencies()
     {
         DependencyNode node = getVerboseDependencyTree();
@@ -89,19 +116,6 @@ public abstract class GenericMojo extends AbstractMojo
         }
 
         return result;
-    }
-
-    protected Artifact getArduinoCoreArtifact()
-    {
-        for( Artifact artifact : getArduinoDependencies() )
-        {
-            if( ARDUINO_CORE_EXTENSION.equals( artifact.getExtension() ) )
-            {
-                return artifact;
-            }
-        }
-
-        return null;
     }
 
     private DependencyNode getVerboseDependencyTree()

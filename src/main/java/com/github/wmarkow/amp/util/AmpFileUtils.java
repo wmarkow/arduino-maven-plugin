@@ -9,7 +9,7 @@ public class AmpFileUtils
     {
         if( file == null )
         {
-            throw new IllegalArgumentException( "File must not benull" );
+            throw new IllegalArgumentException( "File must not be null" );
         }
 
         if( !file.exists() )

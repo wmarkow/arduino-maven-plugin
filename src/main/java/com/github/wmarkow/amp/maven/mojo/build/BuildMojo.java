@@ -59,35 +59,27 @@ public class BuildMojo extends ProcessorMojo
         Compiler compiler = new Compiler( platform, platformVariables, boardVariables );
 
         compiler.setToolchainBinDirPath( getToolChainBinDirPath() );
-        compiler.setCurrentArduinoCorePath( getPathToUnpackedCoreLibrary().getAbsolutePath() );
+        compiler.setCurrentArduinoCorePath( getPathToUnpackedArduinoCore().getAbsolutePath() );
         compiler.setCommandExecutionDirectory( getCommandExecutionDirectory() );
         compiler.setObjDirectory( getObjectDir() );
 
         compiler.addSrcDirectory( new File( sourceDirectory ) );
 
-        final String arch = platform.getArchitecture();
         final String core = boardVariables.getVariable( BoardVariables.VAR_BUILD_CORE ).getValue();
         final String variant = boardVariables.getVariable( BoardVariables.VAR_BUILD_VARIANT ).getValue();
 
-        for( Artifact arduinoDependency : getArduinoDependencies() )
+        File[] paths = getPathToUnpackedArduinoCoreSourcesDir( core, variant );
+        for( File path : paths )
         {
-            if( ARDUINO_LIB_EXTENSION.equals( arduinoDependency.getExtension() ) )
-            {
-                File path = getPathToUnpackedLibrarySourcesDir( arduinoDependency );
-                compiler.addSrcDirectory( path );
-                compiler.addIncludeDirectory( path );
-            }
+            compiler.addSrcDirectory( path );
+            compiler.addIncludeDirectory( path );
+        }
 
-            if( ARDUINO_CORE_EXTENSION.equals( arduinoDependency.getExtension() ) )
-            {
-                File[] paths = getPathToUnpackedCoreLibrarySourcesDir( arduinoDependency, core, variant );
-
-                for( File path : paths )
-                {
-                    compiler.addSrcDirectory( path );
-                    compiler.addIncludeDirectory( path );
-                }
-            }
+        for( Artifact arduinoDependency : getArduinoLibDependencies() )
+        {
+            File path = getPathToUnpackedLibrarySourcesDir( arduinoDependency );
+            compiler.addSrcDirectory( path );
+            compiler.addIncludeDirectory( path );
         }
 
         compiler.compile();
@@ -116,7 +108,7 @@ public class BuildMojo extends ProcessorMojo
 
         LinkerCommandBuilder lcb = new LinkerCommandBuilder( platform, platformVariables, boardVariables );
         lcb.setToolchainBinDirPath( getToolChainBinDirPath() );
-        lcb.setCurrentArduinoCorePath( getPathToUnpackedCoreLibrary().getAbsolutePath() );
+        lcb.setCurrentArduinoCorePath( getPathToUnpackedArduinoCore().getAbsolutePath() );
 
         Linker linker = new Linker( lcb );
         linker.setCommandExecutionDirectory( getCommandExecutionDirectory() );
