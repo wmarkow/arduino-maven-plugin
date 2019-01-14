@@ -85,6 +85,26 @@ public abstract class ProcessorMojo extends GenericBoardMojo
         return baseDir;
     }
 
+    protected File getPathToUnpackedCoreLibrarySourcesDir( String libraryName )
+    {
+        File baseDir = getPathToUnpackedArduinoCore();
+        File coreLibrariesDir = new File( baseDir, "libraries" );
+        File libraryDir = new File( coreLibrariesDir, libraryName );
+
+        if( !libraryDir.exists() )
+        {
+            return null;
+        }
+
+        File libraryDirWithSrc = new File( libraryDir, "src" );
+        if( libraryDirWithSrc.exists() )
+        {
+            return libraryDirWithSrc;
+        }
+
+        return libraryDir;
+    }
+
     protected File[] getPathToUnpackedArduinoCoreSourcesDir( String core, String variant )
     {
         File baseDir = getPathToUnpackedArduinoCore();

@@ -20,6 +20,7 @@ import com.github.wmarkow.amp.arduino.build.linker.LinkerCommandBuilder;
 import com.github.wmarkow.amp.arduino.platform.BoardVariables;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
+import com.github.wmarkow.amp.maven.mojo.GenericMojo;
 
 @Mojo( name = "build", defaultPhase = LifecyclePhase.COMPILE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
@@ -77,9 +78,24 @@ public class BuildMojo extends ProcessorMojo
 
         for( Artifact arduinoDependency : getArduinoLibDependencies() )
         {
-            File path = getPathToUnpackedLibrarySourcesDir( arduinoDependency );
-            compiler.addSrcDirectory( path );
-            compiler.addIncludeDirectory( path );
+            if( GenericMojo.ARDUINO_LIB_EXTENSION.equals( arduinoDependency.getExtension() ) )
+            {
+                File path = getPathToUnpackedLibrarySourcesDir( arduinoDependency );
+                compiler.addSrcDirectory( path );
+                compiler.addIncludeDirectory( path );
+            }
+
+            if( GenericMojo.ARDUINO_CORE_LIB_EXTENSION.equals( arduinoDependency.getExtension() ) )
+            {
+                File path = getPathToUnpackedCoreLibrarySourcesDir( arduinoDependency.getArtifactId() );
+                if( path == null )
+                {
+                    throw new IOException( String.format( "Can't find a path to internal library %s",
+                        arduinoDependency.getArtifactId() ) );
+                }
+                compiler.addSrcDirectory( path );
+                compiler.addIncludeDirectory( path );
+            }
         }
 
         compiler.compile();

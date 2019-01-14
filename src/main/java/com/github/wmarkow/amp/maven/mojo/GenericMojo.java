@@ -22,6 +22,7 @@ public abstract class GenericMojo extends AbstractMojo
 {
     public final static String ARDUINO_CORE_EXTENSION = "arduinocore";
     public final static String ARDUINO_LIB_EXTENSION = "arduinolib";
+    public final static String ARDUINO_CORE_LIB_EXTENSION = "arduinocorelib";
 
     @Component
     protected MavenProject mavenProject;
@@ -91,7 +92,8 @@ public abstract class GenericMojo extends AbstractMojo
 
         for( Artifact artifact : getArduinoDependencies() )
         {
-            if( ARDUINO_LIB_EXTENSION.equals( artifact.getExtension() ) )
+            if( ARDUINO_LIB_EXTENSION.equals( artifact.getExtension() )
+                || ARDUINO_CORE_LIB_EXTENSION.equals( artifact.getExtension() ) )
             {
                 result.add( artifact );
             }
@@ -109,7 +111,8 @@ public abstract class GenericMojo extends AbstractMojo
         for( DependencyNode dn : node.getChildren() )
         {
             if( ARDUINO_CORE_EXTENSION.equals( dn.getArtifact().getExtension() )
-                || ARDUINO_LIB_EXTENSION.equals( dn.getArtifact().getExtension() ) )
+                || ARDUINO_LIB_EXTENSION.equals( dn.getArtifact().getExtension() )
+                || ARDUINO_CORE_LIB_EXTENSION.equals( dn.getArtifact().getExtension() ) )
             {
                 result.add( dn.getArtifact() );
             }

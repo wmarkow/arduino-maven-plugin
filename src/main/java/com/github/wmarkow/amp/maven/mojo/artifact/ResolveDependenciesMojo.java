@@ -24,6 +24,7 @@ import com.github.wmarkow.amp.maven.artifact.resolver.GithubFetchDescriptor;
 import com.github.wmarkow.amp.maven.artifact.resolver.LibraryRepacker;
 import com.github.wmarkow.amp.maven.mojo.GenericPlatformMojo;
 import com.github.wmarkow.amp.util.ArtifactUtils;
+import com.github.wmarkow.amp.util.CompressUtil;
 
 @Mojo( name = "fetch-dependencies", defaultPhase = LifecyclePhase.INITIALIZE, requiresProject = true )
 public class ResolveDependenciesMojo extends GenericPlatformMojo
@@ -56,7 +57,7 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
                 }
                 catch( Exception e )
                 {
-                    throw new MojoFailureException( e.getMessage() );
+                    throw new MojoFailureException( e.getMessage(), e );
                 }
             }
 
@@ -70,7 +71,27 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
                 }
                 catch( Exception e )
                 {
-                    throw new MojoFailureException( e.getMessage() );
+                    throw new MojoFailureException( e.getMessage(), e );
+                }
+            }
+
+            if( ARDUINO_CORE_LIB_EXTENSION.equals( arduinoLib.getExtension() ) )
+            {
+                // a special case: install an empty zip file as this arduino library (just to ignor Maven
+                // errors about missing dependency). This library will be handled in a different way later.
+                try
+                {
+                    File emptyZipDir = new File( "target/empty_zip_dir" );
+                    emptyZipDir.mkdirs();
+
+                    File emptyZipFile = new File( "target/empty_zip.zip" );
+                    CompressUtil.packZip( emptyZipDir, emptyZipFile );
+
+                    installLibrary( arduinoLib, emptyZipFile );
+                }
+                catch( Exception e )
+                {
+                    throw new MojoFailureException( e.getMessage(), e );
                 }
             }
         }

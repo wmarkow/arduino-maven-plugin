@@ -15,6 +15,7 @@ import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
 
+import com.github.wmarkow.amp.maven.mojo.GenericMojo;
 import com.github.wmarkow.amp.maven.mojo.GenericPlatformMojo;
 import com.github.wmarkow.amp.util.ArtifactUtils;
 import com.github.wmarkow.amp.util.CompressUtil;
@@ -27,38 +28,53 @@ public class UnpackDependenciesMojo extends GenericPlatformMojo
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        List< Artifact > arduinoLibs = getArduinoDependencies();
+        List< Artifact > arduinoDeps = getArduinoDependencies();
 
-        for( Artifact arduinoLib : arduinoLibs )
+        for( Artifact arduinoDep : arduinoDeps )
         {
-            getLog().info( String.format( "Processing library %s", artifactToString( arduinoLib ) ) );
-
-            File sourceZip = resolveFileOfDependency( arduinoLib );
-
-            File dstDir =
-                new File( getGeneratedSourcesDirFile(), ArtifactUtils.getBaseFileName( arduinoLib ) );
-            try
+            if( GenericMojo.ARDUINO_CORE_EXTENSION.equals( arduinoDep.getExtension() )
+                || GenericMojo.ARDUINO_LIB_EXTENSION.equals( arduinoDep.getExtension() ) )
             {
-                FileUtils.forceMkdir( dstDir );
-            }
-            catch( IOException e )
-            {
-                throw new MojoExecutionException( String.format( "Can't create directory %s",
-                    dstDir.getAbsolutePath() ) );
+                unpackArduinoCoreOrArduinoLib( arduinoDep );
             }
 
-            getLog().info(
-                String.format( "Unpacking library from %s to %s", sourceZip.getAbsolutePath(),
-                    dstDir.getAbsolutePath() ) );
+            if( GenericMojo.ARDUINO_CORE_LIB_EXTENSION.equals( arduinoDep.getExtension() ) )
+            {
+                // there is nothing to unpack here as the internal library is already unpacked together with
+                // Arduino Core
+            }
+        }
+    }
 
-            try
-            {
-                CompressUtil.unpack( sourceZip, dstDir );
-            }
-            catch( IOException e )
-            {
-                throw new MojoExecutionException( e.getMessage(), e );
-            }
+    private void unpackArduinoCoreOrArduinoLib( Artifact arduinoDep ) throws MojoExecutionException,
+        MojoFailureException
+    {
+        getLog().info( String.format( "Processing library %s", artifactToString( arduinoDep ) ) );
+
+        File sourceZip = resolveFileOfDependency( arduinoDep );
+
+        File dstDir = new File( getGeneratedSourcesDirFile(), ArtifactUtils.getBaseFileName( arduinoDep ) );
+        try
+        {
+            FileUtils.forceMkdir( dstDir );
+        }
+        catch( IOException e )
+        {
+            throw new MojoExecutionException( String.format( "Can't create directory %s",
+                dstDir.getAbsolutePath() ) );
+        }
+
+        getLog().info(
+            String.format( "Unpacking library from %s to %s", sourceZip.getAbsolutePath(),
+                dstDir.getAbsolutePath() ) );
+
+        try
+        {
+            CompressUtil.unpack( sourceZip, dstDir );
+        }
+        catch( IOException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
         }
     }
 
