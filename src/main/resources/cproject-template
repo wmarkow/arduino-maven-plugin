@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+    <storageModule moduleId="org.eclipse.cdt.core.settings">
+        <cconfiguration id="0.1812903690">
+            <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="0.1812903690" moduleId="org.eclipse.cdt.core.settings" name="Default">
+                <externalSettings/>
+                <extensions>
+                    <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+                    <extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+                    <extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+                    <extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+                    <extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+                    <extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+                    <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+                </extensions>
+            </storageModule>
+            <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+                <configuration artifactName="${ProjName}" buildProperties="" description="" errorParsers="org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.VCErrorParser;org.eclipse.cdt.core.CWDLocator" id="0.1812903690" name="Default" optionalBuildProperties="org.eclipse.cdt.docker.launcher.containerbuild.property.enablement=null,org.eclipse.cdt.docker.launcher.containerbuild.property.selectedvolumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.volumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.image=null,org.eclipse.cdt.docker.launcher.containerbuild.property.connection=null" parent="org.eclipse.cdt.build.core.prefbase.cfg">
+                    <folderInfo id="0.1812903690." name="/" resourcePath="">
+                        <toolChain id="org.eclipse.cdt.build.core.prefbase.toolchain.1152733728" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
+                            <targetPlatform binaryParser="org.eclipse.cdt.core.ELF" id="org.eclipse.cdt.build.core.prefbase.toolchain.1152733728.1484042595" name=""/>
+                            <builder command="mvn.cmd" id="org.eclipse.cdt.build.core.settings.default.builder.1168600404" incrementalBuildTarget="package" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+                            <tool id="org.eclipse.cdt.build.core.settings.holder.libs.688746967" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
+                            <tool id="org.eclipse.cdt.build.core.settings.holder.1749848409" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
+                                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="org.eclipse.cdt.build.core.settings.holder.incpaths.1863455930" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\lib\gcc\avr\5.4.0\include&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\avr\include&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\lib\gcc\avr\5.4.0\include-fixed&quot;"/>
+                                </option>
+                                <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.191324716" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+                            </tool>
+                            <tool id="org.eclipse.cdt.build.core.settings.holder.634901801" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
+                                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="org.eclipse.cdt.build.core.settings.holder.incpaths.1334791575" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\lib\gcc\avr\5.4.0\include&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\avr\include&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\lib\gcc\avr\5.4.0\include-fixed&quot;"/>
+                                </option>
+                                <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.383962630" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+                            </tool>
+                            <tool id="org.eclipse.cdt.build.core.settings.holder.1693020626" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
+                                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="org.eclipse.cdt.build.core.settings.holder.incpaths.316226683" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\lib\gcc\avr\5.4.0\include&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\avr\include&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\lib\gcc\avr\5.4.0\include-fixed&quot;"/>
+                                </option>
+                                <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.947339509" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+                            </tool>
+                        </toolChain>
+                    </folderInfo>
+                    <sourceEntries>
+                        <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/main/cpp"/>
+                        <entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="target/generated-sources/arduino-avr-1.6.23/avr/cores/arduino"/>
+                        <entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="target/generated-sources/arduino-avr-1.6.23/avr/libraries/Wire"/>
+                        <entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="target/generated-sources/arduino-avr-1.6.23/avr/variants/standard"/>
+                    </sourceEntries>
+                </configuration>
+            </storageModule>
+            <storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+        </cconfiguration>
+    </storageModule>
+    <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+        <project id="cpp_managed_makefile_project-test.null.1186035975" name="cpp_managed_makefile_project-test"/>
+    </storageModule>
+    <storageModule moduleId="scannerConfiguration">
+        <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+        <scannerConfigBuildInfo instanceId="0.1812903690">
+            <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+        </scannerConfigBuildInfo>
+    </storageModule>
+    <storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+    <storageModule moduleId="refreshScope" versionNumber="2">
+        <configuration configurationName="Default">
+            <resource resourceType="PROJECT" workspacePath="/cpp_managed_makefile_project-test"/>
+        </configuration>
+    </storageModule>
+    <storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+    <storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+</cproject>

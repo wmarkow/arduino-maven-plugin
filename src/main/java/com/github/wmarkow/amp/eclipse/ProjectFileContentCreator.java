@@ -1,6 +1,6 @@
 package com.github.wmarkow.amp.eclipse;
 
-public class ProjectFileContentCreator
+public class ProjectFileContentCreator extends AbstractProjectFileContentCreator
 {
     private final static String PROJECT_NAME_VARIABLE_NAME = "projectName";
     private String projectName;
