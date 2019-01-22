@@ -57,7 +57,7 @@ public class EclipseMojo extends GenericPlatformMojo
 
         String templateContent = IOUtils.toString( inputStream, "UTF-8" );
 
-        CProjectFileContentCreator creator = new CProjectFileContentCreator();
+        CProjectFileContentCreator creator = new CProjectFileContentCreator( mavenProject.getName() );
         final String fileContent = creator.create( templateContent );
 
         FileUtils.writeStringToFile( new File( C_PROJECT_FILE_NAME ), fileContent, "UTF-8" );

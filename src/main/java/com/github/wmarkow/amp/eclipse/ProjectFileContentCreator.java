@@ -2,20 +2,14 @@ package com.github.wmarkow.amp.eclipse;
 
 public class ProjectFileContentCreator extends AbstractProjectFileContentCreator
 {
-    private final static String PROJECT_NAME_VARIABLE_NAME = "projectName";
-    private String projectName;
-
     public ProjectFileContentCreator( String projectName )
     {
-        if( projectName == null )
-        {
-            throw new IllegalArgumentException( "Project name must not be null." );
-        }
-        this.projectName = projectName;
+        super( projectName );
     }
 
+    @Override
     public String create( String template )
     {
-        return template.replaceAll( "\\$\\{" + PROJECT_NAME_VARIABLE_NAME + "\\}", projectName );
+        return replaceVariable( template, PROJECT_NAME_VARIABLE_NAME, getProjectName() );
     }
 }
