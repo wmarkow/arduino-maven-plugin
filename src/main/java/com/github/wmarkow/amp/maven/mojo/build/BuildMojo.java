@@ -2,6 +2,8 @@ package com.github.wmarkow.amp.maven.mojo.build;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -51,6 +53,53 @@ public class BuildMojo extends ProcessorMojo
         }
     }
 
+    protected File getPathToMainSourcesDir()
+    {
+        File baseDir = new File( "." );
+        File sourceDir = new File( sourceDirectory );
+
+        String relative = baseDir.toURI().relativize( sourceDir.toURI() ).getPath();
+
+        return new File( relative );
+    }
+
+    protected File[] getPathsToUnpackedArduinoCoreSourcesDir() throws IOException
+    {
+        final BoardVariables boardVariables = getBoardVariables();
+
+        final String core = boardVariables.getVariable( BoardVariables.VAR_BUILD_CORE ).getValue();
+        final String variant = boardVariables.getVariable( BoardVariables.VAR_BUILD_VARIANT ).getValue();
+
+        return getPathToUnpackedArduinoCoreSourcesDir( core, variant );
+    }
+
+    protected File[] getPathsToUnpackedLibrarySourcesDir() throws IOException
+    {
+        List< File > paths = new ArrayList< File >();
+
+        for( Artifact arduinoDependency : getArduinoLibDependencies() )
+        {
+            if( GenericMojo.ARDUINO_LIB_EXTENSION.equals( arduinoDependency.getExtension() ) )
+            {
+                paths.add( getPathToUnpackedLibrarySourcesDir( arduinoDependency ) );
+            }
+
+            if( GenericMojo.ARDUINO_CORE_LIB_EXTENSION.equals( arduinoDependency.getExtension() ) )
+            {
+                File path = getPathToUnpackedCoreLibrarySourcesDir( arduinoDependency.getArtifactId() );
+                if( path == null )
+                {
+                    throw new IOException( String.format( "Can't find a path to internal library %s",
+                        arduinoDependency.getArtifactId() ) );
+                }
+                paths.add( path );
+            }
+        }
+
+        return paths.toArray( new File[]
+        {} );
+    }
+
     private void compile() throws IOException, InterruptedException
     {
         final Platform platform = getPlatform();
@@ -64,38 +113,18 @@ public class BuildMojo extends ProcessorMojo
         compiler.setCommandExecutionDirectory( getCommandExecutionDirectory() );
         compiler.setObjDirectory( getObjectDir() );
 
-        compiler.addSrcDirectory( new File( sourceDirectory ) );
+        compiler.addSrcDirectory( getPathToMainSourcesDir() );
 
-        final String core = boardVariables.getVariable( BoardVariables.VAR_BUILD_CORE ).getValue();
-        final String variant = boardVariables.getVariable( BoardVariables.VAR_BUILD_VARIANT ).getValue();
-
-        File[] paths = getPathToUnpackedArduinoCoreSourcesDir( core, variant );
-        for( File path : paths )
+        for( File path : getPathsToUnpackedArduinoCoreSourcesDir() )
         {
             compiler.addSrcDirectory( path );
             compiler.addIncludeDirectory( path );
         }
 
-        for( Artifact arduinoDependency : getArduinoLibDependencies() )
+        for( File path : getPathsToUnpackedLibrarySourcesDir() )
         {
-            if( GenericMojo.ARDUINO_LIB_EXTENSION.equals( arduinoDependency.getExtension() ) )
-            {
-                File path = getPathToUnpackedLibrarySourcesDir( arduinoDependency );
-                compiler.addSrcDirectory( path );
-                compiler.addIncludeDirectory( path );
-            }
-
-            if( GenericMojo.ARDUINO_CORE_LIB_EXTENSION.equals( arduinoDependency.getExtension() ) )
-            {
-                File path = getPathToUnpackedCoreLibrarySourcesDir( arduinoDependency.getArtifactId() );
-                if( path == null )
-                {
-                    throw new IOException( String.format( "Can't find a path to internal library %s",
-                        arduinoDependency.getArtifactId() ) );
-                }
-                compiler.addSrcDirectory( path );
-                compiler.addIncludeDirectory( path );
-            }
+            compiler.addSrcDirectory( path );
+            compiler.addIncludeDirectory( path );
         }
 
         compiler.compile();

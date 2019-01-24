@@ -48,10 +48,7 @@
                         </toolChain>
                     </folderInfo>
                     <sourceEntries>
-                        <entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src/main/cpp"/>
-                        <entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="target/generated-sources/arduino-avr-1.6.23/avr/cores/arduino"/>
-                        <entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="target/generated-sources/arduino-avr-1.6.23/avr/libraries/Wire"/>
-                        <entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="target/generated-sources/arduino-avr-1.6.23/avr/variants/standard"/>
+                        ${sourceEntries}
                     </sourceEntries>
                 </configuration>
             </storageModule>

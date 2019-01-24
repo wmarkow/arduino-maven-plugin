@@ -3,6 +3,8 @@ package com.github.wmarkow.amp.maven.mojo.eclipse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -14,11 +16,11 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import com.github.wmarkow.amp.eclipse.CProjectFileContentCreator;
 import com.github.wmarkow.amp.eclipse.ProjectFileContentCreator;
-import com.github.wmarkow.amp.maven.mojo.GenericPlatformMojo;
+import com.github.wmarkow.amp.maven.mojo.build.BuildMojo;
 
 @Mojo( name = "eclipse", defaultPhase = LifecyclePhase.NONE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
-public class EclipseMojo extends GenericPlatformMojo
+public class EclipseMojo extends BuildMojo
 {
     private final static String PROJECT_TEMPLATE_FILE_PATH = "/project-template";
     private final static String PROJECT_FILE_NAME = ".project";
@@ -57,7 +59,19 @@ public class EclipseMojo extends GenericPlatformMojo
 
         String templateContent = IOUtils.toString( inputStream, "UTF-8" );
 
-        CProjectFileContentCreator creator = new CProjectFileContentCreator( mavenProject.getName() );
+        List< String > sourcesPaths = new ArrayList< String >();
+        sourcesPaths.add( getPathToMainSourcesDir().getPath() );
+        for( File filePath : getPathsToUnpackedArduinoCoreSourcesDir() )
+        {
+            sourcesPaths.add( filePath.getPath() );
+        }
+        for( File filePath : getPathsToUnpackedLibrarySourcesDir() )
+        {
+            sourcesPaths.add( filePath.getPath() );
+        }
+
+        CProjectFileContentCreator creator =
+            new CProjectFileContentCreator( mavenProject.getName(), sourcesPaths );
         final String fileContent = creator.create( templateContent );
 
         FileUtils.writeStringToFile( new File( C_PROJECT_FILE_NAME ), fileContent, "UTF-8" );
