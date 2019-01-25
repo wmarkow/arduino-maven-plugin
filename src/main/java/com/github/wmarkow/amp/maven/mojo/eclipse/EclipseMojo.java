@@ -14,7 +14,10 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
+import com.github.wmarkow.amp.arduino.platform.PlatformVariables;
+import com.github.wmarkow.amp.arduino.variable.Variable;
 import com.github.wmarkow.amp.eclipse.CProjectFileContentCreator;
+import com.github.wmarkow.amp.eclipse.GccIncludesScanner;
 import com.github.wmarkow.amp.eclipse.ProjectFileContentCreator;
 import com.github.wmarkow.amp.maven.mojo.build.BuildMojo;
 
@@ -30,6 +33,16 @@ public class EclipseMojo extends BuildMojo
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException
     {
+        try
+        {
+            getLog().info( "Trying to get default includes paths of GCC." );
+            scanForGccDefaultIncludes();
+        }
+        catch( Exception ex )
+        {
+            getLog().error( ex );
+        }
+
         try
         {
             generateProjectFile();
@@ -76,4 +89,14 @@ public class EclipseMojo extends BuildMojo
 
         FileUtils.writeStringToFile( new File( C_PROJECT_FILE_NAME ), fileContent, "UTF-8" );
     }
+
+    private void scanForGccDefaultIncludes() throws IOException, InterruptedException
+    {
+        PlatformVariables platformVariables = getPlatformVariables();
+        Variable compilerCCmd = platformVariables.getVariable( "compiler.c.cmd" );
+
+        GccIncludesScanner scanner = new GccIncludesScanner();
+        scanner.getDefaultIncludes( new File( getToolChainBinDirPath() + compilerCCmd.getValue() ) );
+    }
+
 }
