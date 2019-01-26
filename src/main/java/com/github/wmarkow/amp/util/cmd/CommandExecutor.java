@@ -11,8 +11,17 @@ public class CommandExecutor
 {
     private Logger logger = LoggerFactory.getLogger( CommandExecutor.class );
 
+    private StreamGobbler streamGobbler;
+    private boolean consumed;
+
     public int execute( List< String > cmdArgs, File cmdWorkDir ) throws IOException, InterruptedException
     {
+        if( consumed )
+        {
+            throw new IllegalStateException( "Can't use this CommandExecutor twice. Create a new instance." );
+        }
+        consumed = true;
+
         // Create ProcessBuilder with the command arguments
         ProcessBuilder pb = new ProcessBuilder( cmdArgs );
 
@@ -35,10 +44,23 @@ public class CommandExecutor
         }
         logger.info( "[Executing] " + builder.toString() );
 
-        // Create the StreamGobbler to read the process output
-        StreamGobbler outputGobbler = new LoggingStreamGobbler();
-        outputGobbler.start( process.getInputStream() );
+        getStreamGobbler().start( process.getInputStream() );
 
         return process.waitFor();
+    }
+
+    public StreamGobbler getStreamGobbler()
+    {
+        if( streamGobbler == null )
+        {
+            streamGobbler = new LoggingStreamGobbler();
+        }
+
+        return streamGobbler;
+    }
+
+    public void setStreamGobbler( StreamGobbler aStreamGobbler )
+    {
+        streamGobbler = aStreamGobbler;
     }
 }
