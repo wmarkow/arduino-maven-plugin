@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class StreamGobbler extends Thread
+public abstract class StreamGobbler extends Thread
 {
     private Logger logger = LoggerFactory.getLogger( StreamGobbler.class );
 
@@ -30,7 +30,7 @@ public class StreamGobbler extends Thread
             String line;
             while( (line = br.readLine()) != null )
             {
-                logger.info( line );
+                onLineRead( line );
             }
 
             br.close();
@@ -40,6 +40,8 @@ public class StreamGobbler extends Thread
             logger.error( ioe.getMessage(), ioe );
         }
     }
+
+    protected abstract void onLineRead( String line );
 }
 
 
