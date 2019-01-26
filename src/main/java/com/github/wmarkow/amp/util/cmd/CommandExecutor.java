@@ -45,6 +45,7 @@ public class CommandExecutor
         logger.info( "[Executing] " + builder.toString() );
 
         getStreamGobbler().start( process.getInputStream() );
+        getStreamGobbler().waitFor();
 
         return process.waitFor();
     }

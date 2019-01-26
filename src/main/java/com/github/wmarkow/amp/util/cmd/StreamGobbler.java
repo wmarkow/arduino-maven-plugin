@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ public abstract class StreamGobbler
     private Logger logger = LoggerFactory.getLogger( StreamGobbler.class );
 
     private InputStream is;
+    private AtomicBoolean finished = new AtomicBoolean( false );
 
     public StreamGobbler()
     {
@@ -31,6 +33,14 @@ public abstract class StreamGobbler
             }
         };
         thread.start();
+    }
+
+    public void waitFor()
+    {
+        while( finished.get() == false )
+        {
+            // do nothing; just wait
+        }
     }
 
     protected abstract void onLineRead( String line );
@@ -53,5 +63,7 @@ public abstract class StreamGobbler
         {
             logger.error( ioe.getMessage(), ioe );
         }
+
+        finished.set( true );
     }
 }
