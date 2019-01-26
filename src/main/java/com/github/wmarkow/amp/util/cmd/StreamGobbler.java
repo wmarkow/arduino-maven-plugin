@@ -8,20 +8,34 @@ import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-public abstract class StreamGobbler extends Thread
+public abstract class StreamGobbler
 {
     private Logger logger = LoggerFactory.getLogger( StreamGobbler.class );
 
-    InputStream is;
+    private InputStream is;
 
-    public StreamGobbler( InputStream is )
+    public StreamGobbler()
     {
-        this.is = is;
     }
 
-    @Override
-    public void run()
+    public void start( InputStream is )
+    {
+        this.is = is;
+
+        Thread thread = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                StreamGobbler.this.run();
+            }
+        };
+        thread.start();
+    }
+
+    protected abstract void onLineRead( String line );
+
+    private void run()
     {
         try
         {
@@ -40,8 +54,4 @@ public abstract class StreamGobbler extends Thread
             logger.error( ioe.getMessage(), ioe );
         }
     }
-
-    protected abstract void onLineRead( String line );
 }
-
-

@@ -36,9 +36,8 @@ public class CommandExecutor
         logger.info( "[Executing] " + builder.toString() );
 
         // Create the StreamGobbler to read the process output
-        StreamGobbler outputGobbler = new LoggingStreamGobbler( process.getInputStream() );
-
-        outputGobbler.start();
+        StreamGobbler outputGobbler = new LoggingStreamGobbler();
+        outputGobbler.start( process.getInputStream() );
 
         return process.waitFor();
     }
