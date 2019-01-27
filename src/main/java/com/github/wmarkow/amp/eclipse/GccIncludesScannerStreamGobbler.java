@@ -3,6 +3,7 @@ package com.github.wmarkow.amp.eclipse;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +17,11 @@ public class GccIncludesScannerStreamGobbler extends StreamGobbler
     private boolean includesStartsHereDetected = false;
     private boolean includesFound = false;
 
-    private ArrayList< File > defaultIncludes = new ArrayList< File >();
+    private List< File > defaultIncludes = new ArrayList< File >();
 
-    public File[] getDefaultIncludes()
+    public List< File > getDefaultIncludes()
     {
-        return defaultIncludes.toArray( new File[]
-        {} );
+        return defaultIncludes;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.github.wmarkow.amp.eclipse;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,12 +25,16 @@ public class CProjectFileContentCreator extends AbstractProjectFileContentCreato
     private final static String SOURCE_ENTRIES_VARIABLE_NAME = "sourceEntries";
     private final static String SOURCE_ENTRY_TEMPLATE =
         "<entry flags=\"VALUE_WORKSPACE_PATH\" kind=\"sourcePath\" name=\"%s\"/>";
-    private final static String INCLUDES_VARIABLE_NAME = "includesEntries";
+    private final static String C_INCLUDES_VARIABLE_NAME = "cIncludesEntries";
+    private final static String CPP_INCLUDES_VARIABLE_NAME = "cppIncludesEntries";
+    private final static String ASM_INCLUDES_VARIABLE_NAME = "asmIncludesEntries";
     private final static String INCLUDE_ENTRY_TEMPLATE =
         "<listOptionValue builtIn=\"false\" value=\"&quot;%s&quot;\"/>";
 
     private List< String > sourcesDirs = new ArrayList<>();
-    private List< String > includesDirs = new ArrayList<>();
+    private List< File > cIncludesDirs = new ArrayList<>();
+    private List< File > cppIncludesDirs = new ArrayList<>();
+    private List< File > assemblerIncludesDirs = new ArrayList<>();
     private Random randomNumber;
 
     public CProjectFileContentCreator( String projectName )
@@ -43,9 +48,19 @@ public class CProjectFileContentCreator extends AbstractProjectFileContentCreato
         this.sourcesDirs.addAll( sourcesDirs );
     }
 
-    public void setIncludesDirs( List< String > sourcesDirs )
+    public void setCIncludesDirs( List< File > includeDirs )
     {
-        this.includesDirs.addAll( sourcesDirs );
+        this.cIncludesDirs.addAll( includeDirs );
+    }
+
+    public void setCppIncludesDirs( List< File > includeDirs )
+    {
+        this.cppIncludesDirs.addAll( includeDirs );
+    }
+
+    public void setAssemblerIncludesDirs( List< File > includeDirs )
+    {
+        this.assemblerIncludesDirs.addAll( includeDirs );
     }
 
     @Override
@@ -55,7 +70,10 @@ public class CProjectFileContentCreator extends AbstractProjectFileContentCreato
 
         temp = replaceVariable( temp, SOURCE_ENTRIES_VARIABLE_NAME, createSourceEntries( sourcesDirs ) );
 
-        temp = replaceVariable( temp, INCLUDES_VARIABLE_NAME, createIncludesEntries( includesDirs ) );
+        temp = replaceVariable( temp, C_INCLUDES_VARIABLE_NAME, createIncludesEntries( cIncludesDirs ) );
+        temp = replaceVariable( temp, CPP_INCLUDES_VARIABLE_NAME, createIncludesEntries( cppIncludesDirs ) );
+        temp =
+            replaceVariable( temp, ASM_INCLUDES_VARIABLE_NAME, createIncludesEntries( assemblerIncludesDirs ) );
 
         temp = replaceVariable( temp, RANDOM_ID_1, String.valueOf( getRandomNumber() ) );
         temp = replaceVariable( temp, RANDOM_ID_2, String.valueOf( getRandomNumber() ) );
@@ -94,13 +112,13 @@ public class CProjectFileContentCreator extends AbstractProjectFileContentCreato
         return sb.toString();
     }
 
-    private String createIncludesEntries( List< String > includesDirs )
+    private String createIncludesEntries( List< File > includesDirs )
     {
         StringBuilder sb = new StringBuilder();
 
         for( int q = 0; q < includesDirs.size(); q++ )
         {
-            String sourceDir = includesDirs.get( q );
+            File sourceDir = includesDirs.get( q );
 
             sb.append( createIncludeEntry( sourceDir ) );
             if( q < includesDirs.size() - 1 )
@@ -119,9 +137,9 @@ public class CProjectFileContentCreator extends AbstractProjectFileContentCreato
         return result.replaceAll( "\\\\", "\\\\\\\\" );
     }
 
-    private String createIncludeEntry( String includePath )
+    private String createIncludeEntry( File includePath )
     {
-        String result = String.format( INCLUDE_ENTRY_TEMPLATE, includePath );
+        String result = String.format( INCLUDE_ENTRY_TEMPLATE, includePath.getAbsolutePath() );
 
         return result.replaceAll( "\\\\", "\\\\\\\\" );
     }

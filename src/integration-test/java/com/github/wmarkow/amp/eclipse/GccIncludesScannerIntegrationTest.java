@@ -1,5 +1,7 @@
 package com.github.wmarkow.amp.eclipse;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -31,8 +33,12 @@ public class GccIncludesScannerIntegrationTest
         PlatformToolsManager toolsManager = new PlatformToolsManager( getPlatformDir() );
         File toolchainBinDirPath = toolsManager.getToolchainBinDirPath( platformRepository, platform );
 
-        GccIncludesScanner gccIncludesScanner = new GccIncludesScanner();
-        gccIncludesScanner.getDefaultIncludes( new File( toolchainBinDirPath, "avr-gcc" ) );
+        GccIncludesScanner scanner = new GccIncludesScanner();
+        scanner.scan( new File( toolchainBinDirPath, "avr-gcc" ) );
+
+        assertEquals( 3, scanner.getCIncludes().size() );
+        assertEquals( 3, scanner.getCppIncludes().size() );
+        assertEquals( 0, scanner.getAsmIncludes().size() );
     }
 
     private File getPlatformDir()

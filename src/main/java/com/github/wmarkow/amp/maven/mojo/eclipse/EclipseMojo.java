@@ -75,15 +75,6 @@ public class EclipseMojo extends BuildMojo
 
         CProjectFileContentCreator creator = new CProjectFileContentCreator( mavenProject.getName() );
         creator.setSourcesDirs( sourcesPaths );
-        creator.setIncludesDirs( scanForGccDefaultIncludes() );
-        final String fileContent = creator.create( templateContent );
-
-        FileUtils.writeStringToFile( new File( C_PROJECT_FILE_NAME ), fileContent, "UTF-8" );
-    }
-
-    private List< String > scanForGccDefaultIncludes()
-    {
-        getLog().info( "Trying to get default includes paths of GCC." );
 
         try
         {
@@ -91,23 +82,20 @@ public class EclipseMojo extends BuildMojo
             Variable compilerCCmd = platformVariables.getVariable( "compiler.c.cmd" );
 
             GccIncludesScanner scanner = new GccIncludesScanner();
-            File[] files =
-                scanner.getDefaultIncludes( new File( getToolChainBinDirPath() + compilerCCmd.getValue() ) );
+            scanner.scan( new File( getToolChainBinDirPath() + compilerCCmd.getValue() ) );
 
-            List< String > result = new ArrayList< String >();
-            for( File file : files )
-            {
-                result.add( file.getAbsolutePath() );
-            }
-
-            return result;
+            creator.setCIncludesDirs( scanner.getCIncludes() );
+            creator.setCppIncludesDirs( scanner.getCppIncludes() );
+            creator.setAssemblerIncludesDirs( scanner.getAsmIncludes() );
         }
-        catch( Exception ex )
+        catch( IOException e )
         {
-            getLog().error( ex );
-
-            return new ArrayList< String >();
+            getLog().warn( "There was some error while creating default GCC includes list.", e );
         }
+
+        final String fileContent = creator.create( templateContent );
+
+        FileUtils.writeStringToFile( new File( C_PROJECT_FILE_NAME ), fileContent, "UTF-8" );
     }
 
 }
