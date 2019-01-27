@@ -24,26 +24,38 @@ public class CProjectFileContentCreator extends AbstractProjectFileContentCreato
     private final static String SOURCE_ENTRIES_VARIABLE_NAME = "sourceEntries";
     private final static String SOURCE_ENTRY_TEMPLATE =
         "<entry flags=\"VALUE_WORKSPACE_PATH\" kind=\"sourcePath\" name=\"%s\"/>";
+    private final static String INCLUDES_VARIABLE_NAME = "includesEntries";
+    private final static String INCLUDE_ENTRY_TEMPLATE =
+        "<listOptionValue builtIn=\"false\" value=\"&quot;%s&quot;\"/>";
 
     private List< String > sourcesDirs = new ArrayList<>();
+    private List< String > includesDirs = new ArrayList<>();
     private Random randomNumber;
 
-    public CProjectFileContentCreator( String projectName, List< String > sourcesDirs )
+    public CProjectFileContentCreator( String projectName )
     {
         super( projectName );
 
+    }
+
+    public void setSourcesDirs( List< String > sourcesDirs )
+    {
         this.sourcesDirs.addAll( sourcesDirs );
+    }
+
+    public void setIncludesDirs( List< String > sourcesDirs )
+    {
+        this.includesDirs.addAll( sourcesDirs );
     }
 
     @Override
     public String create( String template )
     {
-        String templateWithProjectName =
-            replaceVariable( template, PROJECT_NAME_VARIABLE_NAME, getProjectName() );
+        String temp = replaceVariable( template, PROJECT_NAME_VARIABLE_NAME, getProjectName() );
 
-        String temp =
-            replaceVariable( templateWithProjectName, SOURCE_ENTRIES_VARIABLE_NAME,
-                createSourceEntries( sourcesDirs ) );
+        temp = replaceVariable( temp, SOURCE_ENTRIES_VARIABLE_NAME, createSourceEntries( sourcesDirs ) );
+
+        temp = replaceVariable( temp, INCLUDES_VARIABLE_NAME, createIncludesEntries( includesDirs ) );
 
         temp = replaceVariable( temp, RANDOM_ID_1, String.valueOf( getRandomNumber() ) );
         temp = replaceVariable( temp, RANDOM_ID_2, String.valueOf( getRandomNumber() ) );
@@ -78,13 +90,38 @@ public class CProjectFileContentCreator extends AbstractProjectFileContentCreato
                 sb.append( "\n\r" );
             }
         }
-        getRandomNumber();
+
+        return sb.toString();
+    }
+
+    private String createIncludesEntries( List< String > includesDirs )
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for( int q = 0; q < includesDirs.size(); q++ )
+        {
+            String sourceDir = includesDirs.get( q );
+
+            sb.append( createIncludeEntry( sourceDir ) );
+            if( q < includesDirs.size() - 1 )
+            {
+                sb.append( "\n\r" );
+            }
+        }
+
         return sb.toString();
     }
 
     private String createSourceEntry( String sourcePath )
     {
         String result = String.format( SOURCE_ENTRY_TEMPLATE, sourcePath );
+
+        return result.replaceAll( "\\\\", "\\\\\\\\" );
+    }
+
+    private String createIncludeEntry( String includePath )
+    {
+        String result = String.format( INCLUDE_ENTRY_TEMPLATE, includePath );
 
         return result.replaceAll( "\\\\", "\\\\\\\\" );
     }

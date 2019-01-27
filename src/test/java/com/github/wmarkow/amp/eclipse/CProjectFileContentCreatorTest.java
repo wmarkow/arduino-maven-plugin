@@ -17,7 +17,8 @@ public class CProjectFileContentCreatorTest
         List< String > sourcesDirs = new ArrayList< String >();
         sourcesDirs.add( "src/main/cpp" );
 
-        CProjectFileContentCreator creator = new CProjectFileContentCreator( "test-project", sourcesDirs );
+        CProjectFileContentCreator creator = new CProjectFileContentCreator( "test-project" );
+        creator.setSourcesDirs( sourcesDirs );
 
         final String content = creator.create( "${sourceEntries}" );
 
@@ -31,7 +32,8 @@ public class CProjectFileContentCreatorTest
         List< String > sourcesDirs = new ArrayList< String >();
         sourcesDirs.add( "src\\main\\cpp" );
 
-        CProjectFileContentCreator creator = new CProjectFileContentCreator( "test-project", sourcesDirs );
+        CProjectFileContentCreator creator = new CProjectFileContentCreator( "test-project" );
+        creator.setSourcesDirs( sourcesDirs );
 
         final String content = creator.create( "${sourceEntries}" );
 

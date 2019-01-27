@@ -23,25 +23,19 @@
                             <tool id="org.eclipse.cdt.build.core.settings.holder.libs.${randomId5}" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
                             <tool id="org.eclipse.cdt.build.core.settings.holder.${randomId6}" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
                                 <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="org.eclipse.cdt.build.core.settings.holder.incpaths.${randomId7}" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
-                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\lib\gcc\avr\5.4.0\include&quot;"/>
-                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\avr\include&quot;"/>
-                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\lib\gcc\avr\5.4.0\include-fixed&quot;"/>
+                                    ${includesEntries}
                                 </option>
                                 <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.${randomId8}" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
                             </tool>
                             <tool id="org.eclipse.cdt.build.core.settings.holder.${randomId9}" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
                                 <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="org.eclipse.cdt.build.core.settings.holder.incpaths.${randomId10}" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
-                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\lib\gcc\avr\5.4.0\include&quot;"/>
-                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\avr\include&quot;"/>
-                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\lib\gcc\avr\5.4.0\include-fixed&quot;"/>
+                                    ${includesEntries}
                                 </option>
                                 <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.${randomId11}" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
                             </tool>
                             <tool id="org.eclipse.cdt.build.core.settings.holder.${randomId12}" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
                                 <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="org.eclipse.cdt.build.core.settings.holder.incpaths.${randomId13}" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
-                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\lib\gcc\avr\5.4.0\include&quot;"/>
-                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\avr\include&quot;"/>
-                                    <listOptionValue builtIn="false" value="&quot;C:\Users\wmarkowski\.arduino-maven-plugin\packages\arduino\tools\avr-gcc\5.4.0-atmel3.6.1-arduino2\avr\lib\gcc\avr\5.4.0\include-fixed&quot;"/>
+                                    ${includesEntries}
                                 </option>
                                 <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.${randomId14}" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
                             </tool>

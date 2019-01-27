@@ -20,11 +20,12 @@ public class GccIncludesScanner
         FileUtils.touch( bogusTestFile );
 
         CommandExecutor cmd = new CommandExecutor();
-        cmd.setStreamGobbler( new GccIncludesScannerStreamGobbler() );
+        GccIncludesScannerStreamGobbler gccIncludesScannerStreamGobbler =
+            new GccIncludesScannerStreamGobbler();
+        cmd.setStreamGobbler( gccIncludesScannerStreamGobbler );
         cmd.execute( prepareCommandArgs( pathToGccExecutable ), new File( "." ) );
 
-        return new File[]
-        {};
+        return gccIncludesScannerStreamGobbler.getDefaultIncludes();
     }
 
     private List< String > prepareCommandArgs( File pathToGccExecutable )

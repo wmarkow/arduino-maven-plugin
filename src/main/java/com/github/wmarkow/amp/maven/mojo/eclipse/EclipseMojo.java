@@ -35,16 +35,6 @@ public class EclipseMojo extends BuildMojo
     {
         try
         {
-            getLog().info( "Trying to get default includes paths of GCC." );
-            scanForGccDefaultIncludes();
-        }
-        catch( Exception ex )
-        {
-            getLog().error( ex );
-        }
-
-        try
-        {
             generateProjectFile();
             generateCProjectFile();
         }
@@ -83,20 +73,41 @@ public class EclipseMojo extends BuildMojo
             sourcesPaths.add( filePath.getPath() );
         }
 
-        CProjectFileContentCreator creator =
-            new CProjectFileContentCreator( mavenProject.getName(), sourcesPaths );
+        CProjectFileContentCreator creator = new CProjectFileContentCreator( mavenProject.getName() );
+        creator.setSourcesDirs( sourcesPaths );
+        creator.setIncludesDirs( scanForGccDefaultIncludes() );
         final String fileContent = creator.create( templateContent );
 
         FileUtils.writeStringToFile( new File( C_PROJECT_FILE_NAME ), fileContent, "UTF-8" );
     }
 
-    private void scanForGccDefaultIncludes() throws IOException, InterruptedException
+    private List< String > scanForGccDefaultIncludes()
     {
-        PlatformVariables platformVariables = getPlatformVariables();
-        Variable compilerCCmd = platformVariables.getVariable( "compiler.c.cmd" );
+        getLog().info( "Trying to get default includes paths of GCC." );
 
-        GccIncludesScanner scanner = new GccIncludesScanner();
-        scanner.getDefaultIncludes( new File( getToolChainBinDirPath() + compilerCCmd.getValue() ) );
+        try
+        {
+            PlatformVariables platformVariables = getPlatformVariables();
+            Variable compilerCCmd = platformVariables.getVariable( "compiler.c.cmd" );
+
+            GccIncludesScanner scanner = new GccIncludesScanner();
+            File[] files =
+                scanner.getDefaultIncludes( new File( getToolChainBinDirPath() + compilerCCmd.getValue() ) );
+
+            List< String > result = new ArrayList< String >();
+            for( File file : files )
+            {
+                result.add( file.getAbsolutePath() );
+            }
+
+            return result;
+        }
+        catch( Exception ex )
+        {
+            getLog().error( ex );
+
+            return new ArrayList< String >();
+        }
     }
 
 }
