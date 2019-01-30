@@ -14,47 +14,52 @@ import org.junit.Test;
 
 import com.github.wmarkow.amp.util.CompressUtil;
 
-public class CompressUtilTest
-{
+public class CompressUtilTest {
 
-    private File uncompressZipDir = new File( "target/uncomporess-tests/test-zip" );
-    private File uncompressTarBz2Dir = new File( "target/uncomporess-tests/test-tar-bz2" );
+	private File uncompressZipDir = new File("target/uncomporess-tests/test-zip");
+	private File uncompressTarBz2Dir = new File("target/uncomporess-tests/test-tar-bz2");
 
-    @Before
-    public void init() throws IOException
-    {
-        FileUtils.forceMkdir( uncompressZipDir );
-        FileUtils.forceMkdir( uncompressTarBz2Dir );
+	@Before
+	public void init() throws IOException {
+		FileUtils.forceMkdir(uncompressZipDir);
+		FileUtils.forceMkdir(uncompressTarBz2Dir);
 
-        FileUtils.cleanDirectory( uncompressZipDir );
-        FileUtils.cleanDirectory( uncompressTarBz2Dir );
-    }
+		FileUtils.cleanDirectory(uncompressZipDir);
+		FileUtils.cleanDirectory(uncompressTarBz2Dir);
+	}
 
-    @Test
-    public void testUnpackZip() throws IOException, ArchiveException
-    {
-        assertEquals( 0, uncompressZipDir.list().length );
+	@Test
+	public void testUnpackZip() throws IOException, ArchiveException {
+		assertEquals(0, uncompressZipDir.list().length);
 
-        boolean result = CompressUtil.unpack( new File( "src/test/resources/test.zip" ), uncompressZipDir );
+		boolean result = CompressUtil.unpack(new File("src/test/resources/test.zip"), uncompressZipDir);
 
-        assertTrue( result );
-        assertEquals( 1, uncompressZipDir.list().length );
-        assertTrue( new File( uncompressZipDir, "src/hooks.c" ).exists() );
-        assertTrue( new File( uncompressZipDir, "src/Client.h" ).exists() );
-    }
+		assertTrue(result);
+		assertEquals(1, uncompressZipDir.list().length);
+		assertTrue(new File(uncompressZipDir, "src/hooks.c").exists());
+		assertTrue(new File(uncompressZipDir, "src/Client.h").exists());
+	}
 
-    @Test
-    public void testUnpackTarBz2() throws IOException, ArchiveException
-    {
-        boolean result =
-            CompressUtil.unpack( new File( "src/test/resources/test.tar.bz2" ), uncompressTarBz2Dir );
+	@Test
+	public void testUnpackTarBz2() throws IOException, ArchiveException {
+		boolean result = CompressUtil.unpack(new File("src/test/resources/test.tar.bz2"), uncompressTarBz2Dir);
 
-        assertTrue( result );
-        assertFalse( new File( uncompressTarBz2Dir, "test.tar.tar" ).exists() );
-        assertEquals( 1, uncompressTarBz2Dir.list().length );
-        assertTrue( new File( uncompressTarBz2Dir, "avr/bootloaders/atmega8/Makefile" ).exists() );
-        assertTrue( new File( uncompressTarBz2Dir, "avr/boards.txt" ).exists() );
-        assertTrue( new File( uncompressTarBz2Dir, "avr/platform.txt" ).exists() );
-        assertTrue( new File( uncompressTarBz2Dir, "avr/programmers.txt" ).exists() );
-    }
+		assertTrue(result);
+		assertFalse(new File(uncompressTarBz2Dir, "test.tar.tar").exists());
+		assertEquals(1, uncompressTarBz2Dir.list().length);
+		assertTrue(new File(uncompressTarBz2Dir, "avr/bootloaders/atmega8/Makefile").exists());
+		assertTrue(new File(uncompressTarBz2Dir, "avr/boards.txt").exists());
+		assertTrue(new File(uncompressTarBz2Dir, "avr/platform.txt").exists());
+		assertTrue(new File(uncompressTarBz2Dir, "avr/programmers.txt").exists());
+	}
+
+	@Test
+	public void testUnpack() throws IOException {
+
+		boolean result = CompressUtil.unpack(new File(
+				"/home/witek/.arduino-maven-plugin/downloads/avr-gcc-5.4.0-atmel3.6.1-arduino2-x86_64-pc-linux-gnu.tar.bz2"),
+				new File("/home/witek/.arduino-maven-plugin/packages/arduino/tools/avr-gcc/5.4.0-atmel3.6.1-arduino2"));
+		
+		assertTrue(result);
+	}
 }

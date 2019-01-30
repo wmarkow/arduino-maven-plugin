@@ -119,6 +119,8 @@ public class CompressUtil
 
     private static boolean unpackTarBzip2( File inputFile, File targetDir ) throws IOException
     {
+    	FileUtils.forceMkdir(targetDir);
+    	
         final String fileBase = FilenameUtils.getBaseName( inputFile.getName() );
         final File tarFile = new File( targetDir, fileBase + ".tar" );
 
@@ -140,6 +142,10 @@ public class CompressUtil
             {
                 out.write( buffer, 0, n );
             }
+        }
+        catch(IOException ex)
+        {
+        	throw ex;
         }
         finally
         {
