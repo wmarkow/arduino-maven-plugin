@@ -52,14 +52,4 @@ public class CompressUtilTest {
 		assertTrue(new File(uncompressTarBz2Dir, "avr/platform.txt").exists());
 		assertTrue(new File(uncompressTarBz2Dir, "avr/programmers.txt").exists());
 	}
-
-	@Test
-	public void testUnpack() throws IOException {
-
-		boolean result = CompressUtil.unpack(new File(
-				"/home/witek/.arduino-maven-plugin/downloads/avr-gcc-5.4.0-atmel3.6.1-arduino2-x86_64-pc-linux-gnu.tar.bz2"),
-				new File("/home/witek/.arduino-maven-plugin/packages/arduino/tools/avr-gcc/5.4.0-atmel3.6.1-arduino2"));
-		
-		assertTrue(result);
-	}
 }
