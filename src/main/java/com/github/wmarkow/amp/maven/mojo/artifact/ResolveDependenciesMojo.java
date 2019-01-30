@@ -38,6 +38,7 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
         }
         catch( IOException e1 )
         {
+            getLog().error(e1.getMessage(),  e1);
             throw new MojoFailureException( e1.getMessage() );
         }
 
