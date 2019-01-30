@@ -16,110 +16,80 @@ import com.github.wmarkow.amp.arduino.platform.Tool;
 import com.github.wmarkow.amp.arduino.platform.ToolsDependency;
 import com.github.wmarkow.amp.util.CompressUtil;
 
-public class PlatformToolsManager extends PlatformManager
-{
-    private Logger logger = LoggerFactory.getLogger( PlatformToolsManager.class );
+public class PlatformToolsManager extends PlatformManager {
+	private Logger logger = LoggerFactory.getLogger(PlatformToolsManager.class);
 
-    private final static String DOWNLOADS_DIR = "downloads";
+	private final static String DOWNLOADS_DIR = "downloads";
 
-    public PlatformToolsManager( File platformDir )
-    {
-        super( platformDir );
-    }
+	public PlatformToolsManager(File platformDir) {
+		super(platformDir);
+	}
 
-    public void resolve( PlatformRepository platformRepository, Platform platform )
-        throws MalformedURLException, IOException
-    {
-        logger.info( String.format( "Resolving tools dependencies for platform %s ...", platform ) );
+	public void resolve(PlatformRepository platformRepository, Platform platform)
+			throws MalformedURLException, IOException {
+		logger.info(String.format("Resolving tools dependencies for platform %s ...", platform));
 
-        for( ToolsDependency td : platform.getToolsDependencies() )
-        {
-            Tool tool =
-                platformRepository.getToolByPackagerAndNameAndVersion( td.getPackager(), td.getName(),
-                    td.getVersion() );
+		for (ToolsDependency td : platform.getToolsDependencies()) {
+			Tool tool = platformRepository.getToolByPackagerAndNameAndVersion(td.getPackager(), td.getName(),
+					td.getVersion());
 
-            downlaodToolIfNeeded( td.getPackager(), tool );
-            unpackToolIfNeeded( td.getPackager(), tool );
+			downlaodToolIfNeeded(td.getPackager(), tool);
+			unpackToolIfNeeded(td.getPackager(), tool);
 
-        }
-    }
+		}
+	}
 
-    public File getToolchainBinDirPath( PlatformRepository platformRepository, Platform platform )
-    {
-        for( ToolsDependency td : platform.getToolsDependencies() )
-        {
-            if( td.getName().toLowerCase().contains( "gcc" ) )
-            {
-                Tool tool =
-                    platformRepository.getToolByPackagerAndNameAndVersion( td.getPackager(), td.getName(),
-                        td.getVersion() );
+	public File getToolchainBinDirPath(PlatformRepository platformRepository, Platform platform) {
+		for (ToolsDependency td : platform.getToolsDependencies()) {
+			if (td.getName().toLowerCase().contains("gcc")) {
+				Tool tool = platformRepository.getToolByPackagerAndNameAndVersion(td.getPackager(), td.getName(),
+						td.getVersion());
 
-                File packagesDir = new File( getPlatformDir(), "packages" );
-                File dir =
-                    new File( packagesDir, td.getPackager() + "/tools/" + tool.getName() + "/"
-                        + tool.getVersion() );
+				File packagesDir = new File(getPlatformDir(), "packages");
+				File dir = new File(packagesDir,
+						td.getPackager() + "/tools/" + tool.getName() + "/" + tool.getVersion());
 
-                // sometimes the distribution contains one additional dir in the structure. Strip it.
-                File[] filesInside = dir.listFiles();
-                if( filesInside.length == 1 )
-                {
-                    return new File( filesInside[ 0 ], "/bin/" );
-                }
-            }
-        }
+				// sometimes the distribution contains one additional dir in the structure.
+				// Strip it.
+				File[] filesInside = dir.listFiles();
+				if (filesInside.length == 1) {
+					return new File(filesInside[0], "/bin/");
+				}
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    private void downlaodToolIfNeeded( String packageName, Tool tool ) throws MalformedURLException,
-        IOException
-    {
-        System system = getCurrentSystem( tool );
-        File downloadDir = new File( getPlatformDir(), DOWNLOADS_DIR );
-        File downloadFile = new File( downloadDir, system.getArchiveFileName() );
+	private void downlaodToolIfNeeded(String packageName, Tool tool) throws MalformedURLException, IOException {
+		System system = tool.getSystemByHostInfo(HostInfo.populateLocalhostInfo());
+		File downloadDir = new File(getPlatformDir(), DOWNLOADS_DIR);
+		File downloadFile = new File(downloadDir, system.getArchiveFileName());
 
-        if( downloadFile.exists() )
-        {
-            return;
-        }
+		if (downloadFile.exists()) {
+			return;
+		}
 
-        logger.info( String.format( "Downloading %s into %s", system.getUrl(), downloadFile ) );
+		logger.info(String.format("Downloading %s into %s", system.getUrl(), downloadFile));
 
-        FileUtils.copyURLToFile( new URL( system.getUrl() ), downloadFile, 5000, 2500 );
-    }
+		FileUtils.copyURLToFile(new URL(system.getUrl()), downloadFile, 5000, 2500);
+	}
 
-    private void unpackToolIfNeeded( String packageName, Tool tool ) throws IOException
-    {
-        File packagesDir = new File( getPlatformDir(), "packages" );
-        File targetDir =
-            new File( packagesDir, packageName + "/tools/" + tool.getName() + "/" + tool.getVersion() );
+	private void unpackToolIfNeeded(String packageName, Tool tool) throws IOException {
+		File packagesDir = new File(getPlatformDir(), "packages");
+		File targetDir = new File(packagesDir, packageName + "/tools/" + tool.getName() + "/" + tool.getVersion());
 
-        if( targetDir.exists() )
-        {
-            return;
-        }
+		if (targetDir.exists()) {
+			return;
+		}
 
-        System system = getCurrentSystem( tool );
+		System system = tool.getSystemByHostInfo(HostInfo.populateLocalhostInfo());
 
-        File downloadDir = new File( getPlatformDir(), DOWNLOADS_DIR );
-        File downloadFile = new File( downloadDir, system.getArchiveFileName() );
+		File downloadDir = new File(getPlatformDir(), DOWNLOADS_DIR);
+		File downloadFile = new File(downloadDir, system.getArchiveFileName());
 
-        logger.info( String.format( "Unpacking %s into %s", downloadFile, targetDir ) );
+		logger.info(String.format("Unpacking %s into %s", downloadFile, targetDir));
 
-        CompressUtil.unpack( downloadFile, targetDir );
-    }
-
-    // FIXME: silently for now only windows supported
-    private System getCurrentSystem( Tool tool )
-    {
-        for( System system : tool.getSystems() )
-        {
-            if( system.getHost().toLowerCase().contains( "mingw" ) )
-            {
-                return system;
-            }
-        }
-
-        return null;
-    }
+		CompressUtil.unpack(downloadFile, targetDir);
+	}
 }
