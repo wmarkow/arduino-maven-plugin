@@ -23,7 +23,7 @@ public class Tool {
 	}
 
 	public System getSystemByHostInfo(HostInfo hostInfo) {
-		List<System> systems = getSystemsByOsName(hostInfo.getOsName());
+        List< System > systems = getSystemsByOsName( hostInfo.getOsName(), getSystems() );
 		
 		if(systems.size() == 0)
 		{
@@ -35,7 +35,7 @@ public class Tool {
 			return systems.get(0);
 		}
 		
-		systems = getSystemsByArche(hostInfo.getOsArch());
+        systems = getSystemsByArch( hostInfo.getOsArch(), systems );
 		
 		if(systems.size() == 0)
 		{
@@ -58,22 +58,36 @@ public class Tool {
 		throw new RuntimeException(sb.toString());
 	}
 
-	private List<System> getSystemsByOsName(String osName) {
+    private List< System > getSystemsByOsName( String osName, List< System > systems )
+    {
 		List<System> result = new ArrayList<System>();
 
-		for (System system : getSystems()) {
+        for( System system : systems )
+        {
 			if (system.getHost().toLowerCase().contains(osName.toLowerCase())) {
 				result.add(system);
+
+                continue;
+            }
+
+            if( osName.toLowerCase().contains( "windows" )
+                && system.getHost().toLowerCase().contains( "mingw" ) )
+            {
+                result.add( system );
+
+                continue;
 			}
 		}
 
 		return result;
 	}
 	
-	private List<System> getSystemsByArche(String osArch) {
+    private List< System > getSystemsByArch( String osArch, List< System > systems )
+    {
 		List<System> result = new ArrayList<System>();
 
-		for (System system : getSystems()) {
+        for( System system : systems )
+        {
 			if (osArch.toLowerCase().contains("64") && system.getHost().toLowerCase().contains("x86_64")) {
 				result.add(system);
 			}

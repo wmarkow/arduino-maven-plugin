@@ -14,8 +14,8 @@ import org.junit.Test;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
 import com.github.wmarkow.amp.arduino.platform.PlatformRepository;
-import com.github.wmarkow.amp.arduino.platform.Tool;
 import com.github.wmarkow.amp.arduino.platform.System;
+import com.github.wmarkow.amp.arduino.platform.Tool;
 
 public class PlatformToolsManagerIntegrationTest {
 	private final static File PLATFORM_DIR = new File("target/arduino-maven-plugin");
@@ -73,4 +73,23 @@ public class PlatformToolsManagerIntegrationTest {
 		assertEquals("x86_64-linux-gnu", system.getHost());
 		assertEquals("avr-gcc-5.4.0-atmel3.6.1-arduino2-x86_64-pc-linux-gnu.tar.bz2", system.getArchiveFileName());
 	}
+
+    @Test
+    public void testFindSystemForWindows() throws IOException
+    {
+        PlatformFilesReader pir = new PlatformFilesReader();
+        PlatformRepository platformRepository = new PlatformRepository();
+        platformRepository.addIndex( pir.readFromJson( new File( "src/test/resources/package_index.json" ) ) );
+
+        Tool tool =
+            platformRepository.getPackageByName( "arduino" ).getToolByNameAndVersion( "avr-gcc",
+                "5.4.0-atmel3.6.1-arduino2" );
+
+        HostInfo hostInfo = new HostInfo( "amd64", "Windows 7" );
+        System system = tool.getSystemByHostInfo( hostInfo );
+
+        assertEquals( "i686-mingw32", system.getHost() );
+        assertEquals( "avr-gcc-5.4.0-atmel3.6.1-arduino2-i686-w64-mingw32.zip",
+            system.getArchiveFileName() );
+    }
 }
