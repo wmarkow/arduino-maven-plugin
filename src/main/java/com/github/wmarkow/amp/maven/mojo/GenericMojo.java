@@ -15,7 +15,12 @@ import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.collection.DependencyCollectionException;
+import org.eclipse.aether.collection.DependencySelector;
 import org.eclipse.aether.graph.DependencyNode;
+import org.eclipse.aether.util.artifact.JavaScopes;
+import org.eclipse.aether.util.graph.selector.AndDependencySelector;
+import org.eclipse.aether.util.graph.selector.OptionalDependencySelector;
+import org.eclipse.aether.util.graph.selector.ScopeDependencySelector;
 import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
 public abstract class GenericMojo extends AbstractMojo
@@ -133,6 +138,15 @@ public abstract class GenericMojo extends AbstractMojo
 
         // Set the No-Op Graph transformer so tree stays intact
         session.setDependencyGraphTransformer( new NoopDependencyGraphTransformer() );
+
+        if( ARDUINO_LIB_EXTENSION.equals( artifact.getExtension() ) )
+        {
+            // for arduinolib add PROVIDED as well (so exclude TEST)
+            DependencySelector dependencySelector =
+                new AndDependencySelector( new ScopeDependencySelector( JavaScopes.TEST ),
+                    new OptionalDependencySelector() );
+            session.setDependencySelector( dependencySelector );
+        }
 
         // Create Aether graph dependency object from params extracted above
         org.eclipse.aether.graph.Dependency dep = new org.eclipse.aether.graph.Dependency( artifact, null );

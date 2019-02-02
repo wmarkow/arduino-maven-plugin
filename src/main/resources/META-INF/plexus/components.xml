@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<component-set>
+    <components>
+        <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping
+            </role>
+            <role-hint>arduinolib</role-hint>
+            <implementation>
+                org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping
+            </implementation>
+            <configuration>
+                <lifecycles>
+                    <lifecycle>
+                        <id>default</id>
+                        <phases>
+                            <initialize>
+                                com.github.wmarkow.amp:arduino-maven-plugin:fetch-dependencies
+                            </initialize>
+                            <generate-sources>
+                                com.github.wmarkow.amp:arduino-maven-plugin:unpack-dependencies
+                            </generate-sources>
+                            <compile>
+                                com.github.wmarkow.amp:arduino-maven-plugin:build
+                            </compile>
+                            <package>
+                                org.apache.maven.plugins:maven-assembly-plugin:single
+                            </package>
+                            <install>
+                                org.apache.maven.plugins:maven-install-plugin:install-file
+                            </install>
+                        </phases>
+                    </lifecycle>
+                </lifecycles>
+            </configuration>
+        </component>
+    </components>
+</component-set>
