@@ -11,6 +11,7 @@ import com.github.wmarkow.amp.arduino.platform.BoardsVariables;
 import com.github.wmarkow.amp.arduino.platform.Package;
 import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
+import com.github.wmarkow.amp.arduino.platform.manager.PlatformLibrariesManager;
 import com.github.wmarkow.amp.arduino.platform.manager.PlatformPackageManager;
 import com.github.wmarkow.amp.util.AmpFileUtils;
 import com.github.wmarkow.amp.util.ArtifactUtils;
@@ -22,6 +23,7 @@ public abstract class GenericPlatformMojo extends GenericMojo
     private URL[] packageIndexes;
 
     private PlatformPackageManager ppm;
+    private PlatformLibrariesManager plm;
 
     protected URL[] getPackageIndexesUrls()
     {
@@ -43,6 +45,20 @@ public abstract class GenericPlatformMojo extends GenericMojo
         }
 
         return ppm;
+    }
+
+    protected synchronized PlatformLibrariesManager getPlatformLibrariesManager()
+    {
+        if( plm == null )
+        {
+            PlatformLibrariesManager plm = new PlatformLibrariesManager( getArduinoPlatformDirFile() );
+
+            plm.update();
+
+            this.plm = plm;
+        }
+
+        return plm;
     }
 
     protected Package getPackage()
