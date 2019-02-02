@@ -20,7 +20,7 @@
                                 com.github.wmarkow.amp:arduino-maven-plugin:unpack-dependencies
                             </generate-sources>
                             <compile>
-                                com.github.wmarkow.amp:arduino-maven-plugin:build
+                                com.github.wmarkow.amp:arduino-maven-plugin:compile
                             </compile>
                             <package>
                                 org.apache.maven.plugins:maven-assembly-plugin:single
@@ -28,6 +28,36 @@
                             <install>
                                 org.apache.maven.plugins:maven-install-plugin:install-file
                             </install>
+                        </phases>
+                    </lifecycle>
+                </lifecycles>
+            </configuration>
+        </component>
+        <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping
+            </role>
+            <role-hint>arduinohex</role-hint>
+            <implementation>
+                org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping
+            </implementation>
+            <configuration>
+                <lifecycles>
+                    <lifecycle>
+                        <id>default</id>
+                        <phases>
+                            <initialize>
+                                com.github.wmarkow.amp:arduino-maven-plugin:fetch-dependencies
+                            </initialize>
+                            <generate-sources>
+                                com.github.wmarkow.amp:arduino-maven-plugin:unpack-dependencies
+                            </generate-sources>
+                            <compile>
+                                com.github.wmarkow.amp:arduino-maven-plugin:compile,
+                                com.github.wmarkow.amp:arduino-maven-plugin:link
+                            </compile>
+                            <package>
+                                com.github.wmarkow.amp:arduino-maven-plugin:package
+                            </package>
                         </phases>
                     </lifecycle>
                 </lifecycles>

@@ -19,11 +19,11 @@ import com.github.wmarkow.amp.arduino.variable.Variable;
 import com.github.wmarkow.amp.eclipse.CProjectFileContentCreator;
 import com.github.wmarkow.amp.eclipse.GccIncludesScanner;
 import com.github.wmarkow.amp.eclipse.ProjectFileContentCreator;
-import com.github.wmarkow.amp.maven.mojo.build.BuildMojo;
+import com.github.wmarkow.amp.maven.mojo.build.CompileMojo;
 
 @Mojo( name = "eclipse", defaultPhase = LifecyclePhase.NONE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
-public class EclipseMojo extends BuildMojo
+public class EclipseMojo extends CompileMojo
 {
     private final static String PROJECT_TEMPLATE_FILE_PATH = "/project-template";
     private final static String PROJECT_FILE_NAME = ".project";
