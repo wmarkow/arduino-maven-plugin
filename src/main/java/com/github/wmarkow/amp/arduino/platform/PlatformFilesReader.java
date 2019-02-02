@@ -22,6 +22,14 @@ public class PlatformFilesReader
         return gson.fromJson( jsonString, PlatformPackageIndex.class );
     }
 
+    public PlatformLibrariesIndex readPlatformLibrariesIndexFromJsonFile( File jsonFile ) throws IOException
+    {
+        String jsonString = FileUtils.readFileToString( jsonFile, "UTF-8" );
+        Gson gson = new Gson();
+
+        return gson.fromJson( jsonString, PlatformLibrariesIndex.class );
+    }
+
     public PlatformVariables readPlatformVariablesFromFile( File file ) throws IOException
     {
         PlatformVariables result = new PlatformVariables();

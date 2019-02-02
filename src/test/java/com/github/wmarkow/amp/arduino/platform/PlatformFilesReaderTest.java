@@ -21,6 +21,17 @@ public class PlatformFilesReaderTest
     }
 
     @Test
+    public void testReadArduinoLibrariesIndex() throws IOException
+    {
+        PlatformFilesReader pir = new PlatformFilesReader();
+
+        PlatformLibrariesIndex index =
+            pir.readPlatformLibrariesIndexFromJsonFile( new File( "src/test/resources/library_index.json" ) );
+
+        assertEquals( 7168, index.getLibraries().size() );
+    }
+
+    @Test
     public void testReadArduinoIndexForToolsDependencies() throws IOException
     {
         PlatformFilesReader pir = new PlatformFilesReader();
