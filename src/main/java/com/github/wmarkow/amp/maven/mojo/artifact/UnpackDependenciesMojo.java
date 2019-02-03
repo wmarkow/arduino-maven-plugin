@@ -71,6 +71,16 @@ public class UnpackDependenciesMojo extends GenericPlatformMojo
         try
         {
             CompressUtil.unpack( sourceZip, dstDir );
+
+            File[] listed = dstDir.listFiles();
+            if( listed.length == 1 && !listed[ 0 ].getName().equals( "src" ) )
+            {
+                // copy content of that directory one level higher
+                FileUtils.copyDirectory( listed[ 0 ], dstDir, false );
+                // delete that directory
+                FileUtils.forceDelete( listed[ 0 ] );
+            }
+
         }
         catch( IOException e )
         {
