@@ -9,7 +9,7 @@ public class Library
     private String author;
     private List< String > architectures;
     private List< String > types;
-    private String reporsitory;
+    private String repository;
     private String url;
     private String archiveFileName;
     private int size;
@@ -40,9 +40,9 @@ public class Library
         return types;
     }
 
-    public String getReporsitory()
+    public String getRepository()
     {
-        return reporsitory;
+        return repository;
     }
 
     public String getUrl()

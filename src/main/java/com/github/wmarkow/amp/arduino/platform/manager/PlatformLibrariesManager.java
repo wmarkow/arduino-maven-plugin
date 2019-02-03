@@ -10,6 +10,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.wmarkow.amp.arduino.platform.PlatformFilesReader;
+import com.github.wmarkow.amp.arduino.platform.PlatformLibrariesIndex;
+
 public class PlatformLibrariesManager extends PlatformManager
 {
     private Logger logger = LoggerFactory.getLogger( PlatformLibrariesManager.class );
@@ -55,5 +58,25 @@ public class PlatformLibrariesManager extends PlatformManager
         {
             logger.warn( String.format( "Exception while downloading file %s", LIBRARY_INDEX_URL ), e );
         }
+    }
+
+    public PlatformLibrariesIndex getPlatformLibrariesIndex() throws IOException
+    {
+        URL url;
+        try
+        {
+            url = new URL( LIBRARY_INDEX_URL );
+        }
+        catch( MalformedURLException e )
+        {
+            throw new RuntimeException( e );
+        }
+
+        final String filename = FilenameUtils.getName( url.getPath() );
+        File file = new File( getPlatformDir(), filename );
+
+        PlatformFilesReader pfr = new PlatformFilesReader();
+
+        return pfr.readPlatformLibrariesIndexFromJsonFile( file );
     }
 }

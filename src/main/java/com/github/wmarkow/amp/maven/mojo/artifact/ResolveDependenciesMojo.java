@@ -17,8 +17,10 @@ import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
 
+import com.github.wmarkow.amp.arduino.platform.PlatformLibrariesIndex;
 import com.github.wmarkow.amp.arduino.platform.manager.PlatformLibrariesManager;
 import com.github.wmarkow.amp.arduino.platform.manager.PlatformToolsManager;
+import com.github.wmarkow.amp.maven.artifact.resolver.ArduinloLibraryIndexArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.ArduinoCoreArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.GithubArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.GithubFetchDescriptor;
@@ -39,7 +41,7 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
         }
         catch( IOException e1 )
         {
-            getLog().error(e1.getMessage(),  e1);
+            getLog().error( e1.getMessage(), e1 );
             throw new MojoFailureException( e1.getMessage() );
         }
 
@@ -65,9 +67,14 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
 
             if( ARDUINO_LIB_EXTENSION.equals( arduinoLib.getExtension() ) )
             {
+                final File workDir = getArduinoMavenPluginDirFile();
+
                 try
                 {
-                    File file = prepareLibrary( arduinoLib );
+                    PlatformLibrariesIndex index = getPlatformLibrariesManager().getPlatformLibrariesIndex();
+                    ArduinloLibraryIndexArtifactResolver resolver =
+                        new ArduinloLibraryIndexArtifactResolver( index );
+                    File file = resolver.fetch( arduinoLib, workDir );
 
                     installLibrary( arduinoLib, file );
                 }
