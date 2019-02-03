@@ -69,7 +69,15 @@ public abstract class AbstractCompiler extends AbstractProcessor
 
         for( File srcDir : srcDirs )
         {
-            Collection< File > files = FileUtils.listFiles( srcDir, getFilesExtensions(), true );
+            Collection< File > files = null;
+            if( srcDir.getName().equals( "src" ) )
+            {
+                files = FileUtils.listFiles( srcDir, getFilesExtensions(), true );
+            }
+            else
+            {
+                files = FileUtils.listFiles( srcDir, getFilesExtensions(), false );
+            }
 
             for( File file : files )
             {
