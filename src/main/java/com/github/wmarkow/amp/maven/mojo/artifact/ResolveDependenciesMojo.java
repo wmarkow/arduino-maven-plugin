@@ -35,15 +35,15 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        try
-        {
-            updateArduinoPlatform();
-        }
-        catch( IOException e1 )
-        {
-            getLog().error( e1.getMessage(), e1 );
-            throw new MojoFailureException( e1.getMessage() );
-        }
+        // try
+        // {
+        // updateArduinoPlatform();
+        // }
+        // catch( IOException e1 )
+        // {
+        // getLog().error( e1.getMessage(), e1 );
+        // throw new MojoFailureException( e1.getMessage() );
+        // }
 
         for( Artifact arduinoLib : getMissingArduinoDependencies() )
         {
@@ -110,7 +110,7 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
     {
         List< Artifact > missingLibs = new ArrayList<>();
 
-        final List< Artifact > arduinoLibs = getArduinoDependencies();
+        final List< Artifact > arduinoLibs = collectArduinoDependencies();
 
         for( Artifact arduinoLib : arduinoLibs )
         {

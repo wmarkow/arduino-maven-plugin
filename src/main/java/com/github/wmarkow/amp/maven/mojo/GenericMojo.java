@@ -17,6 +17,8 @@ import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.collection.DependencyCollectionException;
 import org.eclipse.aether.collection.DependencySelector;
 import org.eclipse.aether.graph.DependencyNode;
+import org.eclipse.aether.graph.DependencyVisitor;
+import org.eclipse.aether.resolution.DependencyRequest;
 import org.eclipse.aether.util.artifact.JavaScopes;
 import org.eclipse.aether.util.graph.selector.AndDependencySelector;
 import org.eclipse.aether.util.graph.selector.OptionalDependencySelector;
@@ -109,29 +111,44 @@ public abstract class GenericMojo extends AbstractMojo
 
     protected List< Artifact > getArduinoDependencies()
     {
-        DependencyNode node = getVerboseDependencyTree();
-
         List< Artifact > result = new ArrayList< Artifact >();
 
-        for( DependencyNode dn : node.getChildren() )
+        for( Artifact artifact : getDependencies() )
         {
-            if( ARDUINO_CORE_EXTENSION.equals( dn.getArtifact().getExtension() )
-                || ARDUINO_LIB_EXTENSION.equals( dn.getArtifact().getExtension() )
-                || ARDUINO_CORE_LIB_EXTENSION.equals( dn.getArtifact().getExtension() ) )
+            if( ARDUINO_CORE_EXTENSION.equals( artifact.getExtension() )
+                || ARDUINO_LIB_EXTENSION.equals( artifact.getExtension() )
+                || ARDUINO_CORE_LIB_EXTENSION.equals( artifact.getExtension() ) )
             {
-                result.add( dn.getArtifact() );
+                result.add( artifact );
             }
         }
 
         return result;
     }
 
-    private DependencyNode getVerboseDependencyTree()
+    protected List< Artifact > collectArduinoDependencies()
     {
-        // Create CollectRequest object that will be submitted to collect the dependencies
+        List< Artifact > result = new ArrayList< Artifact >();
+
+        for( Artifact artifact : collectDependencies() )
+        {
+            if( ARDUINO_CORE_EXTENSION.equals( artifact.getExtension() )
+                || ARDUINO_LIB_EXTENSION.equals( artifact.getExtension() )
+                || ARDUINO_CORE_LIB_EXTENSION.equals( artifact.getExtension() ) )
+            {
+                result.add( artifact );
+
+                getLog().info( artifact.toString() );
+            }
+        }
+
+        return result;
+    }
+
+    private List< Artifact > collectDependencies()
+    {
         CollectRequest collectReq = new CollectRequest();
 
-        // Get artifact this Maven project is attempting to build
         Artifact artifact = getProjectArtifact();
 
         DefaultRepositorySystemSession session = new DefaultRepositorySystemSession( repoSession );
@@ -148,20 +165,67 @@ public abstract class GenericMojo extends AbstractMojo
             session.setDependencySelector( dependencySelector );
         }
 
-        // Create Aether graph dependency object from params extracted above
         org.eclipse.aether.graph.Dependency dep = new org.eclipse.aether.graph.Dependency( artifact, null );
 
-        // Set the root of the request, in this case the current project will be the root
         collectReq.setRoot( dep );
 
         try
         {
-            return repoSystem.collectDependencies( session, collectReq ).getRoot();
+            DependencyRequest depReq = new DependencyRequest();
+            depReq.setCollectRequest( collectReq );
+
+            List< Artifact > result = new ArrayList<>();
+
+            DependencyNode dn = repoSystem.collectDependencies( session, collectReq ).getRoot();
+            dn.accept( new DependencyVisitor()
+            {
+
+                @Override
+                public boolean visitEnter( DependencyNode aNode )
+                {
+                    result.add( aNode.getArtifact() );
+                    return true;
+                }
+
+                @Override
+                public boolean visitLeave( DependencyNode aNode )
+                {
+                    return true;
+                }
+            } );
+
+            return result;
         }
         catch( DependencyCollectionException exception )
         {
             getLog().warn( "Could not collect dependencies from repo system", exception );
             return null;
         }
+    }
+
+    private List< Artifact > getDependencies()
+    {
+        List< Artifact > result = new ArrayList<>();
+
+        getLog().info( String.format( "size of dependencies is %s", mavenProject.getArtifacts().size() ) );
+
+        for( org.apache.maven.artifact.Artifact artifact : mavenProject.getArtifacts() )
+        {
+            // String groupId, String artifactId, String classifier, String extension, String version
+            String groupId = artifact.getGroupId();
+            String artifactId = artifact.getArtifactId();
+            String classifier = artifact.getClassifier();
+            String extension = artifact.getType();
+            String version = artifact.getVersion();
+
+            Artifact aetherArtifact =
+                new DefaultArtifact( groupId, artifactId, classifier, extension, version );
+
+            getLog().info( aetherArtifact.toString() );
+
+            result.add( aetherArtifact );
+        }
+
+        return result;
     }
 }
