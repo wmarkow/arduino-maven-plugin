@@ -118,8 +118,6 @@ public abstract class GenericMojo extends AbstractMojo
     {
         List< Artifact > result = new ArrayList<>();
 
-        getLog().info( String.format( "size of dependencies is %s", mavenProject.getArtifacts().size() ) );
-
         for( org.apache.maven.artifact.Artifact artifact : mavenProject.getArtifacts() )
         {
             // String groupId, String artifactId, String classifier, String extension, String version
@@ -131,8 +129,6 @@ public abstract class GenericMojo extends AbstractMojo
 
             Artifact aetherArtifact =
                 new DefaultArtifact( groupId, artifactId, classifier, extension, version );
-
-            getLog().info( aetherArtifact.toString() );
 
             result.add( aetherArtifact );
         }

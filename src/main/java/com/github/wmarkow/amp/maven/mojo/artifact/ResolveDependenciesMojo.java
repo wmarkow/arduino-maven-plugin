@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -29,16 +28,14 @@ import org.eclipse.aether.util.graph.selector.OptionalDependencySelector;
 import org.eclipse.aether.util.graph.selector.ScopeDependencySelector;
 import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
+import com.github.wmarkow.amp.arduino.platform.Platform;
 import com.github.wmarkow.amp.arduino.platform.PlatformLibrariesIndex;
+import com.github.wmarkow.amp.arduino.platform.PlatformRepository;
 import com.github.wmarkow.amp.arduino.platform.manager.PlatformLibrariesManager;
 import com.github.wmarkow.amp.arduino.platform.manager.PlatformToolsManager;
 import com.github.wmarkow.amp.maven.artifact.resolver.ArduinloLibraryIndexArtifactResolver;
 import com.github.wmarkow.amp.maven.artifact.resolver.ArduinoCoreArtifactResolver;
-import com.github.wmarkow.amp.maven.artifact.resolver.GithubArtifactResolver;
-import com.github.wmarkow.amp.maven.artifact.resolver.GithubFetchDescriptor;
-import com.github.wmarkow.amp.maven.artifact.resolver.LibraryRepacker;
 import com.github.wmarkow.amp.maven.mojo.GenericPlatformMojo;
-import com.github.wmarkow.amp.util.ArtifactUtils;
 import com.github.wmarkow.amp.util.CompressUtil;
 
 @Mojo( name = "fetch-dependencies", defaultPhase = LifecyclePhase.INITIALIZE, requiresProject = true )
@@ -47,15 +44,15 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        // try
-        // {
-        // updateArduinoPlatform();
-        // }
-        // catch( IOException e1 )
-        // {
-        // getLog().error( e1.getMessage(), e1 );
-        // throw new MojoFailureException( e1.getMessage() );
-        // }
+        try
+        {
+            updateArduinoPlatform();
+        }
+        catch( IOException e1 )
+        {
+            getLog().error( e1.getMessage(), e1 );
+            throw new MojoFailureException( e1.getMessage() );
+        }
 
         for( Artifact arduinoLib : getMissingArduinoDependencies() )
         {
@@ -146,60 +143,6 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
         return missingLibs;
     }
 
-    private File prepareLibrary( Artifact arduinoLib ) throws IOException
-    {
-        getLog().info( "Preparing library for " + artifactToString( arduinoLib ) );
-
-        if( "com.github.arduino".equals( arduinoLib.getGroupId() )
-            && "arduino-core".equals( arduinoLib.getArtifactId() )
-            && "1.6.23".equals( arduinoLib.getBaseVersion() ) && "avr".equals( arduinoLib.getClassifier() ) )
-        {
-            // fetch com.github.arduino:arduino-core-1.6.23-avr
-            GithubArtifactResolver githubFetcher = new GithubArtifactResolver();
-            GithubFetchDescriptor descriptor = new GithubFetchDescriptor();
-            descriptor.username = "arduino";
-            descriptor.repoName = "ArduinoCore-avr";
-            descriptor.refName = "1.6.23";
-
-            final File targetDir = getArduinoMavenPluginDirFile();
-            FileUtils.forceMkdir( targetDir );
-
-            File fetchedSources = githubFetcher.fetchLibrary( descriptor, targetDir );
-
-            LibraryRepacker repacker = new LibraryRepacker();
-            File arduinoZipLibrary = new File( targetDir, ArtifactUtils.getZipFileName( arduinoLib ) );
-            repacker.repack( fetchedSources, "cores/arduino", arduinoZipLibrary );
-
-            return arduinoZipLibrary;
-        }
-
-        if( "com.github.arduino".equals( arduinoLib.getGroupId() )
-            && "arduino-variant".equals( arduinoLib.getArtifactId() )
-            && "1.6.23".equals( arduinoLib.getBaseVersion() )
-            && "avr-standard".equals( arduinoLib.getClassifier() ) )
-        {
-            // fetch com.github.arduino:arduino-core-1.6.23-avr
-            GithubArtifactResolver githubFetcher = new GithubArtifactResolver();
-            GithubFetchDescriptor descriptor = new GithubFetchDescriptor();
-            descriptor.username = "arduino";
-            descriptor.repoName = "ArduinoCore-avr";
-            descriptor.refName = "1.6.23";
-
-            final File targetDir = getArduinoMavenPluginDirFile();
-            FileUtils.forceMkdir( targetDir );
-
-            File fetchedSources = githubFetcher.fetchLibrary( descriptor, targetDir );
-
-            LibraryRepacker repacker = new LibraryRepacker();
-            File arduinoZipLibrary = new File( targetDir, ArtifactUtils.getZipFileName( arduinoLib ) );
-            repacker.repack( fetchedSources, "variants/standard", arduinoZipLibrary );
-
-            return arduinoZipLibrary;
-        }
-
-        return null;
-    }
-
     private void installLibrary( Artifact arduinoLib, File libraryFile ) throws IOException,
         InstallationException
     {
@@ -216,12 +159,39 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
 
         File arduinoPlatformDir = getArduinoPlatformDirFile();
         PlatformToolsManager toolsManager = new PlatformToolsManager( arduinoPlatformDir );
-        toolsManager.resolve( getPlatformPackageManager().getPlatformRepository(), getPlatform() );
+        PlatformRepository platformRepository = getPlatformPackageManager().getPlatformRepository();
+
+        for( Artifact arduinoCore : collectArduinoCoreDependencies() )
+        {
+            final Platform platform = getPlatform( arduinoCore );
+            toolsManager.resolve( platformRepository, platform );
+        }
 
         PlatformLibrariesManager librariesManager = new PlatformLibrariesManager( arduinoPlatformDir );
         librariesManager.update();
 
         getLog().info( "Arduino platform is up to date." );
+    }
+
+    private Platform getPlatform( Artifact arduinoCoreArtifact )
+    {
+        return getPlatformPackageManager().getPlatformRepository().getPlatform(
+            arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
+    }
+
+    private List< Artifact > collectArduinoCoreDependencies()
+    {
+        List< Artifact > result = new ArrayList<>();
+
+        for( Artifact artifact : collectArduinoDependencies() )
+        {
+            if( ARDUINO_CORE_EXTENSION.equals( artifact.getExtension() ) )
+            {
+                result.add( artifact );
+            }
+        }
+
+        return result;
     }
 
     private List< Artifact > collectArduinoDependencies()
@@ -235,8 +205,6 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
                 || ARDUINO_CORE_LIB_EXTENSION.equals( artifact.getExtension() ) )
             {
                 result.add( artifact );
-
-                getLog().info( artifact.toString() );
             }
         }
 
@@ -247,14 +215,14 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
     {
         CollectRequest collectReq = new CollectRequest();
 
-        Artifact artifact = getProjectArtifact();
+        Artifact projectArtifact = getProjectArtifact();
 
         DefaultRepositorySystemSession session = new DefaultRepositorySystemSession( repoSession );
 
         // Set the No-Op Graph transformer so tree stays intact
         session.setDependencyGraphTransformer( new NoopDependencyGraphTransformer() );
 
-        if( ARDUINO_LIB_EXTENSION.equals( artifact.getExtension() ) )
+        if( ARDUINO_LIB_EXTENSION.equals( projectArtifact.getExtension() ) )
         {
             // for arduinolib add PROVIDED as well (so exclude TEST)
             DependencySelector dependencySelector =
@@ -263,7 +231,8 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
             session.setDependencySelector( dependencySelector );
         }
 
-        org.eclipse.aether.graph.Dependency dep = new org.eclipse.aether.graph.Dependency( artifact, null );
+        org.eclipse.aether.graph.Dependency dep =
+            new org.eclipse.aether.graph.Dependency( projectArtifact, null );
 
         collectReq.setRoot( dep );
 
@@ -279,9 +248,16 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
             {
 
                 @Override
-                public boolean visitEnter( DependencyNode aNode )
+                public boolean visitEnter( DependencyNode node )
                 {
-                    result.add( aNode.getArtifact() );
+                    final Artifact artifact = node.getArtifact();
+                    if( artifact.getGroupId().equals( projectArtifact.getGroupId() )
+                        && artifact.getArtifactId().equals( projectArtifact.getArtifactId() ) )
+                    {
+                        return true;
+                    }
+
+                    result.add( artifact );
                     return true;
                 }
 
