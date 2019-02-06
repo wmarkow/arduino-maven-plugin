@@ -10,12 +10,24 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.collection.CollectRequest;
+import org.eclipse.aether.collection.DependencyCollectionException;
+import org.eclipse.aether.collection.DependencySelector;
+import org.eclipse.aether.graph.DependencyNode;
+import org.eclipse.aether.graph.DependencyVisitor;
 import org.eclipse.aether.installation.InstallRequest;
 import org.eclipse.aether.installation.InstallationException;
 import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
+import org.eclipse.aether.resolution.DependencyRequest;
+import org.eclipse.aether.util.artifact.JavaScopes;
+import org.eclipse.aether.util.graph.selector.AndDependencySelector;
+import org.eclipse.aether.util.graph.selector.OptionalDependencySelector;
+import org.eclipse.aether.util.graph.selector.ScopeDependencySelector;
+import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
 import com.github.wmarkow.amp.arduino.platform.PlatformLibrariesIndex;
 import com.github.wmarkow.amp.arduino.platform.manager.PlatformLibrariesManager;
@@ -210,5 +222,82 @@ public class ResolveDependenciesMojo extends GenericPlatformMojo
         librariesManager.update();
 
         getLog().info( "Arduino platform is up to date." );
+    }
+
+    private List< Artifact > collectArduinoDependencies()
+    {
+        List< Artifact > result = new ArrayList< Artifact >();
+
+        for( Artifact artifact : collectDependencies() )
+        {
+            if( ARDUINO_CORE_EXTENSION.equals( artifact.getExtension() )
+                || ARDUINO_LIB_EXTENSION.equals( artifact.getExtension() )
+                || ARDUINO_CORE_LIB_EXTENSION.equals( artifact.getExtension() ) )
+            {
+                result.add( artifact );
+
+                getLog().info( artifact.toString() );
+            }
+        }
+
+        return result;
+    }
+
+    private List< Artifact > collectDependencies()
+    {
+        CollectRequest collectReq = new CollectRequest();
+
+        Artifact artifact = getProjectArtifact();
+
+        DefaultRepositorySystemSession session = new DefaultRepositorySystemSession( repoSession );
+
+        // Set the No-Op Graph transformer so tree stays intact
+        session.setDependencyGraphTransformer( new NoopDependencyGraphTransformer() );
+
+        if( ARDUINO_LIB_EXTENSION.equals( artifact.getExtension() ) )
+        {
+            // for arduinolib add PROVIDED as well (so exclude TEST)
+            DependencySelector dependencySelector =
+                new AndDependencySelector( new ScopeDependencySelector( JavaScopes.TEST ),
+                    new OptionalDependencySelector() );
+            session.setDependencySelector( dependencySelector );
+        }
+
+        org.eclipse.aether.graph.Dependency dep = new org.eclipse.aether.graph.Dependency( artifact, null );
+
+        collectReq.setRoot( dep );
+
+        try
+        {
+            DependencyRequest depReq = new DependencyRequest();
+            depReq.setCollectRequest( collectReq );
+
+            List< Artifact > result = new ArrayList<>();
+
+            DependencyNode dn = repoSystem.collectDependencies( session, collectReq ).getRoot();
+            dn.accept( new DependencyVisitor()
+            {
+
+                @Override
+                public boolean visitEnter( DependencyNode aNode )
+                {
+                    result.add( aNode.getArtifact() );
+                    return true;
+                }
+
+                @Override
+                public boolean visitLeave( DependencyNode aNode )
+                {
+                    return true;
+                }
+            } );
+
+            return result;
+        }
+        catch( DependencyCollectionException exception )
+        {
+            getLog().warn( "Could not collect dependencies from repo system", exception );
+            return null;
+        }
     }
 }

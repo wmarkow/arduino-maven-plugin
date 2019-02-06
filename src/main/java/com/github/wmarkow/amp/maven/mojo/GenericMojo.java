@@ -8,22 +8,10 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.artifact.DefaultArtifact;
-import org.eclipse.aether.collection.CollectRequest;
-import org.eclipse.aether.collection.DependencyCollectionException;
-import org.eclipse.aether.collection.DependencySelector;
-import org.eclipse.aether.graph.DependencyNode;
-import org.eclipse.aether.graph.DependencyVisitor;
-import org.eclipse.aether.resolution.DependencyRequest;
-import org.eclipse.aether.util.artifact.JavaScopes;
-import org.eclipse.aether.util.graph.selector.AndDependencySelector;
-import org.eclipse.aether.util.graph.selector.OptionalDependencySelector;
-import org.eclipse.aether.util.graph.selector.ScopeDependencySelector;
-import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 
 public abstract class GenericMojo extends AbstractMojo
 {
@@ -124,83 +112,6 @@ public abstract class GenericMojo extends AbstractMojo
         }
 
         return result;
-    }
-
-    protected List< Artifact > collectArduinoDependencies()
-    {
-        List< Artifact > result = new ArrayList< Artifact >();
-
-        for( Artifact artifact : collectDependencies() )
-        {
-            if( ARDUINO_CORE_EXTENSION.equals( artifact.getExtension() )
-                || ARDUINO_LIB_EXTENSION.equals( artifact.getExtension() )
-                || ARDUINO_CORE_LIB_EXTENSION.equals( artifact.getExtension() ) )
-            {
-                result.add( artifact );
-
-                getLog().info( artifact.toString() );
-            }
-        }
-
-        return result;
-    }
-
-    private List< Artifact > collectDependencies()
-    {
-        CollectRequest collectReq = new CollectRequest();
-
-        Artifact artifact = getProjectArtifact();
-
-        DefaultRepositorySystemSession session = new DefaultRepositorySystemSession( repoSession );
-
-        // Set the No-Op Graph transformer so tree stays intact
-        session.setDependencyGraphTransformer( new NoopDependencyGraphTransformer() );
-
-        if( ARDUINO_LIB_EXTENSION.equals( artifact.getExtension() ) )
-        {
-            // for arduinolib add PROVIDED as well (so exclude TEST)
-            DependencySelector dependencySelector =
-                new AndDependencySelector( new ScopeDependencySelector( JavaScopes.TEST ),
-                    new OptionalDependencySelector() );
-            session.setDependencySelector( dependencySelector );
-        }
-
-        org.eclipse.aether.graph.Dependency dep = new org.eclipse.aether.graph.Dependency( artifact, null );
-
-        collectReq.setRoot( dep );
-
-        try
-        {
-            DependencyRequest depReq = new DependencyRequest();
-            depReq.setCollectRequest( collectReq );
-
-            List< Artifact > result = new ArrayList<>();
-
-            DependencyNode dn = repoSystem.collectDependencies( session, collectReq ).getRoot();
-            dn.accept( new DependencyVisitor()
-            {
-
-                @Override
-                public boolean visitEnter( DependencyNode aNode )
-                {
-                    result.add( aNode.getArtifact() );
-                    return true;
-                }
-
-                @Override
-                public boolean visitLeave( DependencyNode aNode )
-                {
-                    return true;
-                }
-            } );
-
-            return result;
-        }
-        catch( DependencyCollectionException exception )
-        {
-            getLog().warn( "Could not collect dependencies from repo system", exception );
-            return null;
-        }
     }
 
     private List< Artifact > getDependencies()
