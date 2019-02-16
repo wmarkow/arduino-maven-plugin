@@ -24,7 +24,7 @@
                             </compile>
                             <package>
                                 org.apache.maven.plugins:maven-assembly-plugin:single,
-                                com.github.wmarkow.amp:arduino-maven-plugin:package2
+                                com.github.wmarkow.amp:arduino-maven-plugin:package
                             </package>
                             <install>
                                 org.apache.maven.plugins:maven-install-plugin:install
@@ -54,10 +54,11 @@
                             </generate-sources>
                             <compile>
                                 com.github.wmarkow.amp:arduino-maven-plugin:compile,
-                                com.github.wmarkow.amp:arduino-maven-plugin:link
+                                com.github.wmarkow.amp:arduino-maven-plugin:link,
+                                com.github.wmarkow.amp:arduino-maven-plugin:obj-dump
                             </compile>
                             <package>
-                                com.github.wmarkow.amp:arduino-maven-plugin:package
+                                
                             </package>
                         </phases>
                     </lifecycle>
