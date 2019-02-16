@@ -11,9 +11,6 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.eclipse.aether.artifact.Artifact;
-import org.eclipse.aether.resolution.ArtifactRequest;
-import org.eclipse.aether.resolution.ArtifactResolutionException;
-import org.eclipse.aether.resolution.ArtifactResult;
 
 import com.github.wmarkow.amp.maven.mojo.GenericMojo;
 import com.github.wmarkow.amp.maven.mojo.GenericPlatformMojo;
@@ -90,24 +87,22 @@ public class UnpackDependenciesMojo extends GenericPlatformMojo
 
     private File resolveFileOfDependency( Artifact artifact ) throws MojoFailureException
     {
-        ArtifactRequest req = new ArtifactRequest().setArtifact( artifact );
-        ArtifactResult resolutionResult;
-        try
+        String localPath = repoSession.getLocalRepositoryManager().getPathForLocalArtifact( artifact );
+        if( localPath == null )
         {
-            resolutionResult = repoSystem.resolveArtifact( repoSession, req );
-
-            if( resolutionResult.isMissing() )
-            {
-                throw new MojoFailureException( String.format( "Unable to resolve dependency %s",
-                    artifactToString( artifact ) ) );
-            }
-
-            return resolutionResult.getArtifact().getFile();
+            throw new MojoFailureException( String.format(
+                "Unable to find dependency %s in local repository", artifactToString( artifact ) ) );
         }
-        catch( ArtifactResolutionException e )
+
+        File localRepoBaseDir = repoSession.getLocalRepository().getBasedir();
+
+        File file = new File( localRepoBaseDir, localPath );
+        if( !file.exists() )
         {
-            throw new MojoFailureException( String.format( "Unable to resolve dependency %s",
-                artifactToString( artifact ) ) );
+            throw new MojoFailureException( String.format(
+                "Unable to find dependency file %s in local repository", file.getAbsolutePath() ) );
         }
+
+        return file;
     }
 }

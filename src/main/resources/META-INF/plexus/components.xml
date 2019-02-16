@@ -23,10 +23,11 @@
                                 com.github.wmarkow.amp:arduino-maven-plugin:compile
                             </compile>
                             <package>
-                                org.apache.maven.plugins:maven-assembly-plugin:single
+                                org.apache.maven.plugins:maven-assembly-plugin:single,
+                                com.github.wmarkow.amp:arduino-maven-plugin:package2
                             </package>
                             <install>
-                                org.apache.maven.plugins:maven-install-plugin:install-file
+                                org.apache.maven.plugins:maven-install-plugin:install
                             </install>
                         </phases>
                     </lifecycle>
@@ -63,5 +64,41 @@
                 </lifecycles>
             </configuration>
         </component>
+<!--         <component> -->
+<!--             <role>org.apache.maven.artifact.handler.ArtifactHandler -->
+<!--             </role> -->
+<!--             <role-hint>arduinolib</role-hint> -->
+<!--             <implementation> -->
+<!--                 org.apache.maven.artifact.handler.DefaultArtifactHandler -->
+<!--             </implementation> -->
+<!--             <configuration> -->
+<!--                 <type>arduinolib</type> -->
+<!--                 <extension>zip</extension> -->
+<!--             </configuration> -->
+<!--         </component> -->
+<!--         <component> -->
+<!--             <role>org.apache.maven.artifact.handler.ArtifactHandler -->
+<!--             </role> -->
+<!--             <role-hint>arduinocore</role-hint> -->
+<!--             <implementation> -->
+<!--                 org.apache.maven.artifact.handler.DefaultArtifactHandler -->
+<!--             </implementation> -->
+<!--             <configuration> -->
+<!--                 <type>zip</type> -->
+<!--                 <extension>zip</extension> -->
+<!--             </configuration> -->
+<!--         </component> -->
+<!--         <component> -->
+<!--             <role>org.apache.maven.artifact.handler.ArtifactHandler -->
+<!--             </role> -->
+<!--             <role-hint>arduinocorelib</role-hint> -->
+<!--             <implementation> -->
+<!--                 org.apache.maven.artifact.handler.DefaultArtifactHandler -->
+<!--             </implementation> -->
+<!--             <configuration> -->
+<!--                 <type>zip</type> -->
+<!--                 <extension>zip</extension> -->
+<!--             </configuration> -->
+<!--         </component> -->
     </components>
 </component-set>
