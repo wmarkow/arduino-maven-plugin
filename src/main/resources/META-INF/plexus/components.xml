@@ -37,7 +37,7 @@
         <component>
             <role>org.apache.maven.lifecycle.mapping.LifecycleMapping
             </role>
-            <role-hint>arduinohex</role-hint>
+            <role-hint>arduinoelf</role-hint>
             <implementation>
                 org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping
             </implementation>
@@ -58,8 +58,11 @@
                                 com.github.wmarkow.amp:arduino-maven-plugin:obj-dump
                             </compile>
                             <package>
-                                
+                                com.github.wmarkow.amp:arduino-maven-plugin:package
                             </package>
+                            <install>
+                                org.apache.maven.plugins:maven-install-plugin:install
+                            </install>
                         </phases>
                     </lifecycle>
                 </lifecycles>

@@ -18,6 +18,7 @@ public abstract class GenericMojo extends AbstractMojo
     public final static String ARDUINO_CORE_EXTENSION = "arduinocore";
     public final static String ARDUINO_LIB_EXTENSION = "arduinolib";
     public final static String ARDUINO_CORE_LIB_EXTENSION = "arduinocorelib";
+    public final static String ARDUINO_ELF_EXTENSION = "arduinoelf";
 
     @Component
     protected MavenProject mavenProject;
