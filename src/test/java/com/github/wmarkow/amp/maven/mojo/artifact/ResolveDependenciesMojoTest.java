@@ -5,7 +5,7 @@ import java.io.File;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.junit.Test;
 
-import com.github.wmarkow.amp.maven.mojo.artifact.ResolveDependenciesMojo;
+import com.github.wmarkow.amp.maven.mojo.phase.initialize.ResolveDependenciesMojo;
 
 public class ResolveDependenciesMojoTest extends AbstractMojoTestCase
 {

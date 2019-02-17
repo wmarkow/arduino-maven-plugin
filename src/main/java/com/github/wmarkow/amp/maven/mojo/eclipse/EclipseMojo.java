@@ -19,7 +19,7 @@ import com.github.wmarkow.amp.arduino.variable.Variable;
 import com.github.wmarkow.amp.eclipse.CProjectFileContentCreator;
 import com.github.wmarkow.amp.eclipse.GccIncludesScanner;
 import com.github.wmarkow.amp.eclipse.ProjectFileContentCreator;
-import com.github.wmarkow.amp.maven.mojo.build.CompileMojo;
+import com.github.wmarkow.amp.maven.mojo.phase.compile.CompileMojo;
 
 @Mojo( name = "eclipse", defaultPhase = LifecyclePhase.NONE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )

@@ -8,7 +8,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
-import com.github.wmarkow.amp.maven.mojo.artifact.UnpackDependenciesMojo;
+import com.github.wmarkow.amp.maven.mojo.phase.gensources.UnpackDependenciesMojo;
 
 @Mojo( name = "list-boards", defaultPhase = LifecyclePhase.NONE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )

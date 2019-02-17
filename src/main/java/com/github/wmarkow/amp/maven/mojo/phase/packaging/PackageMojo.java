@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.maven.mojo.build;
+package com.github.wmarkow.amp.maven.mojo.phase.packaging;
 
 import java.io.File;
 

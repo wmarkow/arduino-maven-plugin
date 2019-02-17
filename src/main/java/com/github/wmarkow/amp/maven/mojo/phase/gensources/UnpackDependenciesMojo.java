@@ -1,4 +1,4 @@
-package com.github.wmarkow.amp.maven.mojo.artifact;
+package com.github.wmarkow.amp.maven.mojo.phase.gensources;
 
 import java.io.File;
 import java.io.IOException;

@@ -11,7 +11,7 @@ import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.artifact.DefaultArtifact;
 
 import com.github.wmarkow.amp.maven.mojo.GenericMojo;
-import com.github.wmarkow.amp.maven.mojo.artifact.UnpackDependenciesMojo;
+import com.github.wmarkow.amp.maven.mojo.phase.gensources.UnpackDependenciesMojo;
 
 @Mojo( name = "list-libraries", defaultPhase = LifecyclePhase.NONE,
     requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
