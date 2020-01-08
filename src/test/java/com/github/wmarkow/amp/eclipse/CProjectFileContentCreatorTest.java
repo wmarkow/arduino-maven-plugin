@@ -58,7 +58,7 @@ public class CProjectFileContentCreatorTest
     @Test
     public void test2()
     {
-        File baseDir = new File( "src\\test\\resources\\project-blink" );
+        File baseDir = new File( "C:\\Users\\wmarkowski\\dev-test\\sources\\arduino-maven-plugin\\src\\test\\resources\\project-blink" );
         File sourceDir =
             new File(
                 "C:\\Users\\wmarkowski\\dev-test\\sources\\arduino-maven-plugin\\src\\test\\resources\\project-blink\\src\\main\\cpp" );
