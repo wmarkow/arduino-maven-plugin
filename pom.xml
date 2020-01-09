@@ -15,7 +15,6 @@
 	<modules>
 		<module>amp-utils</module>
 		<module>amp-arduino</module>
-		<module>amp-eclipse</module>
 		<module>arduino-maven-plugin</module>
 	</modules>
 
