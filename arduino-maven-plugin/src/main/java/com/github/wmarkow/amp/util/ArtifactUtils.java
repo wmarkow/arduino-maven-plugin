@@ -10,38 +10,48 @@ import com.github.wmarkow.amp.maven.mojo.GenericMojo;
 public class ArtifactUtils
 {
 
-    public static String getBaseFileName( Artifact artifact )
+    public static String getBaseFileName(Artifact artifact)
     {
         StringBuilder sb = new StringBuilder();
-        sb.append( artifact.getArtifactId() );
-        sb.append( "-" );
-        sb.append( artifact.getBaseVersion() );
-        if( !artifact.getClassifier().isEmpty() )
+        sb.append(artifact.getArtifactId());
+        sb.append("-");
+        sb.append(artifact.getBaseVersion());
+        if (!artifact.getClassifier().isEmpty())
         {
-            sb.append( "-" );
-            sb.append( artifact.getClassifier() );
+            sb.append("-");
+            sb.append(artifact.getClassifier());
         }
 
         return sb.toString();
     }
 
-    public static String getZipFileName( Artifact artifact )
+    public static String getZipFileName(Artifact artifact)
     {
-        return getBaseFileName( artifact ) + ".zip";
+        return getBaseFileName(artifact) + ".zip";
     }
 
-    public static Artifact toArtifact( Package _package, Platform platform )
+    public static Artifact toArtifact(Package _package, Platform platform)
     {
         final String groupId = "put whatever you want";
-        final String artifactId = toArtifactId( _package, platform );
+        final String artifactId = toArtifactId(_package, platform);
         final String extension = GenericMojo.ARDUINO_CORE_EXTENSION;
         final String version = platform.getVersion();
 
-        return new DefaultArtifact( groupId, artifactId, extension, version );
+        return new DefaultArtifact(groupId, artifactId, extension, version);
     }
 
-    public static String toArtifactId( Package _package, Platform platform )
+    public static String toArtifactId(Package _package, Platform platform)
     {
         return _package.getName() + "-" + platform.getArchitecture();
+    }
+
+    public static String getPackageName(String artifactId)
+    {
+        return artifactId.split("\\-")[0];
+    }
+
+    public static String getPlatformArchitecture(String artifactId)
+    {
+        return artifactId.split("\\-")[1];
     }
 }

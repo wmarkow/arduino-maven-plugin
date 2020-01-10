@@ -19,7 +19,7 @@ import com.github.wmarkow.amp.util.ArtifactUtils;
 public abstract class GenericPlatformMojo extends GenericMojo
 {
 
-    @Parameter( property = "arduino-maven-plugin.packageIndexes", required = true )
+    @Parameter(property = "arduino-maven-plugin.packageIndexes", required = true)
     private URL[] packageIndexes;
 
     private PlatformPackageManager ppm;
@@ -32,12 +32,12 @@ public abstract class GenericPlatformMojo extends GenericMojo
 
     protected synchronized PlatformPackageManager getPlatformPackageManager()
     {
-        if( ppm == null )
+        if (ppm == null)
         {
-            PlatformPackageManager ppm = new PlatformPackageManager( getArduinoPlatformDirFile() );
-            for( URL url : getPackageIndexesUrls() )
+            PlatformPackageManager ppm = new PlatformPackageManager(getArduinoPlatformDirFile());
+            for (URL url : getPackageIndexesUrls())
             {
-                ppm.addPackageUrl( url );
+                ppm.addPackageUrl(url);
             }
             ppm.update();
 
@@ -49,9 +49,9 @@ public abstract class GenericPlatformMojo extends GenericMojo
 
     protected synchronized PlatformLibrariesManager getPlatformLibrariesManager()
     {
-        if( plm == null )
+        if (plm == null)
         {
-            PlatformLibrariesManager plm = new PlatformLibrariesManager( getArduinoPlatformDirFile() );
+            PlatformLibrariesManager plm = new PlatformLibrariesManager(getArduinoPlatformDirFile());
 
             plm.update();
 
@@ -64,40 +64,41 @@ public abstract class GenericPlatformMojo extends GenericMojo
     protected Package getPackage()
     {
         final Artifact arduinoCoreArtifact = getArduinoCoreDependency();
+        final String packageName = ArtifactUtils.getPackageName(arduinoCoreArtifact.getArtifactId());
 
-        return getPlatformPackageManager().getPlatformRepository().getPackage(
-            arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
+        return getPlatformPackageManager().getPlatformRepository().getPackageByName(packageName);
     }
 
     protected Platform getPlatform()
     {
         final Artifact arduinoCoreArtifact = getArduinoCoreDependency();
+        final String packageName = ArtifactUtils.getPackageName(arduinoCoreArtifact.getArtifactId());
+        final String platformArchitecture = ArtifactUtils.getPlatformArchitecture(arduinoCoreArtifact.getArtifactId());
 
-        return getPlatformPackageManager().getPlatformRepository().getPlatform(
-            arduinoCoreArtifact.getArtifactId(), arduinoCoreArtifact.getVersion() );
+        return getPlatformPackageManager().getPlatformRepository().getPlatform(packageName, platformArchitecture,
+                arduinoCoreArtifact.getVersion());
     }
 
     protected File getPathToUnpackedArduinoCore()
     {
         final Artifact arduinoCoreArtifact = getArduinoCoreDependency();
 
-        return getPathToUnpackedArduinoCore( arduinoCoreArtifact );
+        return getPathToUnpackedArduinoCore(arduinoCoreArtifact);
     }
 
     protected BoardsVariables getBoardsVariables() throws IOException
     {
-        File boardsTxtFile = new File( getPathToUnpackedArduinoCore(), "/boards.txt" );
+        File boardsTxtFile = new File(getPathToUnpackedArduinoCore(), "/boards.txt");
 
         PlatformFilesReader pfr = new PlatformFilesReader();
 
-        return pfr.readBoardsVariables( boardsTxtFile );
+        return pfr.readBoardsVariables(boardsTxtFile);
     }
 
-    private File getPathToUnpackedArduinoCore( Artifact arduinoCoreArtifact )
+    private File getPathToUnpackedArduinoCore(Artifact arduinoCoreArtifact)
     {
-        File baseDir =
-            new File( getGeneratedSourcesDirFile(), ArtifactUtils.getBaseFileName( arduinoCoreArtifact ) );
+        File baseDir = new File(getGeneratedSourcesDirFile(), ArtifactUtils.getBaseFileName(arduinoCoreArtifact));
 
-        return AmpFileUtils.stepIntoSingleFolderIfPossible( baseDir );
+        return AmpFileUtils.stepIntoSingleFolderIfPossible(baseDir);
     }
 }
