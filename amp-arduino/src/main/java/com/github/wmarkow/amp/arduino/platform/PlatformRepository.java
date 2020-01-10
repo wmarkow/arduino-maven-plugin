@@ -24,23 +24,6 @@ public class PlatformRepository
         return result;
     }
 
-    public Package getPackage(String artifactId, String version)
-    {
-        for (Package _package : getPackages())
-        {
-            for (Platform platform : _package.getPlatforms())
-            {
-                final String _artifactId = _package.getName() + "-" + platform.getArchitecture();
-                if (artifactId.equals(_artifactId) && version.equals(platform.getVersion()))
-                {
-                    return _package;
-                }
-            }
-        }
-
-        return null;
-    }
-
     public Package getPackageByName(String name)
     {
         for (Package _package : getPackages())
