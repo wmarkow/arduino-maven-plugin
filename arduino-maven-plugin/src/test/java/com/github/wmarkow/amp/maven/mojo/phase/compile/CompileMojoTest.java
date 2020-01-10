@@ -23,7 +23,7 @@ public class CompileMojoTest extends AbstractMojoTestCase
     @Test
     public void testMojoGoal() throws Exception
     {
-        File pom = new File( getBasedir(), "src/test/resources/project-blink/pom.xml" );
+        File pom = new File( getBasedir(), "src/test/resources/pom.xml" );
         assertNotNull( pom );
         assertTrue( pom.exists() );
 
