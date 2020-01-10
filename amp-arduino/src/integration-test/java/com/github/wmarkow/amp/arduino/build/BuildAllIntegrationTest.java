@@ -135,12 +135,12 @@ public class BuildAllIntegrationTest
 
         compiler.setToolchainBinDirPath( toolchainBinDirPath.getPath() + "/" );
 
-        compiler.addSrcDirectory( new File( "src/test/resources/arduino-blink-project" ) );
-        compiler.addSrcDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
-        compiler.addSrcDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
-        compiler.addIncludeDirectory( new File( "src/test/resources/arduino-core-1.6.17-avr/src" ) );
+        compiler.addSrcDirectory( new File( "src/integration-test/resources/arduino-blink-project" ) );
+        compiler.addSrcDirectory( new File( "src/integration-test/resources/arduino-core-1.6.17-avr/src" ) );
+        compiler.addSrcDirectory( new File( "src/integration-test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
+        compiler.addIncludeDirectory( new File( "src/integration-test/resources/arduino-core-1.6.17-avr/src" ) );
         compiler
-            .addIncludeDirectory( new File( "src/test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
+            .addIncludeDirectory( new File( "src/integration-test/resources/arduino-variant-1.6.17-avr-standard/src" ) );
         compiler.setObjDirectory( objDir );
         compiler.setCommandExecutionDirectory( new File( "." ) );
 
